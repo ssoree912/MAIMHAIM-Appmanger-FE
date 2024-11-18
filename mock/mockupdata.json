@@ -1,0 +1,82 @@
+{
+  "appinformation": [
+    {
+      "id": 1,
+      "name": "하나원큐",
+      "category": "금융",
+      "img": "Hana-Bank.png"
+    },
+    {
+      "id": 2,
+      "name": "KB스타뱅킹",
+      "category": "금융",
+      "img": "KB.png"
+    },
+    {
+      "id": 3,
+      "name": "K-CARD",
+      "category": "교육",
+      "img": "Kcard.png"
+    },
+    {
+      "id": 4,
+      "name": "NH스마트뱅킹",
+      "category": "금융",
+      "img": "NH.png"
+    },
+    {
+      "id": 5,
+      "name": "토스",
+      "category": "금융",
+      "img": "Toss.png"
+    },
+    {
+      "id": 6,
+      "name": "영운문S#",
+      "category": "증권 및 투자",
+      "img": "Kiwoom.png"
+    },
+    {
+      "id": 7,
+      "name": "한투",
+      "category": "증권 및 투자",
+      "img": "Korea-Invest.png"
+    },
+    {
+      "id": 8,
+      "name": "모바일 티머니",
+      "category": "교통",
+      "img": "Tmoney.png"
+    },
+    {
+      "id": 9,
+      "name": "티머니GO",
+      "category": "교통",
+      "img": "Tmoneygo.png"
+    },
+    {
+      "id": 10,
+      "name": "할리스",
+      "category": "식음료",
+      "img": "Hollys.png"
+    },
+    {
+      "id": 11,
+      "name": "스타벅스",
+      "category": "식음료",
+      "img": "Starbucks.png"
+    },
+    {
+      "id": 12,
+      "name": "투썸하트",
+      "category": "식음료",
+      "img": "Twosome-Place.png"
+    },
+    {
+      "id": 13,
+      "name": "올리브영",
+      "category": "쇼핑",
+      "img": "Oliveyoung.png"
+    }
+  ]
+}

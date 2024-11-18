@@ -1,0 +1,317 @@
+{
+  "스타벅스": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "orderMenu",
+      "name": "메뉴 주문하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "viewCoupons",
+      "name": "쿠폰함 보기",
+      "icon": "walk-outline",
+      "color": "91E4C5",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "흔들기", "isSelected": true},
+        {"name": "후면 터치", "isSelected": false}
+      ]
+    },
+    {
+      "id": "viewStarbucksCard",
+      "name": "스타벅스 카드 보기",
+      "icon": "time-outline",
+      "color": "A1AAFF",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "절대 시간", "isSelected": true},
+        {"name": "상대 시간", "isSelected": false}
+      ]
+    }
+  ],
+  "모바일 티머니": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "checkCardBalance",
+      "name": "카드 잔액 확인하기",
+      "icon": "walk-outline",
+      "color": "91E4C5",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "흔들기", "isSelected": true},
+        {"name": "후면 터치", "isSelected": false}
+      ]
+    }
+  ],
+  "티머니GO": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "runQR",
+      "name": "QR 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "makeReservation",
+      "name": "예매하기",
+      "icon": "walk-outline",
+      "color": "91E4C5",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "흔들기", "isSelected": true},
+        {"name": "후면 터치", "isSelected": false}
+      ]
+    },
+    {
+      "id": "viewReservationHistory",
+      "name": "예약내역 보기",
+      "icon": "time-outline",
+      "color": "A1AAFF",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "절대 시간", "isSelected": true},
+        {"name": "상대 시간", "isSelected": false}
+      ]
+    }
+  ],
+  "토스": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "withdrawATM",
+      "name": "ATM출금하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "transferFunds",
+      "name": "송금하기",
+      "icon": "walk-outline",
+      "color": "91E4C5",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "흔들기", "isSelected": true},
+        {"name": "후면 터치", "isSelected": false}
+      ]
+    }
+  ],
+  "영웅문S#": [
+    {
+      "id": "placeOrder",
+      "name": "주문하기",
+      "icon": "walk-outline",
+      "color": "91E4C5",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "흔들기", "isSelected": true},
+        {"name": "후면 터치", "isSelected": false}
+      ]
+    },
+    {
+      "id": "withdrawATM",
+      "name": "ATM출금하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    },
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "time-outline",
+      "color": "A1AAFF",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "절대 시간", "isSelected": true},
+        {"name": "상대 시간", "isSelected": false}
+      ]
+    }
+  ],
+  "K-CARD": [
+    {
+      "id": "qrAttendance",
+      "name": "QR 출석하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ],
+  "하나원큐": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ],
+  "KB스타뱅킹": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ],
+  "NH스마트뱅킹": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ],
+  "한투": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ],
+
+  "할리스": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ],
+  "투썸하트": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ],
+  "올리브영": [
+    {
+      "id": "runApp",
+      "name": "앱 실행하기",
+      "icon": "map-outline",
+      "color": "FFA4A4",
+      "toggle": false,
+      "isAllowed": false,
+      "settingsOptions": [
+        {"name": "바로 실행", "isSelected": true},
+        {"name": "팝업 알리기", "isSelected": false}
+      ]
+    }
+  ]
+}
