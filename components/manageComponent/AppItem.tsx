@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect , useState } from 'react';
 import {Image, Pressable, View, Alert, NativeModules} from 'react-native';
 import { Text } from '../../theme/theme';
 import styled from 'styled-components/native';
@@ -9,12 +9,15 @@ import { useNavigate } from 'react-router-native';
 import { activateApp } from '../../services/apiServices'; // API 함수 임포트
 import AsyncStorage from '@react-native-async-storage/async-storage'; // AsyncStorage 임포트
 import DatabaseService from '../../utils/DatabaseService';
+import NotificationModal from '../../components/manageComponent/NotificationModal'; // NotificationModal 임포트
 
 export const AppItem = ({ apps, searchTerm }: any) => {
     const [toggleStates, setToggleStates] = useRecoilState(ManageApplicationToggle);
     const navigate = useNavigate();
     const [addApp] = useRecoilState(AddApplication);
     const {LeaveHandleModule} = NativeModules;
+     const [modalVisible, setModalVisible] = useState(false);
+        const [modalMessage, setModalMessage] = useState('');
 
   // 앱이 렌더링될 때 활성화 상태 초기화
   useEffect(() => {
@@ -30,31 +33,38 @@ export const AppItem = ({ apps, searchTerm }: any) => {
   }, [apps]);
 
   // handleToggle 함수 수정
-  const handleToggle = async (appId, packageName,ssid) => {
-    const newToggleStates = { ...toggleStates, [appId]: !toggleStates[appId] };
-    setToggleStates(newToggleStates);
+   const handleToggle = async (appId, packageName, ssid) => {
+          const newToggleStates = { ...toggleStates, [appId]: !toggleStates[appId] };
+          setToggleStates(newToggleStates);
 
-    const memberId = await AsyncStorage.getItem('memberId');
-    if (memberId) {
-      const activate = newToggleStates[appId];
-      try {
-        // 서버에 활성화/비활성화 요청
-        await activateApp(parseInt(memberId, 10), appId, activate);
-        Alert.alert(`앱 ${activate ? '활성화' : '비활성화'} 완료`, `${activate ? '활성화' : '비활성화'}되었습니다.`);
+          const memberId = await AsyncStorage.getItem('memberId');
+          if (memberId) {
+              const activate = newToggleStates[appId];
+              try {
+                  await activateApp(parseInt(memberId, 10), appId, activate);
+                  setModalMessage(`앱이 ${activate ? '활성화' : '비활성화'} 되었습니다.`);
+                  setModalVisible(true);
 
-        // 로컬 데이터베이스에 활성화 상태 업데이트
-          await DatabaseService.updateAppDetails(packageName, { activate });
-          if(activate == false ) await LeaveHandleModule.leaveApp(ssid, activate);
-        console.log(`Local database updated for package: ${packageName}`);
-      } catch (error) {
-        console.error('Error toggling app activation:', error);
-        Alert.alert('오류', '앱 활성화 상태 변경 중 문제가 발생했습니다.');
-      }
-    }
-  };
+                  await DatabaseService.updateAppDetails(packageName, { activate });
+                  if (!activate) await LeaveHandleModule.leaveApp(ssid, activate);
+                  console.log(`Local database updated for package: ${packageName}`);
+              } catch (error) {
+                  console.error('Error toggling app activation:', error);
+                  setModalMessage('앱 활성화 상태 변경 중 문제가 발생했습니다.');
+                  setModalVisible(true);
+              }
+          }
+      };
+
 
   return (
     <>
+     <NotificationModal
+                    visible={modalVisible}
+                    message={modalMessage}
+                    onClose={() => setModalVisible(false)}
+                />
+
       {apps.map((category) => (
         <View key={category.categoryId}>
           <CategoryTitle>{category.categoryName}</CategoryTitle>

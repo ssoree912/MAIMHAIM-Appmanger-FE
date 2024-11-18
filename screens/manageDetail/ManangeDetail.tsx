@@ -21,6 +21,7 @@ import { activateTrigger } from '../../services/apiServices';
 import { activateAdvancedApp } from '../../services/apiServices'; // 고급모드 API 호출
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AlertModal from '../../components/manageComponent/AlterModal';
+import NotificationModal from '../../components/manageComponent/NotificationModal'; // NotificationModal 임포트
 
 const ManangeDetail = () => {
   const [toggleStates, setToggleStates] = useState(true);
@@ -43,6 +44,7 @@ const ManangeDetail = () => {
   const [advancedActivate, setAdvancedActivate] = useState(false); // 고급모드 상태
 const [memberId, setMemberId] = useState<number | null>(null); // AsyncStorage에서 가져온 memberId
 
+  const [modalMessage, setModalMessage] = useState('');
    // AsyncStorage에서 고급모드 상태 가져오기
      const fetchAdvancedActivateState = async () => {
        try {
@@ -79,7 +81,7 @@ const [memberId, setMemberId] = useState<number | null>(null); // AsyncStorage�
          await activateAdvancedApp(memberId, selectedItem.appId, newActivateState);
          saveAdvancedActivateState(newActivateState);
          await ActivateModule.activateAdvanced(newActivateState);
-         Alert.alert('성공', `고급모드가 ${newActivateState ? '활성화' : '비활성화'}되었습니다.`);
+         //Alert.alert('성공', `고급모드가 ${newActivateState ? '활성화' : '비활성화'}되었습니다.`);
        } catch (error) {
          console.error('Error toggling advanced mode:', error);
          Alert.alert('오류', '고급모드 상태 변경 중 문제가 발생했습니다.');
