@@ -39,6 +39,9 @@ public interface AppDao {
     @Query("UPDATE App SET activate = :active WHERE packageName = :packageName")
     void activateApp(String packageName, boolean active);
 
+    @Query("UPDATE App SET isAdd = :active WHERE packageName = :packageName")
+    void addApp(String packageName, boolean active);
+
     @Query("UPDATE App SET timeTriggerActive = :active WHERE packageName = :packageName")
     void activateTimeTrigger(String packageName, boolean active);
     @Query("UPDATE App SET triggerActive = :active WHERE packageName = :packageName")

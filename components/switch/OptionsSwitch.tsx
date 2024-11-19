@@ -148,6 +148,8 @@ const [lastSyncedTime, setLastSyncedTime] = useState<string>(initialTime || '00:
           );
           setLastSyncedTime(formattedTime);
           setLastSyncedDays(formattedDay);
+          console.log(packageName);
+          
           console.log('Changes saved successfully.');
           Alert.alert('알림', '저장 완료되었습니다.');
         } catch (error) {

@@ -72,6 +72,23 @@ public class ActivateModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void activateAddApp(String packageName, boolean active , Promise promise) {
+        try {
+            Log.d(TAG,"activateAddApp" + active );
+            updateAdd(packageName,active);
+            promise.resolve("trigger add success");
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to set add active", e);
+            promise.reject("ERROR", "Failed to set advancedMode");
+        }
+    }
+    private void updateAdd(String packageName, boolean active){
+        new Thread(() -> {
+            appDB.appDao().addApp(packageName,active);
+        }).start();
+    }
+
     private void updateActivate(String packageName, boolean active){
         new Thread(() -> {
             appDB.appDao().activateApp(packageName,active);

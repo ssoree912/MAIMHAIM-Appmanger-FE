@@ -25,7 +25,8 @@ const AddApp = () => {
   const [isAllTrue, setIsAllTrue] = useRecoilState(AllApplicationToggle);
   const [apps, setApps] = useState([]);
   const navigate = useNavigate();
-  const {ForegroundService, MemberIdModule, LeaveHandleModule} = NativeModules;
+  const {ForegroundService, MemberIdModule, LeaveHandleModule, ActivateModule} =
+    NativeModules;
   const [modalVisible, setModalVisible] = useState(false); // 알림창 상태
   const [notificationMessage, setNotificationMessage] = useState(''); // 알림 메시지
 
@@ -125,7 +126,8 @@ const AddApp = () => {
 
         // 로컬 데이터베이스에 모든 앱의 isAdd 상태 업데이트
         for (const app of apps) {
-          await DatabaseService.updateAppIsAdd(app.packageName, newToggleState);
+          // await DatabaseService.updateAppIsAdd(app.packageName, newToggleState);
+          await ActivateModule.activateAddApp(app.packageName,newToggleState);
         }
         console.log('Local database updated for all apps');
       } catch (error) {
