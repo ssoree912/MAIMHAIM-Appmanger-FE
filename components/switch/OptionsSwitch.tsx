@@ -246,6 +246,7 @@ const [notificationVisible, setNotificationVisible] = useState(false);
                 </InnerContainer>
                 <FlatList
                   data={daysOfWeek}
+                  style={{width: '100%', borderRadius: 15}}
                   keyExtractor={item => item}
                   renderItem={({ item }) => (
                     <DayItem onPress={() => toggleDaySelection(item)}>
