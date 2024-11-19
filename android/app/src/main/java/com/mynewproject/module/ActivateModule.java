@@ -8,6 +8,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.mynewproject.LocationForegroundService;
 import com.mynewproject.db.App;
 import com.mynewproject.db.AppDB;
@@ -71,13 +72,15 @@ public class ActivateModule extends ReactContextBaseJavaModule {
             promise.reject("ERROR", "Failed to set advancedMode");
         }
     }
-
     @ReactMethod
-    public void activateAddApp(String packageName, boolean active , Promise promise) {
+    public void activateAddApp(ReadableArray packageNames, boolean active , Promise promise) {
         try {
-            Log.d(TAG,"activateAddApp" + active );
-            updateAdd(packageName,active);
-            promise.resolve("trigger add success");
+            for (int i = 0; i < packageNames.size(); i++) {
+                String packageName = packageNames.getString(i);
+                Log.d(TAG,"activateAddApp" + active );
+                updateAdd(packageName,active);
+                promise.resolve("trigger add success");
+            }
         } catch (Exception e) {
             Log.e(TAG, "Failed to set add active", e);
             promise.reject("ERROR", "Failed to set advancedMode");

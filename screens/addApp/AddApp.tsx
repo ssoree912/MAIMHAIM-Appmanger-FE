@@ -123,12 +123,13 @@ const AddApp = () => {
         // 서버에 모든 앱의 isAdd 상태를 업데이트 요청
         await addApp(parseInt(memberId, 10), appsToAdd);
         showNotification('모든 앱의 상태가 변경되었습니다.');
-
+        const packageNames = apps.map(app => app.packageName);
+        await ActivateModule.activateAddApp(packageNames, newToggleState);
         // 로컬 데이터베이스에 모든 앱의 isAdd 상태 업데이트
-        for (const app of apps) {
-          // await DatabaseService.updateAppIsAdd(app.packageName, newToggleState);
-          await ActivateModule.activateAddApp(app.packageName,newToggleState);
-        }
+        // for (const app of apps) {
+        //   // await DatabaseService.updateAppIsAdd(app.packageName, newToggleState);
+        //   await ActivateModule.activateAddApp(app.packageName,newToggleState);
+        // }
         console.log('Local database updated for all apps');
       } catch (error) {
         console.error('Error adding all apps:', error);
