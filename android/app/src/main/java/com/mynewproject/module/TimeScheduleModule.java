@@ -11,6 +11,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.mynewproject.db.App;
 import com.mynewproject.db.AppDB;
+import com.mynewproject.db.TriggerType;
 import com.mynewproject.service.TimeService;
 
 public class TimeScheduleModule extends ReactContextBaseJavaModule {
@@ -51,8 +52,9 @@ public class TimeScheduleModule extends ReactContextBaseJavaModule {
         TimeService timeService = new TimeService(getReactApplicationContext());
         new Thread(() -> {
             App app = appDB.appDao().getAppByPackage(packageName);
-            if(app.isActivate()&& app.isAdd() && app.isAdvancedMode()&& app.isTimeTriggerActive()){
+            if(app.isActivate()&& app.isAdd() && app.isAdvancedMode()){
                 appDB.appDao().updateTimeAndWeek(packageName,week,time);
+                appDB.appDao().updateTriggerType(packageName, TriggerType.TIME);
                 timeService.scheduleAppOpen(packageName, week, time);
             }
 

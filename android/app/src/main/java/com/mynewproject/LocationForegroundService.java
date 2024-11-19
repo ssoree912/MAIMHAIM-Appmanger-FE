@@ -45,7 +45,7 @@ public class LocationForegroundService extends Service {
     public static boolean shake_determine = false;
     private long entryStartTime = 0; // Wi-Fi 진입 시 타이머 시작 시간
     private long exitStartTime = 0; // Wi-Fi 이탈 시 타이머 시작 시간
-    private static final long DWELL_TIME_THRESHOLD = 3000; // 10초 (진입 또는 이탈을 판단하기 위한 시간 임계값)
+    private static final long DWELL_TIME_THRESHOLD = 2000; // 2초 (진입 또는 이탈을 판단하기 위한 시간 임계값)
     private static final int NOTIFICATION_ID = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -76,7 +76,7 @@ public class LocationForegroundService extends Service {
     private AppDB appDB;  // AppDB 인스턴스 추가
     private String[] packageNames = {"kcard", "tmoney" , "starbucks" , "heromts" , "gs25","oliveyoung","golfzon"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 1.1;
+    private double OUTER_BOUNDARY = 1.4;
 
     private double INNER_BOUNDARY = 1.7;
     private static LocationForegroundService instance;
@@ -138,7 +138,7 @@ public class LocationForegroundService extends Service {
             while (isScanning) {
                 scanWifiNetworks();
                 try {
-                    Thread.sleep(350); // 5초 간격으로 스캔
+                    Thread.sleep(300)           ; // 5초 간격으로 스캔
                 } catch (InterruptedException e) {
                     Log.e("WifiScan", "Wi-Fi 스캔 스레드 중단됨", e);
                     isScanning = false; // 스캔 중단
@@ -147,7 +147,7 @@ public class LocationForegroundService extends Service {
         }).start();
     }
 
-    // 와이파이 스캔 중지 메서드
+    // 와이파이 스캔 중지 메서드``
     private void stopWifiScan() {
         isScanning = false; // 스캔 중단
     }
@@ -294,7 +294,6 @@ public class LocationForegroundService extends Service {
                     Toast.LENGTH_SHORT).show();
         });
 
-//
 
         long currentTime = System.currentTimeMillis();
 

@@ -37,7 +37,8 @@ public class AppInfoFetcher {
             "com.kebhana.hanapush",
             "com.truefriend.neosmartarenewal",
             "viva.republica.toss",
-            "com.golfzon.android"
+            "com.golfzon.android",
+            "kr.co.emart24.everse"
     };
     private String[] names = {
             "kcard",          // kr.co.symtra.kmuid
@@ -54,7 +55,8 @@ public class AppInfoFetcher {
             "hanapush",       // com.kebhana.hanapush
             "neosmartarenewal", // com.truefriend.neosmartarenewal
             "toss"         ,   // viva.republica.toss,
-            "golfzon"
+            "golfzon",
+            "emart24"
 
     };
 

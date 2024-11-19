@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
   NativeModules,
+  Alert,
 } from 'react-native';
 import { styles } from '../../styles/styleGuide';
 import TimePicker from './TimePicker';
@@ -127,22 +128,37 @@ const [lastSyncedTime, setLastSyncedTime] = useState<string>(initialTime || '00:
           console.log('Formatted Time:', formattedTime);
           console.log('Formatted Day:', formattedDay);
 
-          await updateTrigger(appId, triggerId, formattedTime, formattedDay, 'TIME')
-            .then((response) => {
+          await updateTrigger(
+            appId,
+            triggerId,
+            formattedTime,
+            formattedDay,
+            'TIME',
+          )
+            .then(response => {
               console.log('Server response:', response);
             })
-            .catch((error) => {
+            .catch(error => {
               console.error('Error from server:', error);
             });
-          await TimeScheduleModule.setTimeSchedule(packageName,formattedDay, formattedTime);
+          await TimeScheduleModule.setTimeSchedule(
+            packageName,
+            formattedDay,
+            formattedTime,
+          );
           setLastSyncedTime(formattedTime);
           setLastSyncedDays(formattedDay);
           console.log('Changes saved successfully.');
+          Alert.alert('알림', '저장 완료되었습니다.');
         } catch (error) {
           console.error('Failed to save changes:', error);
+          Alert.alert('오류', '저장에 실패했습니다. 다시 시도해주세요.');
         }
       } else {
         console.log('No changes to save.');
+
+        // 변경 사항 없음 알림
+        Alert.alert('알림', '이미 저장이 되었습니다.');
       }
     };
 
