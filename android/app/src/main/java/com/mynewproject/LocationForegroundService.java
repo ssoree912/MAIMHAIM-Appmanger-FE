@@ -45,7 +45,7 @@ public class LocationForegroundService extends Service {
     public static boolean shake_determine = false;
     private long entryStartTime = 0; // Wi-Fi 진입 시 타이머 시작 시간
     private long exitStartTime = 0; // Wi-Fi 이탈 시 타이머 시작 시간
-    private static final long DWELL_TIME_THRESHOLD = 2000; // 2초 (진입 또는 이탈을 판단하기 위한 시간 임계값)
+    private static final long DWELL_TIME_THRESHOLD = 1000; // 2초 (진입 또는 이탈을 판단하기 위한 시간 임계값)
     private static final int NOTIFICATION_ID = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -74,11 +74,11 @@ public class LocationForegroundService extends Service {
     private Map<String, ParticleFilter> particleFilters = new HashMap<>();
 
     private AppDB appDB;  // AppDB 인스턴스 추가
-    private String[] packageNames = {"kcard", "tmoney" , "starbucks" , "heromts" , "gs25","oliveyoung","golfzon"};
+    private String[] packageNames = {"kcard" , "starbucks" , "gs25","golfzon"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 1.4;
+    private double OUTER_BOUNDARY = 1.0;
 
-    private double INNER_BOUNDARY = 1.7;
+    private double INNER_BOUNDARY = 2.0;
     private static LocationForegroundService instance;
     ShakeDetector shakeDetector ;
     public static LocationForegroundService getInstance() {
@@ -127,7 +127,6 @@ public class LocationForegroundService extends Service {
         super.onDestroy();
         unregisterReceiver(wifiStateReceiver); // 리시버 해제
     }
-
     // 와이파이 스캔 시작 메서드
     private void startWifiScan() {
         // 스캔이 이미 진행 중이면 메서드 종료
@@ -138,7 +137,7 @@ public class LocationForegroundService extends Service {
             while (isScanning) {
                 scanWifiNetworks();
                 try {
-                    Thread.sleep(300)           ; // 5초 간격으로 스캔
+                    Thread.sleep(230 )           ; // 5초 간격으로 스캔
                 } catch (InterruptedException e) {
                     Log.e("WifiScan", "Wi-Fi 스캔 스레드 중단됨", e);
                     isScanning = false; // 스캔 중단
@@ -288,11 +287,11 @@ public class LocationForegroundService extends Service {
 
         Log.d("wifi_information", "SSID : " + SSID_name + " BSSID : " + BSSID_name + " DISTANCE : " + max_distance);
 
-        new Handler(Looper.getMainLooper()).post(() -> {
-            Toast.makeText(getApplicationContext(),
-                    "SSID : " + SSID_name + " BSSID : " + BSSID_name + " DISTANCE : " + distance,
-                    Toast.LENGTH_SHORT).show();
-        });
+//        new Handler(Looper.getMainLooper()).post(() -> {
+//            Toast.makeText(getApplicationContext(),
+//                    "SSID : " + SSID_name + " BSSID : " + BSSID_name + " DISTANCE : " + distance,
+//                    Toast.LENGTH_SHORT).show();
+//        });
 
 
         long currentTime = System.currentTimeMillis();
@@ -308,19 +307,12 @@ public class LocationForegroundService extends Service {
                     handleWifiEntry(packageNames[2], SSID_name, BSSID_name,currentTime);
                 } else if (SSID_name.contains(packageNames[3])) {
                     handleWifiEntry(packageNames[3], SSID_name, BSSID_name,currentTime);
-                } else if (SSID_name.contains(packageNames[4])) {
-                    handleWifiEntry(packageNames[4], SSID_name, BSSID_name,currentTime);
-                } else if (SSID_name.contains(packageNames[5])) {
-                    handleWifiEntry(packageNames[5], SSID_name, BSSID_name,currentTime);
-                }else if (SSID_name.contains(packageNames[6])) {
-                    handleWifiEntry(packageNames[6], SSID_name, BSSID_name,currentTime);
                 }
                 exitStartTime = 0; // 재진입 시 이탈 타이머 초기화
             }
             shakeDetector = new ShakeDetector(this);
             if(isShakeAble)  shakeDetector.start();
-        } else if (max_distance >=
-                OUTER_BOUNDARY) {
+        } else if (max_distance >= OUTER_BOUNDARY) {
             if (exitStartTime == 0) {
                 exitStartTime = currentTime;
             }
