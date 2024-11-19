@@ -15,6 +15,7 @@ import { styles } from '../../styles/styleGuide';
 import TimePicker from './TimePicker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { updateTrigger } from '../../services/apiServices';
+import NotificationModal from '../../components/manageComponent/NotificationModal'; // 알림 모달 컴포넌트
 
 type Option = {
   name: string;
@@ -81,6 +82,8 @@ const [lastSyncedTime, setLastSyncedTime] = useState<string>(initialTime || '00:
  const selectedIndex = settingsOptions.findIndex(option => option.isSelected);
   const initialPosition = selectedIndex === 0 ? 2 : 140;
   const togglePosition = useRef(new Animated.Value(initialPosition)).current;
+const [notificationVisible, setNotificationVisible] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   // 상태 초기화를 한 번만 수행
   useEffect(() => {
@@ -151,16 +154,19 @@ const [lastSyncedTime, setLastSyncedTime] = useState<string>(initialTime || '00:
           console.log(packageName);
           
           console.log('Changes saved successfully.');
-          Alert.alert('알림', '저장 완료되었습니다.');
+          setNotificationMessage('저장되었습니다!');
+                  setNotificationVisible(true);
         } catch (error) {
           console.error('Failed to save changes:', error);
-          Alert.alert('오류', '저장에 실패했습니다. 다시 시도해주세요.');
+           setNotificationMessage('저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                  setNotificationVisible(true)
         }
       } else {
         console.log('No changes to save.');
 
         // 변경 사항 없음 알림
-        Alert.alert('알림', '이미 저장이 되었습니다.');
+         setNotificationMessage('이미 저장되었습니다.');
+              setNotificationVisible(true);
       }
     };
 
@@ -254,6 +260,12 @@ const [lastSyncedTime, setLastSyncedTime] = useState<string>(initialTime || '00:
               </ModalContent>
             </ModalBackground>
           </StyledModal>
+           {/* Notification Modal */}
+                <NotificationModal
+                  visible={notificationVisible}
+                  message={notificationMessage}
+                  onClose={() => setNotificationVisible(false)}
+                />
 
         </>
       )}
