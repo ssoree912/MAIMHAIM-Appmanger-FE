@@ -16,6 +16,8 @@ import { AddApplication, AddApplicationToggle, AllApplicationToggle } from '../.
 import { getAppsToAdd, addApp } from '../../services/apiServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatabaseService from '../../utils/DatabaseService';
+import NotificationModal from '../../components/manageComponent/NotificationModal'; // 알림창 컴포넌트
+
 
 const AddApp = () => {
   const [addAppList, setAddAppList] = useRecoilState(AddApplication);
@@ -24,6 +26,9 @@ const AddApp = () => {
   const [apps, setApps] = useState([]);
   const navigate = useNavigate();
   const {ForegroundService, MemberIdModule, LeaveHandleModule} = NativeModules;
+  const [modalVisible, setModalVisible] = useState(false); // 알림창 상태
+  const [notificationMessage, setNotificationMessage] = useState(''); // 알림 메시지
+
 
   useEffect(() => {
     const fetchApps = async () => {
@@ -52,6 +57,10 @@ const AddApp = () => {
     fetchApps();
   }, []);
 
+  const showNotification = (message) => {
+      setNotificationMessage(message);
+      setModalVisible(true);
+    };
 
 
   const handleToggle = async (index) => {
@@ -68,10 +77,10 @@ const AddApp = () => {
           await DatabaseService.updateAppIsAdd(selectedApp.packageName, false); // 로컬 DB에서 isAdd를 0으로 업데이트
           console.log(selectedApp.ssid);
           await LeaveHandleModule.leaveApp(selectedApp.ssid, false);
-          Alert.alert('앱 제거 완료', `${selectedApp.name}이(가) 제거되었습니다.`);
+          showNotification(`${selectedApp.name}이(가) 제거되었습니다.`);
         } catch (error) {
           console.error('Error removing app:', error);
-          Alert.alert('오류', '앱 제거 중 문제가 발생했습니다. 다시 시도해 주세요.');
+         showNotification('앱 제거 중 문제가 발생했습니다. 다시 시도해 주세요.');
         }
       } else {
         // 앱 추가
@@ -79,10 +88,10 @@ const AddApp = () => {
         try {
           await addApp(parseInt(memberId, 10), [{ appId: selectedApp.appId, add: true }]); // 서버에 추가 요청
           await DatabaseService.updateAppIsAdd(selectedApp.packageName, true); // 로컬 DB에서 isAdd를 1로 업데이트
-          Alert.alert('앱 추가 완료', `${selectedApp.name}이(가) 추가되었습니다.`);
+          showNotification(`${selectedApp.name}이(가) 추가되었습니다.`);
         } catch (error) {
           console.error('Error adding app:', error);
-          Alert.alert('오류', '앱 추가 중 문제가 발생했습니다. 다시 시도해 주세요.');
+          showNotification('앱 추가 중 문제가 발생했습니다. 다시 시도해 주세요.');
         }
       }
     }
@@ -112,7 +121,7 @@ const AddApp = () => {
       try {
         // 서버에 모든 앱의 isAdd 상태를 업데이트 요청
         await addApp(parseInt(memberId, 10), appsToAdd);
-        Alert.alert('모든 앱 변동 완료 ');
+        showNotification('모든 앱의 상태가 변경되었습니다.');
 
         // 로컬 데이터베이스에 모든 앱의 isAdd 상태 업데이트
         for (const app of apps) {
@@ -121,13 +130,15 @@ const AddApp = () => {
         console.log('Local database updated for all apps');
       } catch (error) {
         console.error('Error adding all apps:', error);
-        Alert.alert('오류', '모든 앱 추가 중 문제가 발생했습니다. 다시 시도해 주세요.');
+        showNotification('모든 앱 상태 변경 중 문제가 발생했습니다.');
       }
     }
 
     // addApp 상태 업데이트
     setAddApp(newToggleState ? apps : []); // 모든 앱 추가/제거
   };
+
+
 
   return (
     <AppManageView>
@@ -178,6 +189,13 @@ const AddApp = () => {
           ))}
         </ContentView>
       </ManageContentView>
+
+      <NotificationModal
+        visible={modalVisible}
+        message={notificationMessage}
+        onClose={() => setModalVisible(false)}
+      />
+
     </AppManageView>
   );
 };
