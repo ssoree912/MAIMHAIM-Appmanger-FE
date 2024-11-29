@@ -47,7 +47,7 @@ public class AppInfoFetcher {
             "heromts",        // com.kiwoom.heromts
             "gs25",           // com.gsr.gs25
             "oliveyoung",     // com.oliveyoung
-            "hollyscoffee",   // com.kr.hollyscoffee
+            "hollys",   // com.kr.hollyscoffee
             "twosome",        // com.cj.twosome
             "tmoney",         // com.lgt.tmoney
             "kbbank",         // com.kbstar.kbbank

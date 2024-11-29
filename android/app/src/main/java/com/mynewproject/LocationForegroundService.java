@@ -74,7 +74,7 @@ public class LocationForegroundService extends Service {
     private Map<String, ParticleFilter> particleFilters = new HashMap<>();
 
     private AppDB appDB;  // AppDB 인스턴스 추가
-    private String[] packageNames = {"kcard" , "starbucks" , "gs25","golfzon"};
+    private String[] packageNames = {"kcard" , "starbucks" , "gs25","golfzon","hollys"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
     private double OUTER_BOUNDARY = 1.0;
 
@@ -307,6 +307,8 @@ public class LocationForegroundService extends Service {
                     handleWifiEntry(packageNames[2], SSID_name, BSSID_name,currentTime);
                 } else if (SSID_name.contains(packageNames[3])) {
                     handleWifiEntry(packageNames[3], SSID_name, BSSID_name,currentTime);
+                } else if (SSID_name.contains(packageNames[4])) {
+                    handleWifiEntry(packageNames[4], SSID_name, BSSID_name,currentTime);
                 }
                 exitStartTime = 0; // 재진입 시 이탈 타이머 초기화
             }
