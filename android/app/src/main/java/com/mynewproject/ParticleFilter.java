@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ParticleFilter {
-    
+
     // 파티클 클래스 정의
     public static class Particle {
         double state;  // 입자의 상태 (RSSI 값)
@@ -47,14 +47,14 @@ public class ParticleFilter {
     // 업데이트 단계: 측정값을 기반으로 파티클의 가중치 업데이트
     public void updateWeights(double measuredRSSI, double measurementNoise) {
         double totalWeight = 0.0;
-        
+
         for (Particle particle : particles) {
             // 측정 노이즈를 기반으로 가중치 계산 (정규분포)
             double error = measuredRSSI - particle.state;
             particle.weight = Math.exp(-error * error / (2 * measurementNoise * measurementNoise));
             totalWeight += particle.weight;
         }
-        
+
         // 모든 가중치를 정규화
         for (Particle particle : particles) {
             particle.weight /= totalWeight;
@@ -65,12 +65,12 @@ public class ParticleFilter {
     public void resample() {
         List<Particle> newParticles = new ArrayList<>();
         double[] cumulativeWeights = new double[numParticles];
-        
+
         cumulativeWeights[0] = particles.get(0).weight;
         for (int i = 1; i < numParticles; i++) {
             cumulativeWeights[i] = cumulativeWeights[i - 1] + particles.get(i).weight;
         }
-        
+
         for (int i = 0; i < numParticles; i++) {
             double randomValue = random.nextDouble();
             for (int j = 0; j < numParticles; j++) {
@@ -80,7 +80,7 @@ public class ParticleFilter {
                 }
             }
         }
-        
+
         particles = newParticles;
     }
 

@@ -137,16 +137,7 @@ useEffect(() => {
 
      return (
             <MainView isActive={isActive}>
-            {/* 로고 배치 */}
-                  <LogoContainer>
-                    <LogoImage
-                      source={
-                        isActive
-                          ? require('../../assets/img/logo_coshow_active.png')
-                          : require('../../assets/img/logo_coshow_inactive.png')
-                      }
-                    />
-                  </LogoContainer>
+
                 <MainInner>
                     <ContentView>
 
