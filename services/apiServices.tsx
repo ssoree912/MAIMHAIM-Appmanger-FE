@@ -182,4 +182,25 @@ export const activateAdvancedApp = async (
     console.error('Error details:', error.response?.data || error);
     throw error; // 에러를 상위로 전달
   }
+
 };
+
+// 특정 앱의 상세 정보 가져오기 (고급 모드 상태 포함)
+export const getAppDetails = async (appId: number, memberId: number) => {
+  if (!appId || !memberId) {
+    throw new Error("appId 또는 memberId가 누락되었습니다.");
+  }
+
+  const url = `${API_BASE_URL}/apps/${memberId}/${appId}`;
+  try {
+    console.log(`Fetching app details from URL: ${url}`);
+    const response = await axios.get(url);
+    const appDetails = response.data.data || {};
+    return appDetails; // advanceActivate와 type 포함
+  } catch (error) {
+    console.error("Error fetching app details:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
