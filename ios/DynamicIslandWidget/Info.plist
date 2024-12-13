@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.widgetkit-extension</string>
+    <key>NSExtensionAttributes</key>
+     <dict>
+         <key>SupportsLiveActivities</key>
+         <true/>
+     </dict>
+	</dict>
+  <key>NSActivityTypes</key>
+  <array>
+      <string>com.apple.activities.liveactivity</string>
+  </array>
+  <key>NSUserTrackingUsageDescription</key>
+  <string>사용자 활동 데이터를 업데이트하기 위해 필요합니다.</string>
+</dict>
+</plist>

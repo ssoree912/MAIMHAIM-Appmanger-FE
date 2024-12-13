@@ -43,6 +43,12 @@
              </dict>
          </dict>
 	</dict>
+  <key>NSSupportsLiveActivities</key>
+  <true/>
+  <key>NSActivityTypes</key>
+  <array>
+      <string>com.apple.activities.liveactivity</string>
+  </array>
   <key>NSUserNotificationUsageDescription</key>
   <string>백그라운드에서 BLE 기기 검색 시 알림을 표시합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

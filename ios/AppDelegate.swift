@@ -2,6 +2,7 @@ import UIKit
 import CoreLocation
 import UserNotifications
 import React
+import ActivityKit
 
 @objc(AppDelegate)
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate, RCTBridgeDelegate {
@@ -10,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var beaconConstraint: CLBeaconIdentityConstraint?
     var previousProximity: CLProximity? = .unknown
     var hasNotificationBeenSent: Bool = false // 알림 발송 여부를 추적하는 변수
+    var currentCount: Int = 0 // 다이나믹 아일랜드 카운트 업데이트
 
     override init() {
         super.init()
@@ -42,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if granted {
                 print("[LOG] Notification authorization granted")
-                self.setupNotificationActions() // 알림 액션 설정
+                self.setupNotificationActions()
             } else if let error = error {
                 print("[LOG] Notification Authorization Error: \(error)")
             }
@@ -56,34 +58,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     @objc func sourceURL(for bridge: RCTBridge) -> URL? {
         #if DEBUG
-        print("[LOG] Running in DEBUG mode")
         return URL(string: "http://192.168.219.101:8081/index.bundle?platform=ios&dev=true")
         #else
-        print("[LOG] Running in RELEASE mode")
         return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
         #endif
     }
 
-    func setupNotificationActions() {
-        // "Open" 버튼 액션 정의
-        let openAction = UNNotificationAction(
-            identifier: "OPEN_STARBUCKS_ACTION",
-            title: "Open",
-            options: [.foreground] // 앱을 열도록 설정
-        )
+    // MARK: - Dynamic Island Live Activity
+    func startOrUpdateLiveActivity() {
+        currentCount += 1
 
-        // 알림 카테고리 정의
-        let category = UNNotificationCategory(
-            identifier: "BEACON_NOTIFICATION",
-            actions: [openAction], // "Open" 액션 추가
-            intentIdentifiers: [],
-            options: []
-        )
-
-        // 알림 카테고리 등록
-        UNUserNotificationCenter.current().setNotificationCategories([category])
+        // Live Activity 실행 또는 업데이트
+        if Activity<DynamicIslandWidgetAttributes>.activities.isEmpty {
+            startLiveActivity(count: currentCount)
+        } else {
+            updateLiveActivity(newCount: currentCount)
+        }
     }
 
+    func startLiveActivity(count: Int) {
+        guard ActivityAuthorizationInfo().areActivitiesEnabled else {
+            print("[LOG] Live Activities are not authorized")
+            return
+        }
+
+        let attributes = DynamicIslandWidgetAttributes(name: "Beacon Tracker")
+        let initialState = DynamicIslandWidgetAttributes.ContentState(count: count)
+
+        do {
+            let content = ActivityContent(
+                state: initialState,
+                staleDate: nil
+            )
+
+            let activity = try Activity<DynamicIslandWidgetAttributes>.request(
+                attributes: attributes,
+                content: content,
+                pushType: nil
+            )
+            print("[LOG] Live Activity started: \(activity.id)")
+        } catch {
+            print("[LOG] Failed to start Live Activity: \(error.localizedDescription)")
+        }
+    }
+
+    func updateLiveActivity(newCount: Int) {
+        guard let activity = Activity<DynamicIslandWidgetAttributes>.activities.first else {
+            print("[LOG] No active Live Activity found")
+            return
+        }
+
+        let updatedState = DynamicIslandWidgetAttributes.ContentState(count: newCount)
+
+        Task {
+            await activity.update(using: updatedState)
+            print("[LOG] Live Activity updated to count: \(newCount)")
+        }
+    }
+
+    // MARK: - Beacon Monitoring
     func setupBeaconConstraint() {
         guard let uuid = UUID(uuidString: "74278bda-b644-4520-8f0c-720eaf059935") else {
             print("[LOG] Invalid UUID")
@@ -92,7 +125,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
         beaconConstraint = CLBeaconIdentityConstraint(uuid: uuid, major: 40011, minor: 44551)
 
-        // Monitoring 시작
         if let constraint = beaconConstraint {
             let beaconRegion = CLBeaconRegion(beaconIdentityConstraint: constraint, identifier: "StarbucksBeacon")
             beaconRegion.notifyOnEntry = true
@@ -109,23 +141,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             print("[LOG] No beacons detected")
             return
         }
-
-        // Proximity 값 로깅
-        let proximityString: String
-        switch beacon.proximity {
-        case .immediate:
-            proximityString = "Immediate"
-        case .near:
-            proximityString = "Near"
-        case .far:
-            proximityString = "Far"
-        case .unknown:
-            proximityString = "Unknown"
-        @unknown default:
-            proximityString = "Unhandled"
-        }
-
-        print("[LOG] Beacon detected: UUID: \(beacon.uuid), Major: \(beacon.major), Minor: \(beacon.minor), Proximity: \(proximityString), Accuracy: \(beacon.accuracy), RSSI: \(beacon.rssi)")
 
         // 거리 상태 변경 확인
         if beacon.proximity != previousProximity {
@@ -147,31 +162,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             }
             previousProximity = beacon.proximity
         }
+
+        // 조건과 관계없이 항상 Dynamic Island 업데이트
+        startOrUpdateLiveActivity()
     }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        print("[LOG] Application entered background")
-        if let constraint = beaconConstraint {
-            locationManager?.startRangingBeacons(satisfying: constraint)
-            print("[LOG] Started ranging beacons in background")
-        }
-    }
+    // MARK: - Notifications
+    func setupNotificationActions() {
+        let openAction = UNNotificationAction(
+            identifier: "OPEN_STARBUCKS_ACTION",
+            title: "Open",
+            options: [.foreground]
+        )
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        print("[LOG] Application entered foreground")
-        if let constraint = beaconConstraint {
-            locationManager?.startRangingBeacons(satisfying: constraint)
-            print("[LOG] Started ranging beacons in foreground")
-        }
+        let category = UNNotificationCategory(
+            identifier: "BEACON_NOTIFICATION",
+            actions: [openAction],
+            intentIdentifiers: [],
+            options: []
+        )
+
+        UNUserNotificationCenter.current().setNotificationCategories([category])
     }
 
     func sendNotificationForAppLaunch() {
-        print("[LOG] Sending notification for app launch")
         let notification = UNMutableNotificationContent()
         notification.title = "Starbucks Nearby!"
         notification.body = "Would you like to open the Starbucks app?"
         notification.sound = .default
-        notification.categoryIdentifier = "BEACON_NOTIFICATION" // 카테고리 설정
+        notification.categoryIdentifier = "BEACON_NOTIFICATION"
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: nil)
         UNUserNotificationCenter.current().add(request) { error in
@@ -184,7 +203,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
 
     func sendExitNotification() {
-        print("[LOG] Sending exit notification")
         let notification = UNMutableNotificationContent()
         notification.title = "You left Starbucks!"
         notification.body = "You are now far from the beacon."
@@ -206,7 +224,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
         if response.actionIdentifier == "OPEN_STARBUCKS_ACTION" {
-            // "Open" 버튼 클릭 시 starbucks:// 로 이동
             if let url = URL(string: "starbucks://"), UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 print("[LOG] Opened Starbucks app via URL scheme")
