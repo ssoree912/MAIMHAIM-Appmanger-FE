@@ -47,51 +47,6 @@ const [memberId, setMemberId] = useState<number | null>(null); // AsyncStorage�
   const [modalMessage, setModalMessage] = useState('');
   const [appType, setAppType] = useState<string | null>(null); // 앱 타입
 
-
-
-   /* AsyncStorage에서 고급모드 상태 가져오기
-     const fetchAdvancedActivateState = async () => {
-       try {
-         const storedAdvancedState = await AsyncStorage.getItem('advancedActivate');
-         if (storedAdvancedState !== null) {
-           const parsedState = JSON.parse(storedAdvancedState);
-           setAdvancedActivate(parsedState);
-           setToggleStates(!parsedState); // 고급모드일 때 toggleStates를 false로 설정
-         }
-       } catch (error) {
-         console.error('Error fetching advanced mode state:', error);
-       }
-     };
-
-     // 고급모드 상태 저장
-     const saveAdvancedActivateState = async (state: boolean) => {
-       try {
-         await AsyncStorage.setItem('advancedActivate', JSON.stringify(state));
-       } catch (error) {
-         console.error('Error saving advanced mode state:', error);
-       }
-     };
-
-     // 고급 모드 상태 전환
-     const toggleAdvancedMode = async () => {
-       if (!selectedItem || memberId === null) return;
-
-       const newActivateState = !advancedActivate;
-       setAdvancedActivate(newActivateState);
-       setToggleStates(!newActivateState);
-
-       try {
-         // 서버에 상태 전송
-         await activateAdvancedApp(memberId, selectedItem.appId, newActivateState);
-         saveAdvancedActivateState(newActivateState);
-         await ActivateModule.activateAdvanced(newActivateState);
-         //Alert.alert('성공', `고급모드가 ${newActivateState ? '활성화' : '비활성화'}되었습니다.`);
-       } catch (error) {
-         console.error('Error toggling advanced mode:', error);
-         Alert.alert('오류', '고급모드 상태 변경 중 문제가 발생했습니다.');
-       }
-     };*/
-
  // AsyncStorage에서 memberId 가져오기
  const fetchMemberId = async () => {
    try {
@@ -348,7 +303,7 @@ useEffect(() => {
     console.log(`Selected Option: ${selectedOption}`);
   };
 
-  const [toggle2, setToggle2] = useState(false);
+  const [toggle2, setToggle2] = useState(true);
 
   const onIconPress = () => {
     setToggle2(!toggle2);
