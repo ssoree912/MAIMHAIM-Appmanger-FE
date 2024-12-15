@@ -20,6 +20,7 @@
 		7699B88040F8A987B510C191 /* libPods-MyNewProject-MyNewProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MyNewProject-MyNewProjectTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		85AF4884BE15AC8EAD8FC966 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4F674A8836E39736ACD516D3 /* PrivacyInfo.xcprivacy */; };
+		D8ACF9662D0D15FE00134742 /* GeofenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8ACF9652D0D15FE00134742 /* GeofenceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,8 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-MyNewProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyNewProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MyNewProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-MyNewProject-MyNewProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNewProject-MyNewProjectTests.release.xcconfig"; path = "Target Support Files/Pods-MyNewProject-MyNewProjectTests/Pods-MyNewProject-MyNewProjectTests.release.xcconfig"; sourceTree = "<group>"; };
+		D8ACF9652D0D15FE00134742 /* GeofenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceManager.swift; sourceTree = "<group>"; };
+		D8ACF9672D0D160800134742 /* MyNewProject-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyNewProject-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -153,6 +156,7 @@
 			children = (
 				4B35FD592D0C18530064971A /* AppDelegate.swift */,
 				4B35FD542D0BFFE40064971A /* ViewController.swift */,
+				D8ACF9652D0D15FE00134742 /* GeofenceManager.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate2.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -160,7 +164,6 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
-				4F674A8836E39736ACD516D3 /* PrivacyInfo.xcprivacy */,
 				4B35FD562D0BFFF50064971A /* MyNewProject-Bridging-Header.h */,
 			);
 			name = MyNewProject;
@@ -309,6 +312,7 @@
 					};
 					4B35FD5E2D0C49700064971A = {
 						CreatedOnToolsVersion = 16.1;
+						LastSwiftMigration = 1610;
 					};
 				};
 			};
@@ -507,6 +511,7 @@
 				4B35FD552D0BFFF10064971A /* ViewController.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate2.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				D8ACF9662D0D15FE00134742 /* GeofenceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,6 +19,7 @@ import ShortSwitch from '../../components/switch/ShortSwitch';
 import { getTriggers } from '../../services/apiServices';
 import { activateTrigger } from '../../services/apiServices';
 import { activateAdvancedApp } from '../../services/apiServices'; // 고급모드 API 호출
+import { getAppDetails } from '../../services/apiServices'; // 고급모드 API 호출
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AlertModal from '../../components/manageComponent/AlterModal';
 import NotificationModal from '../../components/manageComponent/NotificationModal'; // NotificationModal 임포트
@@ -41,69 +42,129 @@ const ManangeDetail = () => {
   const [initialTime, setInitialTime] = useState<string | null>(null); // 서버에서 받은 시간
   const [triggerId, setTriggerId] = useState<number | null>(null);
   const {ActivateModule} = NativeModules;
-  const [advancedActivate, setAdvancedActivate] = useState(false); // 고급모드 상태
+  const [advancedActivate, setAdvancedActivate] = useState(false); // 고급 모드 상태
 const [memberId, setMemberId] = useState<number | null>(null); // AsyncStorage에서 가져온 memberId
-
   const [modalMessage, setModalMessage] = useState('');
-   // AsyncStorage에서 고급모드 상태 가져오기
-     const fetchAdvancedActivateState = async () => {
-       try {
-         const storedAdvancedState = await AsyncStorage.getItem('advancedActivate');
-         if (storedAdvancedState !== null) {
-           const parsedState = JSON.parse(storedAdvancedState);
-           setAdvancedActivate(parsedState);
-           setToggleStates(!parsedState); // 고급모드일 때 toggleStates를 false로 설정
-         }
-       } catch (error) {
-         console.error('Error fetching advanced mode state:', error);
-       }
-     };
+  const [appType, setAppType] = useState<string | null>(null); // 앱 타입
 
-     // 고급모드 상태 저장
-     const saveAdvancedActivateState = async (state: boolean) => {
-       try {
-         await AsyncStorage.setItem('advancedActivate', JSON.stringify(state));
-       } catch (error) {
-         console.error('Error saving advanced mode state:', error);
-       }
-     };
+ // AsyncStorage에서 memberId 가져오기
+ const fetchMemberId = async () => {
+   try {
+     const storedMemberId = await AsyncStorage.getItem('memberId');
+     if (!storedMemberId) throw new Error('Member ID not found in AsyncStorage.');
+     const memberId = parseInt(storedMemberId, 10);
+     console.log('Fetched Member ID:', memberId);
+     return memberId; // 반환값 추가
+   } catch (error) {
+     console.error('Error fetching memberId:', error);
+     Alert.alert('오류', '사용자 정보를 가져오는 중 문제가 발생했습니다.');
+     throw error;
+   }
+ };
 
-     // 고급 모드 상태 전환
-     const toggleAdvancedMode = async () => {
-       if (!selectedItem || memberId === null) return;
+ // AsyncStorage에서 고급 모드 상태 저장
+ const saveAdvancedActivateState = async (appId, memberId, state) => {
+   try {
+     const key = `advancedActivate_${memberId}_${appId}`;
+     await AsyncStorage.setItem(key, JSON.stringify(state));
+     console.log(`Saved advancedActivate state: ${state} for appId: ${appId}`);
+   } catch (error) {
+     console.error('Error saving advanced activate state:', error);
+     Alert.alert('오류', '고급 모드 상태 저장 중 문제가 발생했습니다.');
+   }
+ };
 
-       const newActivateState = !advancedActivate;
-       setAdvancedActivate(newActivateState);
-       setToggleStates(!newActivateState);
+ // AsyncStorage에서 고급 모드 상태 가져오기
+ const fetchAdvancedActivateState = async (appId, memberId) => {
+   try {
+     const key = `advancedActivate_${memberId}_${appId}`;
+     const storedState = await AsyncStorage.getItem(key);
+     return storedState ? JSON.parse(storedState) : false; // 기본값: 비활성화(false)
+   } catch (error) {
+     console.error('Error fetching advanced activate state:', error);
+     Alert.alert('오류', '고급 모드 상태 불러오기 중 문제가 발생했습니다.');
+     return false;
+   }
+ };
 
-       try {
-         // 서버에 상태 전송
-         await activateAdvancedApp(memberId, selectedItem.appId, newActivateState);
-         saveAdvancedActivateState(newActivateState);
-         await ActivateModule.activateAdvanced(newActivateState);
-         //Alert.alert('성공', `고급모드가 ${newActivateState ? '활성화' : '비활성화'}되었습니다.`);
-       } catch (error) {
-         console.error('Error toggling advanced mode:', error);
-         Alert.alert('오류', '고급모드 상태 변경 중 문제가 발생했습니다.');
-       }
-     };
+// 고급 모드 상태 토글
+const toggleAdvancedMode = async () => {
+  if (!selectedItem || !memberId) return;
 
-     // AsyncStorage에서 memberId 가져오기
-     const fetchMemberId = async () => {
-       try {
-         const storedMemberId = await AsyncStorage.getItem('memberId');
-         if (!storedMemberId) throw new Error('Member ID not found in AsyncStorage.');
-         setMemberId(parseInt(storedMemberId, 10));
-       } catch (error) {
-         console.error('Error fetching memberId:', error);
-         Alert.alert('오류', '사용자 정보를 가져오는 중 문제가 발생했습니다.');
-       }
-     };
+  const newActivateState = !advancedActivate; // 새로운 상태
+  setAdvancedActivate(newActivateState); // 상태 업데이트
+  setToggleStates(!newActivateState);
 
-     useEffect(() => {
-       fetchMemberId();
-       fetchAdvancedActivateState();
-     }, []);
+  try {
+    // 서버에 상태 전송
+    await activateAdvancedApp(memberId, selectedItem.appId, newActivateState);
+
+    // 새로운 상태 저장
+    await saveAdvancedActivateState(selectedItem.appId, memberId, newActivateState);
+
+    // `type`에 따른 동작 수행
+    if (newActivateState && appType) {
+      console.log(`Activating mode for appType: ${appType}`);
+      switch (appType) {
+        case 'LOCATION':
+          setSelectedOption('위치 기반');
+          break;
+        case 'TIME':
+          setSelectedOption('시간 기반');
+          break;
+        case 'SCHEDULE':
+          setSelectedOption('일정 기반');
+          break;
+        case 'MOTION':
+          setSelectedOption('모션 기반');
+          break;
+        default:
+          setSelectedOption('run');
+      }
+     
+    } else if (!newActivateState) {
+      setSelectedOption('run'); // 기본 상태로 복원
+     // Alert.alert('성공', '고급 모드가 비활성화되었습니다.');
+    }
+  } catch (error) {
+    console.error('Error toggling advanced mode:', error);
+    Alert.alert('오류', '고급 모드 상태 변경 중 문제가 발생했습니다.');
+  }
+};
+
+// 앱 상세 정보 가져오기
+const fetchAppDetails = async (appId, memberId) => {
+  try {
+    const appDetails = await getAppDetails(appId, memberId);
+    const storedState = await fetchAdvancedActivateState(appId, memberId);
+    setAdvancedActivate(storedState); // AsyncStorage 상태 반영
+    setAppType(appDetails.type || null); // 앱 타입 업데이트
+    setToggleStates(!storedState); // 고급모드일 때 toggleStates 설정
+  } catch (error) {
+    console.error('Error fetching app details:', error);
+    Alert.alert('오류', '앱 정보를 불러오는 중 문제가 발생했습니다.');
+    throw error;
+  }
+};
+
+ // 초기화 (useEffect)
+useEffect(() => {
+  const initializeAppDetails = async () => {
+    try {
+      const fetchedMemberId = await fetchMemberId();
+      setMemberId(fetchedMemberId);
+      if (selectedItem?.appId) {
+        await fetchAppDetails(selectedItem.appId, fetchedMemberId);
+      }
+    } catch (error) {
+      console.error('Error during initialization:', error);
+    }
+  };
+
+  initializeAppDetails();
+}, [selectedItem?.appId]);
+
+
 const fetchTriggers = async () => {
   try {
     const response = await getTriggers(selectedItem.appId);
@@ -262,7 +323,7 @@ useEffect(() => {
     console.log(`Selected Option: ${selectedOption}`);
   };
 
-  const [toggle2, setToggle2] = useState(false);
+  const [toggle2, setToggle2] = useState(true);
 
   const onIconPress = () => {
     setToggle2(!toggle2);
@@ -378,10 +439,11 @@ const handleOptionPress = async (optionName) => {
  {/* 고급 모드 전환 버튼 */}
     <ToggleBtn onPress={toggleAdvancedMode} toggleStates={advancedActivate}>
       <SwitchText toggleStates={advancedActivate}>
-        {advancedActivate ? '고급모드':'기본모드'}
+        {advancedActivate ? '고급모드' : '기본모드'}
       </SwitchText>
       <CircleBtn toggleStates={advancedActivate} />
     </ToggleBtn>
+
   </HeaderView>
             {toggleStates && (
               <>
