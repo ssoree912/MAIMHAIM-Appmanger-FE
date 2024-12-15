@@ -1,3 +1,11 @@
+//
+//  GeofenceManager.swift
+//  MyNewProject
+//
+//  Created by 하준수 on 12/14/24.
+//
+
+
 import UIKit
 import CoreLocation
 

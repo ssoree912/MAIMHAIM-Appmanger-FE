@@ -87,45 +87,65 @@ const [memberId, setMemberId] = useState<number | null>(null); // AsyncStorage�
    }
  };
 
- // 고급 모드 상태 토글
- const toggleAdvancedMode = async () => {
-   if (!selectedItem || !memberId) return;
+// 고급 모드 상태 토글
+const toggleAdvancedMode = async () => {
+  if (!selectedItem || !memberId) return;
 
-   const newActivateState = !advancedActivate;
-   setAdvancedActivate(newActivateState);
-   setToggleStates(!newActivateState);
+  const newActivateState = !advancedActivate; // 새로운 상태
+  setAdvancedActivate(newActivateState); // 상태 업데이트
+  setToggleStates(!newActivateState);
 
-   try {
-     // 서버에 상태 전송
-     await activateAdvancedApp(memberId, selectedItem.appId, newActivateState);
+  try {
+    // 서버에 상태 전송
+    await activateAdvancedApp(memberId, selectedItem.appId, newActivateState);
 
-     // 새로운 상태 저장
-     await saveAdvancedActivateState(selectedItem.appId, memberId, newActivateState);
+    // 새로운 상태 저장
+    await saveAdvancedActivateState(selectedItem.appId, memberId, newActivateState);
 
-     Alert.alert(
-       '성공',
-       `고급 모드가 ${newActivateState ? '활성화' : '비활성화'}되었습니다.`
-     );
-   } catch (error) {
-     console.error('Error toggling advanced mode:', error);
-     Alert.alert('오류', '고급 모드 상태 변경 중 문제가 발생했습니다.');
-   }
- };
+    // `type`에 따른 동작 수행
+    if (newActivateState && appType) {
+      console.log(`Activating mode for appType: ${appType}`);
+      switch (appType) {
+        case 'LOCATION':
+          setSelectedOption('위치 기반');
+          break;
+        case 'TIME':
+          setSelectedOption('시간 기반');
+          break;
+        case 'SCHEDULE':
+          setSelectedOption('일정 기반');
+          break;
+        case 'MOTION':
+          setSelectedOption('모션 기반');
+          break;
+        default:
+          setSelectedOption('run');
+      }
+     
+    } else if (!newActivateState) {
+      setSelectedOption('run'); // 기본 상태로 복원
+     // Alert.alert('성공', '고급 모드가 비활성화되었습니다.');
+    }
+  } catch (error) {
+    console.error('Error toggling advanced mode:', error);
+    Alert.alert('오류', '고급 모드 상태 변경 중 문제가 발생했습니다.');
+  }
+};
 
- // 앱 상세 정보 가져오기
- const fetchAppDetails = async (appId, memberId) => {
-   try {
-     const appDetails = await getAppDetails(appId, memberId);
-     const storedState = await fetchAdvancedActivateState(appId, memberId);
-     setAdvancedActivate(storedState); // AsyncStorage 상태 반영
-     setAppType(appDetails.type || null); // 앱 타입 업데이트
-     setToggleStates(!storedState); // 고급모드일 때 toggleStates 설정
-   } catch (error) {
-     console.error('Error fetching app details:', error);
-     Alert.alert('오류', '앱 정보를 불러오는 중 문제가 발생했습니다.');
-     throw error;
-   }
- };
+// 앱 상세 정보 가져오기
+const fetchAppDetails = async (appId, memberId) => {
+  try {
+    const appDetails = await getAppDetails(appId, memberId);
+    const storedState = await fetchAdvancedActivateState(appId, memberId);
+    setAdvancedActivate(storedState); // AsyncStorage 상태 반영
+    setAppType(appDetails.type || null); // 앱 타입 업데이트
+    setToggleStates(!storedState); // 고급모드일 때 toggleStates 설정
+  } catch (error) {
+    console.error('Error fetching app details:', error);
+    Alert.alert('오류', '앱 정보를 불러오는 중 문제가 발생했습니다.');
+    throw error;
+  }
+};
 
  // 초기화 (useEffect)
 useEffect(() => {

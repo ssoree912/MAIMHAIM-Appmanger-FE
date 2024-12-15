@@ -36,23 +36,23 @@
 //             return; // 오류가 있을 경우 메서드 종료
 //         }
 
-//         // 지오펜싱 트리거 타입 확인 (ENTER, EXIT 등)
+         // 지오펜싱 트리거 타입 확인 (ENTER, EXIT 등)
 //         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
-//         // 지오펜싱이 ENTER 또는 EXIT일 경우에만 처리
+         // 지오펜싱이 ENTER 또는 EXIT일 경우에만 처리
 //         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
 //             geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
-//             // 트리거된 지오펜스들 가져오기
+             // 트리거된 지오펜스들 가져오기
 //             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
-//             // 각 지오펜스에 대해 처리
+             // 각 지오펜스에 대해 처리
 //             for (Geofence geofence : triggeringGeofences) {
 //                 String requestId = geofence.getRequestId();
 
 //                 Intent serviceIntent = new Intent(context, LocationForegroundService.class);
 
-//                 // 진입인지 이탈인지 확인 후 메시지 출력
+                 // 진입인지 이탈인지 확인 후 메시지 출력
 //                 if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
 //                     Log.i("GeofenceBroadcastReceiver", "지오펜스 진입: " + requestId);
 //                     serviceIntent.putExtra("isCheck", true); // (진입)
@@ -61,7 +61,6 @@
 //                     Log.i("GeofenceBroadcastReceiver", "지오펜스 이탈: " + requestId);
 //                     serviceIntent.putExtra("isCheck", false); // (이탈)
 //                 }
-                
 //                 context.startService(serviceIntent); // 서비스 시작
 //             }
 //         } else {
