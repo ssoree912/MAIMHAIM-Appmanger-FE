@@ -1,5 +1,6 @@
 #import "RCTMemberIdModule.h"
 #import "MyNewProject-Swift.h"
+#import "Constants.h"
 
 @implementation RCTMemberIdModule
 
@@ -31,7 +32,8 @@ RCT_EXPORT_METHOD(saveMemberId:(NSString *)memberId)
 
 // 서버로 데이터 POST 전송
 - (void)sendDataToServerWithMemberId:(NSString *)memberId {
-  NSURL *url = [NSURL URLWithString:@"http://192.168.219.101:8080/api/v2/managed-apps"];
+  NSString *urlString = [NSString stringWithFormat:@"%@/api/v2/managed-apps", BASE_URL];
+    NSURL *url = [NSURL URLWithString:urlString];
   NSDictionary *body = @{
     @"memberId": memberId,
     @"apps": @[

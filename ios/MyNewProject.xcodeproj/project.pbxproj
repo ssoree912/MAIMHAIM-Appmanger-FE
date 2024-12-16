@@ -74,6 +74,7 @@
 		4B35FD5F2D0C49700064971A /* DynamicIslandWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DynamicIslandWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B35FD602D0C49700064971A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		4B35FD622D0C49700064971A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		4B5B5FA72D0FF07B00B8F7B3 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		4B7231CB2D0F283100ACD48E /* MyNewProject-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyNewProject-Bridging-Header.h"; sourceTree = "<group>"; };
 		4B7231FD2D0F2B9E00ACD48E /* RCTMemberIdModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMemberIdModule.h; sourceTree = "<group>"; };
 		4B7231FE2D0F2BC100ACD48E /* RCTMemberIdModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMemberIdModule.m; sourceTree = "<group>"; };
@@ -177,6 +178,7 @@
 				4B7231CB2D0F283100ACD48E /* MyNewProject-Bridging-Header.h */,
 				4B7231FD2D0F2B9E00ACD48E /* RCTMemberIdModule.h */,
 				4B7231FE2D0F2BC100ACD48E /* RCTMemberIdModule.m */,
+				4B5B5FA72D0FF07B00B8F7B3 /* Constants.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate2.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
