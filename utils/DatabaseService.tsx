@@ -10,12 +10,49 @@ const openDatabase = async (): Promise<SQLiteDatabase> => {
     return db;
   }
   try {
-    db = await SQLite.openDatabase({ name: 'app_database', location: 'default' });
+    db = await SQLite.openDatabase({ name: 'app_database.sqlite', location: 'default' });
     console.log('Database connection established');
     return db;
   } catch (error) {
     console.error('Error opening database:', error);
     throw error;
+  }
+};
+
+const initializeDatabase = async () => {
+  try {
+    const database = await openDatabase();
+    database.transaction(tx => {
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS App (
+          appId INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          apName TEXT,
+          packageName TEXT,
+          isAdd INTEGER,
+          activate INTEGER,
+          triggerType TEXT,
+          triggerActive INTEGER,
+          timeTriggerActive INTEGER,
+          motionTriggerActive INTEGER,
+          advancedMode INTEGER,
+          isForeground INTEGER,
+          time TEXT,
+          week TEXT,
+          count INTEGER
+        );`,
+        [],
+        () =>
+          console.log('React Native SQLite: App table created successfully.'),
+        (_, error) =>
+          console.error(
+            'React Native SQLite: Error creating App table:',
+            error,
+          ),
+      );
+    });
+  } catch (error) {
+    console.error('React Native SQLite: Error initializing database:', error);
   }
 };
 
@@ -90,7 +127,7 @@ const DatabaseService = {
               console.log('App details updated locally:', result);
             },
             (tx, error) => {
-              console.error('Error updating app details:', error);
+              console.error('Error updating app details:', error.message);
             }
           );
         } else {
@@ -106,6 +143,7 @@ const DatabaseService = {
   updateAppIsAdd: async (packageName: string, isAdd: boolean): Promise<void> => {
     try {
       const database = await openDatabase();
+      const table = await initializeDatabase();
       database.transaction(tx => {
         tx.executeSql(
           'UPDATE App SET isAdd = ? WHERE packageName = ?',

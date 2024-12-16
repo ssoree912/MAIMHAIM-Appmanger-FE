@@ -1,0 +1,1 @@
+failed to emit precompiled header '/Users/hwangsolhee/Library/Developer/Xcode/DerivedData/MyNewProject-epjkclhwswznllcepkuwwcwazfei/Build/Intermediates.noindex/PrecompiledHeaders/MyNewProject-Bridging-Header-swift_L0SIP2YBG99U-clang_2ETH93YCMLN92.pch' for bridging header '/Users/hwangsolhee/Documents/project/geo-fencing-app/ios/MyNewProject-Bridging-Header.h'

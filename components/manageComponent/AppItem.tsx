@@ -1,4 +1,4 @@
-import React, { useEffect , useState } from 'react';
+import React, { act, useEffect , useState } from 'react';
 import {Image, Pressable, View, Alert, NativeModules} from 'react-native';
 import { Text } from '../../theme/theme';
 import styled from 'styled-components/native';
@@ -39,14 +39,15 @@ export const AppItem = ({ apps, searchTerm }: any) => {
 
           const memberId = await AsyncStorage.getItem('memberId');
           if (memberId) {
-              const activate = newToggleStates[appId];
+            const activate = newToggleStates[appId];
+            
               try {
                   await activateApp(parseInt(memberId, 10), appId, activate);
                   setModalMessage(`앱이 ${activate ? '활성화' : '비활성화'} 되었습니다.`);
-                  setModalVisible(true);
-
+                setModalVisible(true);
+                let isActivate = activate ? 1 : 0;
                   await DatabaseService.updateAppDetails(packageName, { activate });
-                  if (!activate) await LeaveHandleModule.leaveApp(ssid, activate);
+                  // if (!activate) await LeaveHandleModule.leaveApp(ssid, activate);
                   console.log(`Local database updated for package: ${packageName}`);
               } catch (error) {
                   console.error('Error toggling app activation:', error);

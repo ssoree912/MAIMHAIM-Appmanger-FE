@@ -24,7 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadServiceStatus, saveServiceStatus } from '../../utils/foregroundServiceUtils';
 import {useRecoilState} from 'recoil';
 import axios from 'axios';
-import { getTriggerCounts,addUeser } from '../../services/apiServices'; // 앱 매니저 횟수 API 가져오기
+import { getTriggerCounts,addUser } from '../../services/apiServices'; // 앱 매니저 횟수 API 가져오기
 import DatabaseService from '../../utils/DatabaseService';
 
 
@@ -37,20 +37,25 @@ const HomeScreen: React.FC = () => {
 
        const [totalCount, setTotalCount] = useState(0);
 
-    const position = useRef(new Animated.Value(isActive ? 45 : -45)).current;
+  const position = useRef(new Animated.Value(isActive ? 45 : -45)).current;
 
    useEffect(() => {
            const initializeUUID = async () => {
              const storedMemberId = await AsyncStorage.getItem('memberId');
              if (storedMemberId) {
                console.log('Existing memberId found:', storedMemberId);
+              //  await saveMemberIdToNative(storedMemberId); // iOS로 전달
                // Android Native에 저장
                await MemberIdModule.saveMemberId(storedMemberId);
              } else {
                const newMemberId = await initUser();
                if (newMemberId) {
-                 console.log('User initialized with new memberId:', newMemberId);
+                 console.log(
+                   'User initialized with new memberId:',
+                   newMemberId,
+                 );
                  await AsyncStorage.setItem('memberId', newMemberId);
+                //  await saveMemberIdToNative(storedMemberId); // iOS로 전달
                  // Android Native에 저장
                  await MemberIdModule.saveMemberId(newMemberId);
                }
