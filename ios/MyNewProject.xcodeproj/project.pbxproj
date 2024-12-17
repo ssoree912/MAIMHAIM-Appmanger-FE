@@ -17,6 +17,7 @@
 		4B35FD612D0C49700064971A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B35FD602D0C49700064971A /* WidgetKit.framework */; };
 		4B35FD632D0C49700064971A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B35FD622D0C49700064971A /* SwiftUI.framework */; };
 		4B35FD742D0C49720064971A /* DynamicIslandWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4B35FD5F2D0C49700064971A /* DynamicIslandWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4B5B5FCB2D103EA700B8F7B3 /* KalmanFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5B5FCA2D103E9D00B8F7B3 /* KalmanFilter.swift */; };
 		4B7231FF2D0F2BC100ACD48E /* RCTMemberIdModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7231FE2D0F2BC100ACD48E /* RCTMemberIdModule.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		85AF4884BE15AC8EAD8FC966 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4F674A8836E39736ACD516D3 /* PrivacyInfo.xcprivacy */; };
@@ -75,6 +76,7 @@
 		4B35FD602D0C49700064971A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		4B35FD622D0C49700064971A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		4B5B5FA72D0FF07B00B8F7B3 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		4B5B5FCA2D103E9D00B8F7B3 /* KalmanFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KalmanFilter.swift; sourceTree = "<group>"; };
 		4B7231CB2D0F283100ACD48E /* MyNewProject-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyNewProject-Bridging-Header.h"; sourceTree = "<group>"; };
 		4B7231FD2D0F2B9E00ACD48E /* RCTMemberIdModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMemberIdModule.h; sourceTree = "<group>"; };
 		4B7231FE2D0F2BC100ACD48E /* RCTMemberIdModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMemberIdModule.m; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 			children = (
 				4B7232002D0F385A00ACD48E /* db */,
 				4B35FD592D0C18530064971A /* AppDelegate.swift */,
+				4B5B5FCA2D103E9D00B8F7B3 /* KalmanFilter.swift */,
 				4B35FD542D0BFFE40064971A /* ViewController.swift */,
 				D8ACF9652D0D15FE00134742 /* GeofenceManager.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -537,6 +540,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B5B5FCB2D103EA700B8F7B3 /* KalmanFilter.swift in Sources */,
 				4B35FD5A2D0C185A0064971A /* AppDelegate.swift in Sources */,
 				4B35FD552D0BFFF10064971A /* ViewController.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate2.mm in Sources */,
