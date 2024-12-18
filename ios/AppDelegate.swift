@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     let appData: [(urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)] = [
         ("starbucks://", "com.starbucks.co", 40011, 44551, "Starbucks"),
 //        ("costco://", "com.ingka.ikea.app", 40011, 44543, "costco")
-        ("cesconf://", "com.ingka.ikea.app", 40011, 44543, "CES2025")
+        ("cesconf://", "com.cta.cestech", 40011, 44543, "CES2025")
     ]
 
     override init() {
@@ -138,7 +138,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
     }
 
+  // 앱 정보 캐시
+  var activeApp: App? // 현재 활성화된 앱 정보 저장
+  var activeAppKey: String? // 현재 활성화된 비콘의 키 저장
+
   func locationManager(_ manager: CLLocationManager, didRange beacons: [CLBeacon], satisfying constraint: CLBeaconIdentityConstraint) {
+      startOrUpdateLiveActivity()
       guard !beacons.isEmpty else {
           print("[LOG] No beacons detected")
           return
@@ -150,7 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
           return
       }
 
-      let key = "\(beacon.major.intValue)-\(beacon.minor.intValue)" // 고유 키 생성
+      let key = "\(beacon.major.intValue)-\(beacon.minor.intValue)" // 비콘 고유 키 생성
       let rawRSSI = Double(beacon.rssi)
       guard rawRSSI != 0 else {
           print("[LOG] Invalid RSSI value")
@@ -161,15 +166,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       movingAverageRSSI = calculateMovingAverage(newRSSI: rawRSSI)
       kalmanRSSI = applyKalmanFilter(rssi: rawRSSI)
       let combinedRSSI = (movingAverageRSSI + kalmanRSSI) / 2
-
       let combinedDistance = calculateDistanceFromRSSI(rssi: combinedRSSI)
 
-//      print("""
-//      [MATCHING APP INFO]
-//      - App Name: \(appInfo.appName)
-//      - Minor: \(appInfo.minor)
-//      - Distance: \(combinedDistance) meters
-//      """)
+      print("""
+      [MATCHING APP INFO]
+      - App Name: \(appInfo.appName)
+      - Minor: \(appInfo.minor)
+      - Distance: \(combinedDistance) meters
+      """)
 
       if notificationState[key] == nil {
           notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
@@ -186,6 +190,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
               if let startTime = entryStartTime[key], now.timeIntervalSince(startTime) >= 2.0 {
                   selectedBeaconKey = key
+                  activeAppKey = key // 활성화된 앱 키 저장
+
+                  // DB 조회는 처음 진입 시 한 번만
+                  if activeApp == nil {
+                      if let app = DBManager.shared.fetchAppByPackageName(appInfo.packageName), app.isAdd, app.activate {
+                          activeApp = app // 활성화된 앱 정보 저장
+                          print("[LOG] Active app set: \(app.name)")
+                      } else {
+                          print("[LOG] App \(appInfo.appName) is not active or not marked for addition.")
+                          return
+                      }
+                  }
+
                   if notificationState[key]?.hasAppOpened == false {
                       if UIApplication.shared.applicationState == .active {
                           openApp(appInfo: appInfo)
@@ -200,7 +217,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
               }
           }
       } else {
-          entryStartTime[key] = nil // 진입 조건이 깨졌을 때 초기화
+          entryStartTime[key] = nil
       }
 
       // 이탈 조건 처리
@@ -214,15 +231,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
               NotificationManager.shared.sendExitNotification(appName: appInfo.appName)
               resetAppState(forKey: key, appInfo: appInfo)
               selectedBeaconKey = nil
+              activeApp = nil // 활성화된 앱 정보 초기화
+              activeAppKey = nil
               print("[LOG] Exited \(appInfo.appName)")
               exitStartTime[key] = nil // 이탈 완료 후 초기화
           }
       } else {
-          exitStartTime[key] = nil // 이탈 조건이 깨졌을 때 초기화
+          exitStartTime[key] = nil
       }
 
       previousDistance[key] = combinedDistance
-      startOrUpdateLiveActivity()
+    
+  }
+
+  func resetAppState(forKey key: String, appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
+      notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
+      print("[LOG] Reset app launch state for \(appInfo.appName)")
+      hasAppOpened = false
+      hasNotificationBeenSent = false
   }
     // MARK: - Helper Methods
     func calculateDistanceFromRSSI(rssi: Double) -> Double {
@@ -257,10 +283,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
     }
 
-    func resetAppState(forKey key: String, appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
-        notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
-        print("[LOG] Reset app launch state for \(appInfo.appName)")
-        hasAppOpened = false
-        hasNotificationBeenSent = false
-    }
+//    func resetAppState(forKey key: String, appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
+//        notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
+//        print("[LOG] Reset app launch state for \(appInfo.appName)")
+//        hasAppOpened = false
+//        hasNotificationBeenSent = false
+//    }
 }

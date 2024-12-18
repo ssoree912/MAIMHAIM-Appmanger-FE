@@ -124,8 +124,14 @@ class DBManager: NSObject {
           
           // 결과 확인
           while sqlite3_step(statement) == SQLITE_ROW {
-              fetchedApp = fetchAppFromStatement(statement)
-              print("Fetched app: \(fetchedApp?.packageName ?? "N/A")")
+              let app = fetchAppFromStatement(statement)
+              print("Fetched app: \(app?.packageName ?? "N/A")")
+//            if let app = app, app.isAdd && app.activate {
+//                            fetchedApp = app
+//                            print("App \(app.packageName) is valid with isAdd: \(app.isAdd), activate: \(app.activate)")
+//                        } else {
+//                            print("App \(app?.packageName ?? "N/A") is not valid or does not satisfy conditions.")
+//                        }
           }
       } else {
           print("Error preparing SELECT statement: \(String(cString: sqlite3_errmsg(db)))")
@@ -197,4 +203,29 @@ class DBManager: NSObject {
           count: count
       )
     }
+  // MARK: - Update App Activate Value
+  func updateAppActivate(packageName: String, isActive: Bool) -> Bool {
+      let updateQuery = "UPDATE App SET activate = ? WHERE packageName = ?;"
+      var updateStatement: OpaquePointer? = nil
+
+      if sqlite3_prepare_v2(db, updateQuery, -1, &updateStatement, nil) == SQLITE_OK {
+          let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+
+          sqlite3_bind_int(updateStatement, 1, isActive ? 1 : 0) // Bind isActive value (1 for true, 0 for false)
+          sqlite3_bind_text(updateStatement, 2, packageName, -1, SQLITE_TRANSIENT) // Bind packageName
+
+          if sqlite3_step(updateStatement) == SQLITE_DONE {
+              print("Successfully updated activate value for package: \(packageName)")
+              sqlite3_finalize(updateStatement)
+              return true
+          } else {
+              print("Failed to update activate value for package: \(packageName)")
+          }
+      } else {
+          print("Failed to prepare update statement: \(String(cString: sqlite3_errmsg(db)))")
+      }
+
+      sqlite3_finalize(updateStatement)
+      return false
+  }
 }

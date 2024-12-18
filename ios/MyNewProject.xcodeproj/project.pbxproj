@@ -123,6 +123,11 @@
 			path = db;
 			sourceTree = "<group>";
 		};
+		4B8FD2572D134770009A5BAB /* modules */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = modules;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +179,7 @@
 		13B07FAE1A68108700A75B9A /* MyNewProject */ = {
 			isa = PBXGroup;
 			children = (
+				4B8FD2572D134770009A5BAB /* modules */,
 				4B7232002D0F385A00ACD48E /* db */,
 				4B35FD592D0C18530064971A /* AppDelegate.swift */,
 				4B8FD2532D116FDC009A5BAB /* NotificationManager.swift */,
@@ -304,6 +310,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				4B7232002D0F385A00ACD48E /* db */,
+				4B8FD2572D134770009A5BAB /* modules */,
 			);
 			name = MyNewProject;
 			productName = MyNewProject;

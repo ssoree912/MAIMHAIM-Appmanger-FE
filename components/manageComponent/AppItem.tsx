@@ -15,7 +15,7 @@ export const AppItem = ({ apps, searchTerm }: any) => {
     const [toggleStates, setToggleStates] = useRecoilState(ManageApplicationToggle);
     const navigate = useNavigate();
     const [addApp] = useRecoilState(AddApplication);
-    const {LeaveHandleModule} = NativeModules;
+    const {LeaveHandleModule, MemberIdModule} = NativeModules;
      const [modalVisible, setModalVisible] = useState(false);
         const [modalMessage, setModalMessage] = useState('');
 
@@ -46,7 +46,8 @@ export const AppItem = ({ apps, searchTerm }: any) => {
                   setModalMessage(`앱이 ${activate ? '활성화' : '비활성화'} 되었습니다.`);
                 setModalVisible(true);
                 let isActivate = activate ? 1 : 0;
-                  await DatabaseService.updateAppDetails(packageName, { activate });
+                await DatabaseService.updateAppDetails(packageName, { activate });
+                await MemberIdModule.updateActivateValue(packageName, activate);
                   // if (!activate) await LeaveHandleModule.leaveApp(ssid, activate);
                   console.log(`Local database updated for package: ${packageName}`);
               } catch (error) {

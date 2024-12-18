@@ -77,7 +77,7 @@ const AddApp = () => {
           await addApp(parseInt(memberId, 10), [{ appId: selectedApp.appId, add: false }]); // 서버에 제거 요청
           await DatabaseService.updateAppIsAdd(selectedApp.packageName, false); // 로컬 DB에서 isAdd를 0으로 업데이트
           console.log(selectedApp.ssid);
-          await LeaveHandleModule.leaveApp(selectedApp.ssid, false);
+          // await LeaveHandleModule.leaveApp(selectedApp.ssid, false);
           showNotification(`${selectedApp.name}이(가) 제거되었습니다.`);
         } catch (error) {
           console.error('Error removing app:', error);
