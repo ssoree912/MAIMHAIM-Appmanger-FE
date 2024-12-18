@@ -11,13 +11,12 @@ NSArray *appsData;
 
 + (void)initialize {
     appsData = @[
-      @{@"packageName": @"com.amazon.mShop.android.shopping", @"apName": @"Amazon", @"name": @"Amazon", @"uid": @"4", @"urlScheme": @"amazonpay"},
-      @{@"packageName": @"com.lasoo.android.target", @"apName": @"Target", @"name": @"Target", @"uid": @"5", @"urlScheme": @"targetaustralia"},
-      @{@"packageName": @"com.cta.cestech", @"apName": @"CESConf", @"name": @"CESConf", @"uid": @"6", @"urlScheme": @"cesconf"},
         @{@"packageName": @"com.starbucks.co", @"apName": @"Starbucks", @"name": @"Starbucks", @"uid": @"1", @"urlScheme": @"starbucks"},
         @{@"packageName": @"com.costco.dmc.store", @"apName": @"Costco", @"name": @"Costco", @"uid": @"2", @"urlScheme": @"costco"},
         @{@"packageName": @"com.fidelity.wi.activity", @"apName": @"Fidelity", @"name": @"Fidelity", @"uid": @"3", @"urlScheme": @"netbenefits"},
-
+        @{@"packageName": @"com.amazon.mShop.android.shopping", @"apName": @"Amazon", @"name": @"Amazon", @"uid": @"4", @"urlScheme": @"amazonpay"},
+        @{@"packageName": @"com.lasoo.android.target", @"apName": @"Target", @"name": @"Target", @"uid": @"5", @"urlScheme": @"targetaustralia"},
+        @{@"packageName": @"com.cta.cestech", @"apName": @"CESConf", @"name": @"CESConf", @"uid": @"6", @"urlScheme": @"cesconf"},
         
     ];
 }
@@ -46,7 +45,7 @@ RCT_EXPORT_METHOD(saveMemberId:(NSString *)memberId)
         // URL 스킴 확인
         NSString *urlScheme = [NSString stringWithFormat:@"%@://", appData[@"urlScheme"]];
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlScheme]]) {
-            NSLog(@"App %@ with URL scheme %@ is installed. Adding to request.", appData[@"name"], urlScheme);
+//            NSLog(@"App %@ with URL scheme %@ is installed. Adding to request.", appData[@"name"], urlScheme);
 
             // 설치된 앱만 appsArray에 추가
             [appsArray addObject:@{
