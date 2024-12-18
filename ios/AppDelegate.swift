@@ -59,7 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     @objc func sourceURL(for bridge: RCTBridge) -> URL? {
         #if DEBUG
 //      연결되어있는 ip로 바꿔야함
-        return URL(string: "http://192.168.219.101:8081/index.bundle?platform=ios&dev=true")
+       // return URL(string: "http://192.168.219.101:8081/index.bundle?platform=ios&dev=true")
+      return URL(string: "http://192.168.0.59:8081/index.bundle?platform=ios&dev=true")
         #else
         return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
         #endif

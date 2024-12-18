@@ -22,41 +22,51 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>starbucks</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSActivityTypes</key>
+	<array>
+		<string>com.apple.activities.liveactivity</string>
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
-    <key>NSExceptionDomains</key>
-         <dict>
-             <key>54.180.201.68</key>
-             <dict>
-                 <key>NSIncludesSubdomains</key>
-                 <true/>
-                 <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-                 <true/>
-                 <key>NSTemporaryExceptionMinimumTLSVersion</key>
-                 <string>TLSv1.0</string>
-             </dict>
-         </dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>54.180.201.68</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSTemporaryExceptionMinimumTLSVersion</key>
+				<string>TLSv1.0</string>
+			</dict>
+		</dict>
 	</dict>
-  <key>NSSupportsLiveActivities</key>
-  <true/>
-  <key>NSActivityTypes</key>
-  <array>
-      <string>com.apple.activities.liveactivity</string>
-  </array>
-  <key>NSUserNotificationUsageDescription</key>
-  <string>백그라운드에서 BLE 기기 검색 시 알림을 표시합니다.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>이 앱은 항상 위치 서비스를 사용하여 Beacon 이벤트를 감지합니다.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to detect nearby beacons even when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-  <string>이 앱은 항상 위치 서비스를 사용하여 Beacon 이벤트를 감지합니다.</string>
-  <key>NSLocationAlwaysUsageDescription</key>
-  <string>We need your location to detect nearby beacons even when the app is in the background.</string>
+	<string/>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>백그라운드에서 BLE 기기 검색 시 알림을 표시합니다.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>remote-notification</string>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -71,15 +81,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  <key>UIBackgroundModes</key>
-  <array>
-      <string>bluetooth-central</string>
-      <string>remote-notification</string>
-      <string>location</string>
-  </array>
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-      <string>starbucks</string>
-  </array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>PretendardGOVVariable.ttf</string>
+	</array>
 </dict>
 </plist>
