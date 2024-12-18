@@ -8,10 +8,30 @@ import ActivityKit
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate, RCTBridgeDelegate {
     var window: UIWindow?
     var locationManager: CLLocationManager?
-    var beaconConstraint: CLBeaconIdentityConstraint?
-    var previousProximity: CLProximity? = .unknown
-    var hasNotificationBeenSent: Bool = false // 알림 발송 여부를 추적하는 변수
+    var previousDistance: [String: Double] = [:] // 비콘별 이전 거리 값 저장
+    var notificationState: [String: (hasAppOpened: Bool, hasNotificationBeenSent: Bool)] = [:] // 비콘별 상태 저장
+    var hasNotificationBeenSent: Bool = false
+    var hasAppOpened: Bool = false
     var currentCount: Int = 0 // 다이나믹 아일랜드 카운트 업데이트
+    var selectedBeaconKey: String? // 현재 선택된 비콘의 키 저장
+    var entryStartTime: [String: Date] = [:]
+    var exitStartTime: [String: Date] = [:]
+    
+    var kalmanRSSI: Double = 0.0
+    var kalmanFilter = KalmanFilter()
+    var movingAverageRSSI: Double = 0.0
+    var rssiValues: [Double] = [] // Moving Average를 위한 배열
+    let movingAverageWindow = 5
+    
+  let entryThreshold: Double = 0.7 // 진입 거리 임계값 (미터)
+    let exitThreshold: Double = 2.0  // 이탈 거리 임계값 (미터)
+
+    // 앱 전환을 위한 데이터 배열
+    let appData: [(urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)] = [
+        ("starbucks://", "com.starbucks.co", 40011, 44551, "Starbucks"),
+//        ("costco://", "com.ingka.ikea.app", 40011, 44543, "costco")
+        ("cesconf://", "com.ingka.ikea.app", 40011, 44543, "CES2025")
+    ]
 
     override init() {
         super.init()
@@ -20,219 +40,227 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         locationManager?.allowsBackgroundLocationUpdates = true
         locationManager?.pausesLocationUpdatesAutomatically = false
         locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        print("[LOG] LocationManager initialized")
     }
 
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        print("[LOG] Application did finish launching")
         let bridge = RCTBridge(delegate: self, launchOptions: launchOptions)
         let rootView = RCTRootView(bridge: bridge!, moduleName: "MyNewProject", initialProperties: nil)
 
-        let rootViewController = UIViewController()
-        rootViewController.view = rootView
-
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = rootViewController
+        window?.rootViewController = UIViewController()
+        window?.rootViewController?.view = rootView
         window?.makeKeyAndVisible()
 
-        // UNUserNotificationCenter 설정
         let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.delegate = self
-        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                print("[LOG] Notification authorization granted")
-                self.setupNotificationActions()
-            } else if let error = error {
-                print("[LOG] Notification Authorization Error: \(error)")
-            }
+        notificationCenter.delegate = NotificationManager.shared
+        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+            if granted { NotificationManager.shared.setupNotificationActions() }
         }
 
-        // 비콘 탐지 설정
         setupBeaconConstraint()
-
         return true
     }
-
-    @objc func sourceURL(for bridge: RCTBridge) -> URL? {
-        #if DEBUG
+  @objc func sourceURL(for bridge: RCTBridge) -> URL? {
+      #if DEBUG
 //      연결되어있는 ip로 바꿔야함
-        return URL(string: "http://192.168.219.101:8081/index.bundle?platform=ios&dev=true")
-        #else
-        return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-        #endif
-    }
+      return URL(string: "http://192.168.219.101:8081/index.bundle?platform=ios&dev=true")
+      #else
+      return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+      #endif
+  }
 
-    // MARK: - Dynamic Island Live Activity
-    func startOrUpdateLiveActivity() {
-        currentCount += 1
+  // MARK: - Dynamic Island Live Activity
+  func startOrUpdateLiveActivity() {
+      currentCount += 1
 
-        // Live Activity 실행 또는 업데이트
-        if Activity<DynamicIslandWidgetAttributes>.activities.isEmpty {
-            startLiveActivity(count: currentCount)
-        } else {
-            updateLiveActivity(newCount: currentCount)
-        }
-    }
+      // Live Activity 실행 또는 업데이트
+      if Activity<DynamicIslandWidgetAttributes>.activities.isEmpty {
+          startLiveActivity(count: currentCount)
+      } else {
+          updateLiveActivity(newCount: currentCount)
+      }
+  }
 
-    func startLiveActivity(count: Int) {
-        guard ActivityAuthorizationInfo().areActivitiesEnabled else {
-            print("[LOG] Live Activities are not authorized")
-            return
-        }
+  func startLiveActivity(count: Int) {
+      guard ActivityAuthorizationInfo().areActivitiesEnabled else {
+          print("[LOG] Live Activities are not authorized")
+          return
+      }
 
-        let attributes = DynamicIslandWidgetAttributes(name: "Beacon Tracker")
-        let initialState = DynamicIslandWidgetAttributes.ContentState(count: count)
+      let attributes = DynamicIslandWidgetAttributes(name: "Beacon Tracker")
+      let initialState = DynamicIslandWidgetAttributes.ContentState(count: count)
 
-        do {
-            let content = ActivityContent(
-                state: initialState,
-                staleDate: nil
-            )
+      do {
+          let content = ActivityContent(
+              state: initialState,
+              staleDate: nil
+          )
 
-            let activity = try Activity<DynamicIslandWidgetAttributes>.request(
-                attributes: attributes,
-                content: content,
-                pushType: nil
-            )
-            print("[LOG] Live Activity started: \(activity.id)")
-        } catch {
-            print("[LOG] Failed to start Live Activity: \(error.localizedDescription)")
-        }
-    }
+          let activity = try Activity<DynamicIslandWidgetAttributes>.request(
+              attributes: attributes,
+              content: content,
+              pushType: nil
+          )
+          print("[LOG] Live Activity started: \(activity.id)")
+      } catch {
+          print("[LOG] Failed to start Live Activity: \(error.localizedDescription)")
+      }
+  }
 
-    func updateLiveActivity(newCount: Int) {
-        guard let activity = Activity<DynamicIslandWidgetAttributes>.activities.first else {
-            print("[LOG] No active Live Activity found")
-            return
-        }
+  func updateLiveActivity(newCount: Int) {
+      guard let activity = Activity<DynamicIslandWidgetAttributes>.activities.first else {
+          print("[LOG] No active Live Activity found")
+          return
+      }
 
-        let updatedState = DynamicIslandWidgetAttributes.ContentState(count: newCount)
+      let updatedState = DynamicIslandWidgetAttributes.ContentState(count: newCount)
 
-        Task {
+      Task {
             await activity.update(using: updatedState)
-            print("[LOG] Live Activity updated to count: \(newCount)")
-        }
-    }
+//            print("[LOG] Live Activity updated to count: \(newCount)")
+      }
+  }
+
+  
 
     // MARK: - Beacon Monitoring
     func setupBeaconConstraint() {
-        guard let uuid = UUID(uuidString: "74278bda-b644-4520-8f0c-720eaf059935") else {
-            print("[LOG] Invalid UUID")
-            return
-        }
-
-        beaconConstraint = CLBeaconIdentityConstraint(uuid: uuid, major: 40011, minor: 44551)
-
-        if let constraint = beaconConstraint {
-            let beaconRegion = CLBeaconRegion(beaconIdentityConstraint: constraint, identifier: "StarbucksBeacon")
-            beaconRegion.notifyOnEntry = true
-            beaconRegion.notifyOnExit = true
-
+        guard let uuid = UUID(uuidString: "74278bda-b644-4520-8f0c-720eaf059935") else { return }
+        
+        for app in appData {
+            let constraint = CLBeaconIdentityConstraint(uuid: uuid, major: CLBeaconMajorValue(app.major), minor: CLBeaconMinorValue(app.minor))
+            let beaconRegion = CLBeaconRegion(beaconIdentityConstraint: constraint, identifier: app.appName)
             locationManager?.startMonitoring(for: beaconRegion)
             locationManager?.startRangingBeacons(satisfying: constraint)
-            print("[LOG] Started monitoring and ranging for beacon region: \(beaconRegion.identifier)")
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didRange beacons: [CLBeacon], satisfying constraint: CLBeaconIdentityConstraint) {
-        guard let beacon = beacons.first else {
-            print("[LOG] No beacons detected")
-            return
-        }
+  func locationManager(_ manager: CLLocationManager, didRange beacons: [CLBeacon], satisfying constraint: CLBeaconIdentityConstraint) {
+      guard !beacons.isEmpty else {
+          print("[LOG] No beacons detected")
+          return
+      }
 
-        // 거리 상태 변경 확인
-        if beacon.proximity != previousProximity {
-            switch beacon.proximity {
-            case .immediate, .near:
-                if !hasNotificationBeenSent {
-                    sendNotificationForAppLaunch()
-                    hasNotificationBeenSent = true
-                    print("[LOG] Notification for entry sent")
-                }
-            case .far:
-                if hasNotificationBeenSent {
-                    sendExitNotification()
-                    hasNotificationBeenSent = false
-                    print("[LOG] Notification for exit sent")
-                }
-            default:
-                print("[LOG] Proximity unknown or unchanged")
-            }
-            previousProximity = beacon.proximity
-        }
+      let closestBeacon = beacons.min(by: { $0.accuracy < $1.accuracy })
+      guard let beacon = closestBeacon, let appInfo = appData.first(where: { $0.minor == beacon.minor.intValue && $0.major == beacon.major.intValue }) else {
+          print("[LOG] No matching app info for detected beacons")
+          return
+      }
 
-        // 조건과 관계없이 항상 Dynamic Island 업데이트
-        startOrUpdateLiveActivity()
+      let key = "\(beacon.major.intValue)-\(beacon.minor.intValue)" // 고유 키 생성
+      let rawRSSI = Double(beacon.rssi)
+      guard rawRSSI != 0 else {
+          print("[LOG] Invalid RSSI value")
+          return
+      }
+
+      // 필터링된 RSSI 및 거리 계산
+      movingAverageRSSI = calculateMovingAverage(newRSSI: rawRSSI)
+      kalmanRSSI = applyKalmanFilter(rssi: rawRSSI)
+      let combinedRSSI = (movingAverageRSSI + kalmanRSSI) / 2
+
+      let combinedDistance = calculateDistanceFromRSSI(rssi: combinedRSSI)
+
+      print("""
+      [MATCHING APP INFO]
+      - App Name: \(appInfo.appName)
+      - Minor: \(appInfo.minor)
+      - Distance: \(combinedDistance) meters
+      """)
+
+      if notificationState[key] == nil {
+          notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
+          previousDistance[key] = Double.greatestFiniteMagnitude
+      }
+
+      // 진입 조건 처리
+      if combinedDistance <= entryThreshold {
+          if selectedBeaconKey == nil || selectedBeaconKey == key {
+              let now = Date()
+              if entryStartTime[key] == nil {
+                  entryStartTime[key] = now
+              }
+
+              if let startTime = entryStartTime[key], now.timeIntervalSince(startTime) >= 2.0 {
+                  selectedBeaconKey = key
+                  if notificationState[key]?.hasAppOpened == false {
+                      if UIApplication.shared.applicationState == .active {
+                          openApp(appInfo: appInfo)
+                      } else if notificationState[key]?.hasNotificationBeenSent == false {
+                          NotificationManager.shared.sendNotificationForAppLaunch(appName: appInfo.appName, urlScheme: appInfo.urlScheme)
+                          notificationState[key]?.hasNotificationBeenSent = true
+                      }
+                      notificationState[key]?.hasAppOpened = true
+                      print("[LOG] Entered \(appInfo.appName)")
+                  }
+                  entryStartTime[key] = nil // 진입 완료 후 초기화
+              }
+          }
+      } else {
+          entryStartTime[key] = nil // 진입 조건이 깨졌을 때 초기화
+      }
+
+      // 이탈 조건 처리
+      if combinedDistance > exitThreshold && selectedBeaconKey == key {
+          let now = Date()
+          if exitStartTime[key] == nil {
+              exitStartTime[key] = now
+          }
+
+          if let startTime = exitStartTime[key], now.timeIntervalSince(startTime) >= 2.0 {
+              NotificationManager.shared.sendExitNotification(appName: appInfo.appName)
+              resetAppState(forKey: key, appInfo: appInfo)
+              selectedBeaconKey = nil
+              print("[LOG] Exited \(appInfo.appName)")
+              exitStartTime[key] = nil // 이탈 완료 후 초기화
+          }
+      } else {
+          exitStartTime[key] = nil // 이탈 조건이 깨졌을 때 초기화
+      }
+
+      previousDistance[key] = combinedDistance
+      startOrUpdateLiveActivity()
+  }
+    // MARK: - Helper Methods
+    func calculateDistanceFromRSSI(rssi: Double) -> Double {
+        let txPower = -59.0 // TxPower 설정
+        return pow(10, (txPower - rssi) / (10 * 2))
     }
 
-    // MARK: - Notifications
-    func setupNotificationActions() {
-        let openAction = UNNotificationAction(
-            identifier: "OPEN_STARBUCKS_ACTION",
-            title: "Open",
-            options: [.foreground]
-        )
-
-        let category = UNNotificationCategory(
-            identifier: "BEACON_NOTIFICATION",
-            actions: [openAction],
-            intentIdentifiers: [],
-            options: []
-        )
-
-        UNUserNotificationCenter.current().setNotificationCategories([category])
+    func calculateMovingAverage(newRSSI: Double) -> Double {
+        rssiValues.append(newRSSI)
+        if rssiValues.count > movingAverageWindow { rssiValues.removeFirst() }
+        return rssiValues.reduce(0, +) / Double(rssiValues.count)
     }
 
-    func sendNotificationForAppLaunch() {
-        let notification = UNMutableNotificationContent()
-        notification.title = "Starbucks Nearby!"
-        notification.body = "Would you like to open the Starbucks app?"
-        notification.sound = .default
-        notification.categoryIdentifier = "BEACON_NOTIFICATION"
+    func applyKalmanFilter(rssi: Double) -> Double {
+      let processNoise: Double = 1.0
+        let measurementNoise: Double = 2.0
+        var estimateError: Double = 1.0
+        let lastEstimate: Double = kalmanRSSI
 
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: nil)
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("[LOG] Error sending notification: \(error)")
-            } else {
-                print("[LOG] Notification sent successfully")
-            }
+        let prediction = lastEstimate
+        estimateError += processNoise
+        let kalmanGain = estimateError / (estimateError + measurementNoise)
+        kalmanRSSI = prediction + kalmanGain * (rssi - prediction)
+        return kalmanRSSI
+    }
+
+    func openApp(appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
+        if let url = URL(string: appInfo.urlScheme), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+            hasAppOpened = true
+            print("[LOG] Opened \(appInfo.appName) app")
         }
     }
 
-    func sendExitNotification() {
-        let notification = UNMutableNotificationContent()
-        notification.title = "You left Starbucks!"
-        notification.body = "You are now far from the beacon."
-        notification.sound = .default
-
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: nil)
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("[LOG] Error sending exit notification: \(error)")
-            } else {
-                print("[LOG] Exit notification sent successfully")
-            }
-        }
-    }
-
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-        if response.actionIdentifier == "OPEN_STARBUCKS_ACTION" {
-            if let url = URL(string: "starbucks://"), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                print("[LOG] Opened Starbucks app via URL scheme")
-            } else {
-                print("[LOG] Unable to open Starbucks app via URL scheme")
-            }
-        }
-
-        completionHandler()
+    func resetAppState(forKey key: String, appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
+        notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
+        print("[LOG] Reset app launch state for \(appInfo.appName)")
+        hasAppOpened = false
+        hasNotificationBeenSent = false
     }
 }

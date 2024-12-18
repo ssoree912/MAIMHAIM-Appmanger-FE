@@ -98,7 +98,7 @@ RCT_EXPORT_METHOD(saveMemberId:(NSString *)memberId)
                          motionTriggerActive:NO
                                  advancedMode:NO
                                   isForeground:NO
-                                         time:@"@00:00:00"
+                                         time:@"00:00:00"
                                           week:@"FFFFFFF"
                                         count:0];
         [DBManager.shared insertAppWithApp:app];
