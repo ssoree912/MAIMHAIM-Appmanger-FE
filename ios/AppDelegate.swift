@@ -164,12 +164,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
       let combinedDistance = calculateDistanceFromRSSI(rssi: combinedRSSI)
 
-      print("""
-      [MATCHING APP INFO]
-      - App Name: \(appInfo.appName)
-      - Minor: \(appInfo.minor)
-      - Distance: \(combinedDistance) meters
-      """)
+//      print("""
+//      [MATCHING APP INFO]
+//      - App Name: \(appInfo.appName)
+//      - Minor: \(appInfo.minor)
+//      - Distance: \(combinedDistance) meters
+//      """)
 
       if notificationState[key] == nil {
           notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
