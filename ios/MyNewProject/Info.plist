@@ -83,7 +83,17 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>PretendardGOVVariable.ttf</string>
-	</array>
+	 <string>PretendardGOVVariable.ttf</string>
+    <string>PretendardGOVVariable-Thin.ttf</string>
+    <string>PretendardGOVVariable-ExtraLight.ttf</string>
+    <string>PretendardGOVVariable-Light.ttf</string>
+    <string>PretendardGOVVariable-Regular.ttf</string>
+    <string>PretendardGOVVariable-Medium.ttf</string>
+    <string>PretendardGOVVariable-SemiBold.ttf</string>
+    <string>PretendardGOVVariable-Bold.ttf</string>
+    <string>PretendardGOVVariable-ExtraBold.ttf</string>
+    <string>PretendardGOVVariable-Black.ttf</string>
+</array>
+
 </dict>
 </plist>

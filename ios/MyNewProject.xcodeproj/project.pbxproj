@@ -100,6 +100,28 @@
 		D8DC29722D13390C00D98E4D /* interpark.png in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29132D13390C00D98E4D /* interpark.png */; };
 		D8DC29732D13390C00D98E4D /* Kiwoom.png in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29012D13390C00D98E4D /* Kiwoom.png */; };
 		D8DC29742D13390C00D98E4D /* nike.png in Resources */ = {isa = PBXBuildFile; fileRef = D8DC291D2D13390C00D98E4D /* nike.png */; };
+		D8DC29DD2D134F5300D98E4D /* PretendardGOV-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29DC2D134F5300D98E4D /* PretendardGOV-Thin.otf */; };
+		D8DC29DE2D134F5300D98E4D /* PretendardGOV-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D82D134F5300D98E4D /* PretendardGOV-Light.otf */; };
+		D8DC29DF2D134F5300D98E4D /* PretendardGOV-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29DB2D134F5300D98E4D /* PretendardGOV-SemiBold.otf */; };
+		D8DC29E02D134F5300D98E4D /* PretendardGOV-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D92D134F5300D98E4D /* PretendardGOV-Medium.otf */; };
+		D8DC29E22D134F5300D98E4D /* PretendardGOV-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D72D134F5300D98E4D /* PretendardGOV-ExtraLight.otf */; };
+		D8DC29E32D134F5300D98E4D /* PretendardGOV-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29DA2D134F5300D98E4D /* PretendardGOV-Regular.otf */; };
+		D8DC29E42D134F5300D98E4D /* PretendardGOV-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D62D134F5300D98E4D /* PretendardGOV-ExtraBold.otf */; };
+		D8DC29E52D134F5300D98E4D /* PretendardGOV-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D42D134F5300D98E4D /* PretendardGOV-Black.otf */; };
+		D8DC29E62D134F5300D98E4D /* PretendardGOV-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29DC2D134F5300D98E4D /* PretendardGOV-Thin.otf */; };
+		D8DC29E72D134F5300D98E4D /* PretendardGOV-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D82D134F5300D98E4D /* PretendardGOV-Light.otf */; };
+		D8DC29E82D134F5300D98E4D /* PretendardGOV-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29DB2D134F5300D98E4D /* PretendardGOV-SemiBold.otf */; };
+		D8DC29E92D134F5300D98E4D /* PretendardGOV-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D92D134F5300D98E4D /* PretendardGOV-Medium.otf */; };
+		D8DC29EB2D134F5300D98E4D /* PretendardGOV-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D72D134F5300D98E4D /* PretendardGOV-ExtraLight.otf */; };
+		D8DC29EC2D134F5300D98E4D /* PretendardGOV-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29DA2D134F5300D98E4D /* PretendardGOV-Regular.otf */; };
+		D8DC29ED2D134F5300D98E4D /* PretendardGOV-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D62D134F5300D98E4D /* PretendardGOV-ExtraBold.otf */; };
+		D8DC29EE2D134F5300D98E4D /* PretendardGOV-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC29D42D134F5300D98E4D /* PretendardGOV-Black.otf */; };
+		D8DC2A072D1350EC00D98E4D /* PretendardGOV-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC2A062D1350EC00D98E4D /* PretendardGOV-Light.otf */; };
+		D8DC2A082D1350EC00D98E4D /* PretendardGOV-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC2A062D1350EC00D98E4D /* PretendardGOV-Light.otf */; };
+		D8DC2A0D2D1350EE00D98E4D /* PretendardGOV-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC2A0C2D1350EE00D98E4D /* PretendardGOV-Light.otf */; };
+		D8DC2A0E2D1350EE00D98E4D /* PretendardGOV-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC2A0C2D1350EE00D98E4D /* PretendardGOV-Light.otf */; };
+		D8DC2A102D1350EF00D98E4D /* PretendardGOV-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC2A0F2D1350EF00D98E4D /* PretendardGOV-Regular.otf */; };
+		D8DC2A112D1350EF00D98E4D /* PretendardGOV-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8DC2A0F2D1350EF00D98E4D /* PretendardGOV-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,6 +224,17 @@
 		D8DC29222D13390C00D98E4D /* toss.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toss.png; sourceTree = "<group>"; };
 		D8DC29232D13390C00D98E4D /* tving.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tving.png; sourceTree = "<group>"; };
 		D8DC29242D13390C00D98E4D /* zoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoom.png; sourceTree = "<group>"; };
+		D8DC29D42D134F5300D98E4D /* PretendardGOV-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-Black.otf"; sourceTree = "<group>"; };
+		D8DC29D62D134F5300D98E4D /* PretendardGOV-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-ExtraBold.otf"; sourceTree = "<group>"; };
+		D8DC29D72D134F5300D98E4D /* PretendardGOV-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-ExtraLight.otf"; sourceTree = "<group>"; };
+		D8DC29D82D134F5300D98E4D /* PretendardGOV-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-Light.otf"; sourceTree = "<group>"; };
+		D8DC29D92D134F5300D98E4D /* PretendardGOV-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-Medium.otf"; sourceTree = "<group>"; };
+		D8DC29DA2D134F5300D98E4D /* PretendardGOV-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-Regular.otf"; sourceTree = "<group>"; };
+		D8DC29DB2D134F5300D98E4D /* PretendardGOV-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-SemiBold.otf"; sourceTree = "<group>"; };
+		D8DC29DC2D134F5300D98E4D /* PretendardGOV-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PretendardGOV-Thin.otf"; sourceTree = "<group>"; };
+		D8DC2A062D1350EC00D98E4D /* PretendardGOV-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "PretendardGOV-Light.otf"; path = "assets/font/PretendardGOV-Light.otf"; sourceTree = "<group>"; };
+		D8DC2A0C2D1350EE00D98E4D /* PretendardGOV-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "PretendardGOV-Light.otf"; path = "assets/font/PretendardGOV-Light.otf"; sourceTree = "<group>"; };
+		D8DC2A0F2D1350EF00D98E4D /* PretendardGOV-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "PretendardGOV-Regular.otf"; path = "assets/font/PretendardGOV-Regular.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -385,6 +418,13 @@
 		D8DC28FC2D13390C00D98E4D /* font */ = {
 			isa = PBXGroup;
 			children = (
+				D8DC29EF2D13507900D98E4D /* PretendardGOV */,
+				D8DC29D92D134F5300D98E4D /* PretendardGOV-Medium.otf */,
+				D8DC29D72D134F5300D98E4D /* PretendardGOV-ExtraLight.otf */,
+				D8DC29D82D134F5300D98E4D /* PretendardGOV-Light.otf */,
+				D8DC29DA2D134F5300D98E4D /* PretendardGOV-Regular.otf */,
+				D8DC29DB2D134F5300D98E4D /* PretendardGOV-SemiBold.otf */,
+				D8DC29DC2D134F5300D98E4D /* PretendardGOV-Thin.otf */,
 				D8DC28FB2D13390C00D98E4D /* PretendardGOVVariable.ttf */,
 			);
 			path = font;
@@ -458,6 +498,18 @@
 				D8DC29252D13390C00D98E4D /* img */,
 			);
 			path = assets;
+			sourceTree = "<group>";
+		};
+		D8DC29EF2D13507900D98E4D /* PretendardGOV */ = {
+			isa = PBXGroup;
+			children = (
+				D8DC29D42D134F5300D98E4D /* PretendardGOV-Black.otf */,
+				D8DC2A0F2D1350EF00D98E4D /* PretendardGOV-Regular.otf */,
+				D8DC2A0C2D1350EE00D98E4D /* PretendardGOV-Light.otf */,
+				D8DC2A062D1350EC00D98E4D /* PretendardGOV-Light.otf */,
+				D8DC29D62D134F5300D98E4D /* PretendardGOV-ExtraBold.otf */,
+			);
+			path = PretendardGOV;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -593,9 +645,11 @@
 				D8DC292A2D13390C00D98E4D /* Logo.png in Resources */,
 				D8DC292B2D13390C00D98E4D /* Twosome-Place.png in Resources */,
 				D8DC292C2D13390C00D98E4D /* line.png in Resources */,
+				D8DC2A0D2D1350EE00D98E4D /* PretendardGOV-Light.otf in Resources */,
 				D8DC292D2D13390C00D98E4D /* starbucksAPP.png in Resources */,
 				D8DC292E2D13390C00D98E4D /* logo_coshow_inactive.png in Resources */,
 				D8DC292F2D13390C00D98E4D /* Korea-Invest.png in Resources */,
+				D8DC2A112D1350EF00D98E4D /* PretendardGOV-Regular.otf in Resources */,
 				D8DC29302D13390C00D98E4D /* homeLogo_active.png in Resources */,
 				D8DC29312D13390C00D98E4D /* logo_coshow_active.png in Resources */,
 				D8DC29322D13390C00D98E4D /* Logo2.png in Resources */,
@@ -603,6 +657,15 @@
 				D8DC29342D13390C00D98E4D /* starbucks.png in Resources */,
 				D8DC29352D13390C00D98E4D /* KB.png in Resources */,
 				D8DC29362D13390C00D98E4D /* NH.png in Resources */,
+				D8DC29E62D134F5300D98E4D /* PretendardGOV-Thin.otf in Resources */,
+				D8DC29E72D134F5300D98E4D /* PretendardGOV-Light.otf in Resources */,
+				D8DC29E82D134F5300D98E4D /* PretendardGOV-SemiBold.otf in Resources */,
+				D8DC29E92D134F5300D98E4D /* PretendardGOV-Medium.otf in Resources */,
+				D8DC2A072D1350EC00D98E4D /* PretendardGOV-Light.otf in Resources */,
+				D8DC29EB2D134F5300D98E4D /* PretendardGOV-ExtraLight.otf in Resources */,
+				D8DC29EC2D134F5300D98E4D /* PretendardGOV-Regular.otf in Resources */,
+				D8DC29ED2D134F5300D98E4D /* PretendardGOV-ExtraBold.otf in Resources */,
+				D8DC29EE2D134F5300D98E4D /* PretendardGOV-Black.otf in Resources */,
 				D8DC29372D13390C00D98E4D /* Hana-Bank.png in Resources */,
 				D8DC29382D13390C00D98E4D /* Starbucks.png in Resources */,
 				D8DC29392D13390C00D98E4D /* Oliveyoung.png in Resources */,
@@ -634,6 +697,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8DC29DD2D134F5300D98E4D /* PretendardGOV-Thin.otf in Resources */,
+				D8DC29DE2D134F5300D98E4D /* PretendardGOV-Light.otf in Resources */,
+				D8DC29DF2D134F5300D98E4D /* PretendardGOV-SemiBold.otf in Resources */,
+				D8DC29E02D134F5300D98E4D /* PretendardGOV-Medium.otf in Resources */,
+				D8DC29E22D134F5300D98E4D /* PretendardGOV-ExtraLight.otf in Resources */,
+				D8DC29E32D134F5300D98E4D /* PretendardGOV-Regular.otf in Resources */,
+				D8DC29E42D134F5300D98E4D /* PretendardGOV-ExtraBold.otf in Resources */,
+				D8DC29E52D134F5300D98E4D /* PretendardGOV-Black.otf in Resources */,
 				D8DC294E2D13390C00D98E4D /* icon_squarex.png in Resources */,
 				D8DC294F2D13390C00D98E4D /* zoom.png in Resources */,
 				D8DC29502D13390C00D98E4D /* Tmoney.png in Resources */,
@@ -647,6 +718,7 @@
 				D8DC29582D13390C00D98E4D /* logo_coshow_active.png in Resources */,
 				D8DC29592D13390C00D98E4D /* Logo2.png in Resources */,
 				D8DC295A2D13390C00D98E4D /* icon_back.png in Resources */,
+				D8DC2A0E2D1350EE00D98E4D /* PretendardGOV-Light.otf in Resources */,
 				D8DC295B2D13390C00D98E4D /* starbucks.png in Resources */,
 				D8DC295C2D13390C00D98E4D /* KB.png in Resources */,
 				D8DC295D2D13390C00D98E4D /* NH.png in Resources */,
@@ -669,7 +741,9 @@
 				D8DC296E2D13390C00D98E4D /* korail.png in Resources */,
 				D8DC296F2D13390C00D98E4D /* coupang.png in Resources */,
 				D8DC29702D13390C00D98E4D /* Kcard.png in Resources */,
+				D8DC2A102D1350EF00D98E4D /* PretendardGOV-Regular.otf in Resources */,
 				D8DC29712D13390C00D98E4D /* tmoneyApp.png in Resources */,
+				D8DC2A082D1350EC00D98E4D /* PretendardGOV-Light.otf in Resources */,
 				D8DC29722D13390C00D98E4D /* interpark.png in Resources */,
 				D8DC29732D13390C00D98E4D /* Kiwoom.png in Resources */,
 				D8DC29742D13390C00D98E4D /* nike.png in Resources */,
