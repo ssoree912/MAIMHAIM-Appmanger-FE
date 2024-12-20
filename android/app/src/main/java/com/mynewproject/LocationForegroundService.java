@@ -40,6 +40,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.mynewproject.geofence.GeofenceHelper;
+import com.mynewproject.geofence.ServerCommunicator;
+
+import java.util.HashSet;
+import java.util.Set;
+
+
 public class LocationForegroundService extends Service {
 
     public static boolean shake_determine = false;
@@ -88,6 +97,14 @@ public class LocationForegroundService extends Service {
     private NotificationHelper notificationHelper;
     private AppDatabaseHelper appDatabaseHelper;
 
+
+
+    private Set<String> detectedSSIDs = new HashSet<>();
+    private GeofenceHelper geofenceHelper;
+
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -98,6 +115,9 @@ public class LocationForegroundService extends Service {
 
 //        createNotificationChannel(); // 알림 채널 생성
 //        Notification notification = createNotification();
+
+
+
         startForeground(NOTIFICATION_ID, notificationHelper.createNotification());
         // 서비스 시작을 위해 startService() 또는 startForegroundService() 사용
         Intent serviceIntent = new Intent(this, LightSensorService.class);
@@ -108,6 +128,11 @@ public class LocationForegroundService extends Service {
         // 위치 업데이트 초기화
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE); // Wi-Fi 매니저 초기화
+
+        // GeofenceHelper 초기화
+        geofenceHelper = new GeofenceHelper(this); // 추가된 코드
+        geofenceHelper.setupGeofences(); // 지오펜스 설정
+        geofenceHelper.checkCurrentLocation(this); // 현재 위치 확인 추가
 
         // Wi-Fi 상태 변경 감지를 위한 리시버 등록
         wifiStateReceiver = new WifiStateReceiver();
@@ -458,6 +483,19 @@ public class LocationForegroundService extends Service {
             entryStartTime = 0; // 이탈 시 진입 타이머 초기화
         }
     }
+
+    public void handleGeofenceEvent(String geofenceId) {
+        Log.d("GeofenceEvent", "Geofence ID: " + geofenceId);
+
+        // 특정 지오펜스 ID와 연결된 작업 수행
+        if ("starbucks".equals(geofenceId)) {
+            openApp("com.starbucks.app");
+            //ServerCommunicator.sendDataToServer(this, geofenceId, "App opened", "LocationInfo");
+        } else {
+            Log.d("GeofenceEvent", "Unhandled geofence ID: " + geofenceId);
+        }
+    }
+
 
     @Nullable
     @Override
