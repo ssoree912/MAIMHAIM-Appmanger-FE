@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 
-// const API_BASE_URL = 'http://192.168.219.101:8080/api/v1';
-const API_BASE_URL = 'http://54.180.201.68:8080/api/v1';
+const API_BASE_URL = 'http://192.168.219.101:8080/api/v1';
+// const API_BASE_URL = 'http://54.180.201.68:8080/api/v1';
 
 
 export const addUser = async (uuid) => {
@@ -197,6 +197,21 @@ export const getAppDetails = async (appId: number, memberId: number) => {
     const response = await axios.get(url);
     const appDetails = response.data.data || {};
     return appDetails; // advanceActivate와 type 포함
+  } catch (error) {
+    console.error("Error fetching app details:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// 특정 앱의 상세 정보 가져오기 (고급 모드 상태 포함)
+export const getCount = async (memberId: number) => {
+
+  const url = `${API_BASE_URL}/${memberId}/count`;
+  try {
+    console.log(`Fetching app details from URL: ${url}`);
+    const response = await axios.get(url);
+    const count = response.data.data || {};
+    return count; 
   } catch (error) {
     console.error("Error fetching app details:", error.response?.data || error.message);
     throw error;

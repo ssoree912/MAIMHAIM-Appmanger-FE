@@ -19,6 +19,8 @@
 		4B7231FF2D0F2BC100ACD48E /* RCTMemberIdModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7231FE2D0F2BC100ACD48E /* RCTMemberIdModule.m */; };
 		4B8FD2542D116FE1009A5BAB /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FD2532D116FDC009A5BAB /* NotificationManager.swift */; };
 		4B8FD2562D12FE57009A5BAB /* KalmanFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FD2552D12FE48009A5BAB /* KalmanFilter.swift */; };
+		4B9360A12D16E4CD00373122 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9360A02D16E4C600373122 /* ApiService.swift */; };
+		4B9360A32D16E60600373122 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9360A22D16E5FB00373122 /* Constants.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		85AF4884BE15AC8EAD8FC966 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4F674A8836E39736ACD516D3 /* PrivacyInfo.xcprivacy */; };
 		C330652DF67BDB421E4107CE /* libPods-MyNewProject-MyNewProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46042113F977405E59D98678 /* libPods-MyNewProject-MyNewProjectTests.a */; };
@@ -80,6 +82,8 @@
 		4B7231FE2D0F2BC100ACD48E /* RCTMemberIdModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMemberIdModule.m; sourceTree = "<group>"; };
 		4B8FD2532D116FDC009A5BAB /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4B8FD2552D12FE48009A5BAB /* KalmanFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KalmanFilter.swift; sourceTree = "<group>"; };
+		4B9360A02D16E4C600373122 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		4B9360A22D16E5FB00373122 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4F674A8836E39736ACD516D3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = MyNewProject/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MyNewProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97295B002E90603111F7C6F5 /* Pods-MyNewProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNewProject.release.xcconfig"; path = "Target Support Files/Pods-MyNewProject/Pods-MyNewProject.release.xcconfig"; sourceTree = "<group>"; };
@@ -177,9 +181,11 @@
 		13B07FAE1A68108700A75B9A /* MyNewProject */ = {
 			isa = PBXGroup;
 			children = (
+				4B9360A22D16E5FB00373122 /* Constants.swift */,
 				4B8FD2572D134770009A5BAB /* modules */,
 				4B7232002D0F385A00ACD48E /* db */,
 				4B35FD592D0C18530064971A /* AppDelegate.swift */,
+				4B9360A02D16E4C600373122 /* ApiService.swift */,
 				4B8FD2532D116FDC009A5BAB /* NotificationManager.swift */,
 				D8ACF9652D0D15FE00134742 /* GeofenceManager.swift */,
 				4B8FD2552D12FE48009A5BAB /* KalmanFilter.swift */,
@@ -548,9 +554,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B35FD5A2D0C185A0064971A /* AppDelegate.swift in Sources */,
+				4B9360A12D16E4CD00373122 /* ApiService.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate2.mm in Sources */,
 				4B8FD2542D116FE1009A5BAB /* NotificationManager.swift in Sources */,
 				4B8FD2562D12FE57009A5BAB /* KalmanFilter.swift in Sources */,
+				4B9360A32D16E60600373122 /* Constants.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				4B7231FF2D0F2BC100ACD48E /* RCTMemberIdModule.m in Sources */,
 				D8ACF9662D0D15FE00134742 /* GeofenceManager.swift in Sources */,

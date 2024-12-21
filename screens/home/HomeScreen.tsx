@@ -26,7 +26,7 @@ import {useRecoilState} from 'recoil';
 import axios from 'axios';
 import { getTriggerCounts,addUser } from '../../services/apiServices'; // 앱 매니저 횟수 API 가져오기
 import DatabaseService from '../../utils/DatabaseService';
-
+import {getCount} from '../../services/apiServices'; // 고급모드 API 호출
 
 const {ForegroundService, MemberIdModule} = NativeModules;
 
@@ -68,7 +68,7 @@ useEffect(() => {
     const checkDatabaseConnection = async () => {
       try {
         console.log('Checking database connection...');
-        await DatabaseService.getAllApps(); // 모든 레코드 조회
+        // await DatabaseService.getAllApps(); // 모든 레코드 조회
       } catch (error) {
         console.error('Error accessing database:', error);
       }
@@ -131,10 +131,13 @@ useEffect(() => {
 
     useEffect(() => {
         const fetchTotalCount = async () => {
-            const count = await DatabaseService.showCounts();
-            if (count !== null) {
-                setTotalCount(count);
-            }
+          const memberId = await AsyncStorage.getItem('memberId');
+          const response = await getCount(memberId);
+          console.log('Response:', response.count);
+          
+          if (response !== null) {
+            setTotalCount(response.count);
+          }
         };
 
         fetchTotalCount();

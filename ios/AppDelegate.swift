@@ -206,7 +206,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                               if UIApplication.shared.applicationState == .active {
                                   openApp(appInfo: appInfo)
                               } else if notificationState[key]?.hasNotificationBeenSent == false {
-                                  NotificationManager.shared.sendNotificationForAppLaunch(appName: appInfo.appName, urlScheme: appInfo.urlScheme)
+                                NotificationManager.shared.sendNotificationForAppLaunch(
+                                    appName: appInfo.appName,
+                                    urlScheme: appInfo.urlScheme,
+                                    packageName: appInfo.packageName
+                                )
                                   notificationState[key]?.hasNotificationBeenSent = true
                               }
                               notificationState[key]?.hasAppOpened = true
@@ -278,13 +282,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         return kalmanRSSI
     }
 
-    func openApp(appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
-        if let url = URL(string: appInfo.urlScheme), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-            hasAppOpened = true
-            print("[LOG] Opened \(appInfo.appName) app")
-        }
-    }
+  func openApp(appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
+      if let url = URL(string: appInfo.urlScheme), UIApplication.shared.canOpenURL(url) {
+          // 앱 실행
+          UIApplication.shared.open(url) { success in
+              if success {
+                  print("[LOG] Opened \(appInfo.appName) app")
+                  
+                  // UserDefaults에서 memberId 가져오기
+                  let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "0"
+                  
+                  // 서버에 POST 요청
+                  ApiService.shared.addCount(packageName: appInfo.packageName, memberId: Int(memberId) ?? 0, type: "LOCATION") { result in
+                      switch result {
+                      case .success(let response):
+                          print("[LOG] Successfully sent count to server: \(response)")
+                      case .failure(let error):
+                          print("[LOG] Failed to send count to server: \(error)")
+                      }
+                  }
+              } else {
+                  print("[LOG] Failed to open app: \(appInfo.appName)")
+              }
+          }
+      }
+  }
 
 //    func resetAppState(forKey key: String, appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
 //        notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)

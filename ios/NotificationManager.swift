@@ -26,15 +26,15 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     }
 
     // 동적으로 앱 문구와 URL 스킴 설정
-    func sendNotificationForAppLaunch(appName: String, urlScheme: String) {
+    func sendNotificationForAppLaunch(appName: String, urlScheme: String, packageName: String) {
         let notification = UNMutableNotificationContent()
         notification.title = "\(appName) Nearby!"
         notification.body = "Would you like to open the \(appName) app?"
         notification.sound = .default
         notification.categoryIdentifier = "BEACON_NOTIFICATION"
 
-        // URL 스킴 저장
-        notification.userInfo = ["urlScheme": urlScheme]
+        // URL 스킴과 패키지 이름 저장
+        notification.userInfo = ["urlScheme": urlScheme, "packageName": packageName]
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: nil)
         UNUserNotificationCenter.current().add(request) { error in
@@ -63,20 +63,41 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     }
 
     // MARK: - UNUserNotificationCenterDelegate
-    func userNotificationCenter(
-        _ center: UNUserNotificationCenter,
-        didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
-    ) {
-        if response.actionIdentifier == "OPEN_APP_ACTION" {
-            if let urlScheme = response.notification.request.content.userInfo["urlScheme"] as? String,
-               let url = URL(string: urlScheme), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                print("[LOG] Opened app via URL scheme: \(urlScheme)")
-            } else {
-                print("[LOG] Unable to open app via URL scheme")
-            }
-        }
-        completionHandler()
-    }
+  func userNotificationCenter(
+      _ center: UNUserNotificationCenter,
+      didReceive response: UNNotificationResponse,
+      withCompletionHandler completionHandler: @escaping () -> Void
+  ) {
+      if response.actionIdentifier == "OPEN_APP_ACTION" {
+          if let urlScheme = response.notification.request.content.userInfo["urlScheme"] as? String,
+             let packageName = response.notification.request.content.userInfo["packageName"] as? String,
+             let url = URL(string: urlScheme), UIApplication.shared.canOpenURL(url) {
+              
+              // 앱 열기
+              UIApplication.shared.open(url, options: [:]) { success in
+                  if success {
+                      print("[LOG] Opened app via URL scheme: \(urlScheme)")
+                      
+                      // UserDefaults에서 memberId 가져오기
+                      let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "0"
+                      
+                      // 서버에 POST 요청
+                      ApiService.shared.addCount(packageName: packageName, memberId: Int(memberId) ?? 0, type: "LOCATION") { result in
+                          switch result {
+                          case .success(let response):
+                              print("[LOG] Successfully sent count to server: \(response)")
+                          case .failure(let error):
+                              print("[LOG] Failed to send count to server: \(error)")
+                          }
+                      }
+                  } else {
+                      print("[LOG] Unable to open app via URL scheme")
+                  }
+              }
+          } else {
+              print("[LOG] Unable to open app via URL scheme")
+          }
+      }
+      completionHandler()
+  }
 }
