@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(saveMemberId:(NSString *)memberId)
 
     // 앱 데이터 확인 및 서버로 요청
     [self sendDataToServerWithMemberId:memberId];
-    [self addAppToDatabase];
+//    [self addAppToDatabase];
 }
 RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isActive resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -50,13 +50,10 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
     NSString *urlString = [NSString stringWithFormat:@"%@/api/v2/managed-apps", BASE_URL];
     NSURL *url = [NSURL URLWithString:urlString];
 
-    // 동적으로 apps 배열 생성
     NSMutableArray *appsArray = [NSMutableArray array];
     for (NSDictionary *appData in appsData) {
-        // URL 스킴 확인
         NSString *urlScheme = [NSString stringWithFormat:@"%@://", appData[@"urlScheme"]];
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlScheme]]) {
-            // 설치된 앱만 appsArray에 추가
             [appsArray addObject:@{
                 @"packageName": appData[@"packageName"],
                 @"uid": appData[@"uid"],
@@ -67,13 +64,11 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
         }
     }
 
-    // appsArray가 비어 있는 경우 요청하지 않음
     if (appsArray.count == 0) {
         NSLog(@"No apps with valid URL schemes are installed. No request will be sent.");
         return;
     }
 
-    // 요청 body 구성
     NSDictionary *body = @{
         @"memberId": memberId,
         @"apps": appsArray
@@ -81,19 +76,16 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
 
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
-
     if (!jsonData) {
         NSLog(@"Failed to serialize JSON: %@", error);
         return;
     }
 
-    // HTTP 요청 설정
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
 
-    // HTTP 요청 전송
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
@@ -102,8 +94,7 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
             NSLog(@"Response Code: %ld", (long)[httpResponse statusCode]);
             if (data) {
-                NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                NSLog(@"Response: %@", responseObject);
+                [self processResponseData:data];
             }
         }
     }];
@@ -118,6 +109,7 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
         
         // Swift DBManager를 호출하여 packageName이 존재하는지 확인
         App *existingApp = [DBManager.shared fetchAppByPackageName:packageName];
+      NSLog(@">>>> %@",[DBManager.shared fetchAppByPackageName:packageName].name);
         
         if (existingApp) {
             NSLog(@"App with packageName %@ already exists in database.", packageName);
@@ -163,5 +155,49 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
     }
     NSLog(@"--- End of All Apps ---");
 }
+- (void)processResponseData:(NSData *)data {
+    NSError *error;
+    NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 
+    if (error) {
+        NSLog(@"Failed to parse JSON: %@", error);
+        return;
+    }
+
+    NSLog(@"Response Object: %@", responseObject);
+
+    NSArray *dataList = responseObject[@"data"];
+    if (![dataList isKindOfClass:[NSArray class]] || dataList.count == 0) {
+        NSLog(@"No valid data found in response.");
+        return;
+    }
+
+    for (NSDictionary *appData in dataList) {
+        NSString *packageName = appData[@"packageName"];
+        if (!packageName || ![packageName isKindOfClass:[NSString class]]) {
+            NSLog(@"Invalid packageName in appData: %@", appData);
+            continue;
+        }
+
+        App *app = [[App alloc] initWithAppId:[appData[@"appId"] intValue]
+                                         name:appData[@"name"]
+                                       apName:appData[@"name"] // Assuming `apName` is the same as `name` from response
+                                 packageName:packageName
+                                        isAdd:YES
+                                    activate:YES
+                                  triggerType:@"LOCATION"
+                                triggerActive:YES
+                            timeTriggerActive:NO
+                          motionTriggerActive:NO
+                                  advancedMode:NO
+                                   isForeground:NO
+                                          time:@"00:00:00"
+                                           week:@"FFFFFFF"
+                                        count:0]; // Default value
+
+        // Insert into database
+        [DBManager.shared insertAppWithApp:app];
+        NSLog(@"App data added to database for packageName %@", packageName);
+    }
+}
 @end

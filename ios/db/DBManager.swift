@@ -125,7 +125,7 @@ class DBManager: NSObject {
           // 결과 확인
           while sqlite3_step(statement) == SQLITE_ROW {
               let app = fetchAppFromStatement(statement)
-              print("Fetched app: \(app?.packageName ?? "N/A")")
+              print("Fetched app: \(app?.name ?? "N/A")")
 //            if let app = app, app.isAdd && app.activate {
 //                            fetchedApp = app
 //                            print("App \(app.packageName) is valid with isAdd: \(app.isAdd), activate: \(app.activate)")

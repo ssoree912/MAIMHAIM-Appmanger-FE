@@ -197,10 +197,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                       if let app = DBManager.shared.fetchAppByPackageName(appInfo.packageName), app.isAdd, app.activate {
                           activeApp = app // 활성화된 앱 정보 저장
                           print("[LOG] Active app set: \(app.name)")
-                      } else {
-                          print("[LOG] App \(appInfo.appName) is not active or not marked for addition.")
-                          return
-                      }
+                      } 
                   }
 
                   if notificationState[key]?.hasAppOpened == false {

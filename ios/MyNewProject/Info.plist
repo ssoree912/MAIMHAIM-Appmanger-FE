@@ -26,7 +26,6 @@
 	<true/>
   <key>UIAppFonts</key>
   <array>
-    <string>PretendardGOVVariable.ttf</string>
     <string>Ionicons.ttf</string>
   </array>
 	<key>NSAppTransportSecurity</key>
