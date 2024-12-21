@@ -16,12 +16,12 @@ import com.google.gson.Gson;
 public class ServerCommunicator {
     private static final String SERVER_URL = "https://example.com/api/location";
 
-    public static void sendDataToServer(Context context, String geofenceId, String event, String locationInfo) {
+    public static void sendDataToServer(Context context, String geofenceId, String event, double latitude, double longitude) {
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
 
-
-        String json = new Gson().toJson(new DataModel(geofenceId, event, locationInfo));
+        // Create JSON object from DataModel
+        String json = new Gson().toJson(new DataModel(geofenceId, event, latitude, longitude));
 
         RequestBody body = RequestBody.create(json, mediaType);
         Request request = new Request.Builder()
@@ -37,20 +37,27 @@ public class ServerCommunicator {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("ServerCommunicator", "Response: " + response.body().string());
+                if (response.isSuccessful()) {
+                    Log.d("ServerCommunicator", "Response: " + response.body().string());
+                } else {
+                    Log.e("ServerCommunicator", "Server error: " + response.code());
+                }
             }
         });
     }
 
+    // Data model class matching the updated API request format
     static class DataModel {
         String geofenceId;
         String event;
-        String locationInfo;
+        double latitude;
+        double longitude;
 
-        DataModel(String geofenceId, String event, String locationInfo) {
+        DataModel(String geofenceId, String event, double latitude, double longitude) {
             this.geofenceId = geofenceId;
             this.event = event;
-            this.locationInfo = locationInfo;
+            this.latitude = latitude;
+            this.longitude = longitude;
         }
     }
 }
