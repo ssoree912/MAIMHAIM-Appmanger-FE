@@ -181,6 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
       }
 
       // 진입 조건 처리
+
       if combinedDistance <= entryThreshold {
           if selectedBeaconKey == nil || selectedBeaconKey == key {
               let now = Date()
@@ -191,24 +192,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
               if let startTime = entryStartTime[key], now.timeIntervalSince(startTime) >= 2.0 {
                   selectedBeaconKey = key
                   activeAppKey = key // 활성화된 앱 키 저장
-
                   // DB 조회는 처음 진입 시 한 번만
-                  if activeApp == nil {
-                      if let app = DBManager.shared.fetchAppByPackageName(appInfo.packageName), app.isAdd, app.activate {
+                  if let app = DBManager.shared.fetchAppByPackageName(appInfo.packageName) {
+                      print("[DEBUG] Fetched App: \(app.name), isAdd: \(app.isAdd), activate: \(app.activate)")
+                      
+                      // isAdd와 activate가 true일 때만 처리
+                      if app.isAdd && app.activate {
                           activeApp = app // 활성화된 앱 정보 저장
-                          print("[LOG] Active app set: \(app.name)")
-                      } 
-                  }
+                          print("[DEBUG] App is valid for activation: \(app.name)")
 
-                  if notificationState[key]?.hasAppOpened == false {
-                      if UIApplication.shared.applicationState == .active {
-                          openApp(appInfo: appInfo)
-                      } else if notificationState[key]?.hasNotificationBeenSent == false {
-                          NotificationManager.shared.sendNotificationForAppLaunch(appName: appInfo.appName, urlScheme: appInfo.urlScheme)
-                          notificationState[key]?.hasNotificationBeenSent = true
+                          // 앱 실행 또는 알림 전송
+                          if notificationState[key]?.hasAppOpened == false {
+                              if UIApplication.shared.applicationState == .active {
+                                  openApp(appInfo: appInfo)
+                              } else if notificationState[key]?.hasNotificationBeenSent == false {
+                                  NotificationManager.shared.sendNotificationForAppLaunch(appName: appInfo.appName, urlScheme: appInfo.urlScheme)
+                                  notificationState[key]?.hasNotificationBeenSent = true
+                              }
+                              notificationState[key]?.hasAppOpened = true
+                              print("[LOG] Entered \(appInfo.appName)")
+                          }
+                      } else {
+                          print("[DEBUG] App does not meet activation criteria")
                       }
-                      notificationState[key]?.hasAppOpened = true
-                      print("[LOG] Entered \(appInfo.appName)")
                   }
                   entryStartTime[key] = nil // 진입 완료 후 초기화
               }

@@ -12,7 +12,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3105E8D2160A1D3F3ECAB1B7 /* libPods-MyNewProject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE7D6275F8D6BC636B599976 /* libPods-MyNewProject.a */; };
-		4B35FD552D0BFFF10064971A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B35FD542D0BFFE40064971A /* ViewController.swift */; };
 		4B35FD5A2D0C185A0064971A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B35FD592D0C18530064971A /* AppDelegate.swift */; };
 		4B35FD612D0C49700064971A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B35FD602D0C49700064971A /* WidgetKit.framework */; };
 		4B35FD632D0C49700064971A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B35FD622D0C49700064971A /* SwiftUI.framework */; };
@@ -71,7 +70,6 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = MyNewProject/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3794C70A44A3D517DF46B498 /* Pods-MyNewProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNewProject.debug.xcconfig"; path = "Target Support Files/Pods-MyNewProject/Pods-MyNewProject.debug.xcconfig"; sourceTree = "<group>"; };
 		46042113F977405E59D98678 /* libPods-MyNewProject-MyNewProjectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyNewProject-MyNewProjectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B35FD542D0BFFE40064971A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4B35FD592D0C18530064971A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4B35FD5F2D0C49700064971A /* DynamicIslandWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DynamicIslandWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B35FD602D0C49700064971A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -183,7 +181,6 @@
 				4B7232002D0F385A00ACD48E /* db */,
 				4B35FD592D0C18530064971A /* AppDelegate.swift */,
 				4B8FD2532D116FDC009A5BAB /* NotificationManager.swift */,
-				4B35FD542D0BFFE40064971A /* ViewController.swift */,
 				D8ACF9652D0D15FE00134742 /* GeofenceManager.swift */,
 				4B8FD2552D12FE48009A5BAB /* KalmanFilter.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -551,7 +548,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B35FD5A2D0C185A0064971A /* AppDelegate.swift in Sources */,
-				4B35FD552D0BFFF10064971A /* ViewController.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate2.mm in Sources */,
 				4B8FD2542D116FE1009A5BAB /* NotificationManager.swift in Sources */,
 				4B8FD2562D12FE57009A5BAB /* KalmanFilter.swift in Sources */,

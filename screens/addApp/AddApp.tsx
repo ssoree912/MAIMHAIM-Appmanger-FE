@@ -75,9 +75,7 @@ const AddApp = () => {
         newToggleStates[index] = false; // 상태 반전
         try {
           await addApp(parseInt(memberId, 10), [{ appId: selectedApp.appId, add: false }]); // 서버에 제거 요청
-          await DatabaseService.updateAppIsAdd(selectedApp.packageName, false); // 로컬 DB에서 isAdd를 0으로 업데이트
-          console.log(selectedApp.ssid);
-          // await LeaveHandleModule.leaveApp(selectedApp.ssid, false);
+          await MemberIdModule.updateAddAppValue(selectedApp.packageName, false);
           showNotification(`${selectedApp.name}이(가) 제거되었습니다.`);
         } catch (error) {
           console.error('Error removing app:', error);
@@ -88,7 +86,8 @@ const AddApp = () => {
         newToggleStates[index] = true; // 상태 반전
         try {
           await addApp(parseInt(memberId, 10), [{ appId: selectedApp.appId, add: true }]); // 서버에 추가 요청
-          await DatabaseService.updateAppIsAdd(selectedApp.packageName, true); // 로컬 DB에서 isAdd를 1로 업데이트
+          await MemberIdModule.updateAddAppValue(selectedApp.packageName, true);
+          // await DatabaseService.updateAppIsAdd(selectedApp.packageName, true); // 로컬 DB에서 isAdd를 1로 업데이트
           showNotification(`${selectedApp.name}이(가) 추가되었습니다.`);
         } catch (error) {
           console.error('Error adding app:', error);
@@ -124,12 +123,12 @@ const AddApp = () => {
         await addApp(parseInt(memberId, 10), appsToAdd);
         showNotification('모든 앱의 상태가 변경되었습니다.');
         const packageNames = apps.map(app => app.packageName);
-        await ActivateModule.activateAddApp(packageNames, newToggleState);
         // 로컬 데이터베이스에 모든 앱의 isAdd 상태 업데이트
-        // for (const app of apps) {
-        //   // await DatabaseService.updateAppIsAdd(app.packageName, newToggleState);
-        //   await ActivateModule.activateAddApp(app.packageName,newToggleState);
-        // }
+        for (const app of apps) {
+          await MemberIdModule.updateAddAppValue(app.packageName,newToggleState);
+          console.log(">>>>>>",app.packageName , newToggleState);
+          
+        }
         console.log('Local database updated for all apps');
       } catch (error) {
         console.error('Error adding all apps:', error);

@@ -43,6 +43,16 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
   }
 }
 
+RCT_EXPORT_METHOD(updateAddAppValue:(NSString *)packageName isAdd:(BOOL)isAdd resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+  BOOL success = [DBManager.shared updateAppAddWithPackageName:packageName isAdd:isAdd];
+  NSLog(@">>>>>>> is success: %@", packageName);
+  if (success) {
+    resolve(@{@"success": @YES});
+  } else {
+    reject(@"update_failed", @"Failed to update add value", nil);
+  }
+}
 
 
 // 서버로 데이터 POST 전송
@@ -101,60 +111,6 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
 
     [task resume];
 }
-
-// SQLite에 앱 데이터 추가
-- (void)addAppToDatabase {
-    for (NSDictionary *appData in appsData) {
-        NSString *packageName = appData[@"packageName"];
-        
-        // Swift DBManager를 호출하여 packageName이 존재하는지 확인
-        App *existingApp = [DBManager.shared fetchAppByPackageName:packageName];
-      NSLog(@">>>> %@",[DBManager.shared fetchAppByPackageName:packageName].name);
-        
-        if (existingApp) {
-            NSLog(@"App with packageName %@ already exists in database.", packageName);
-        } else {
-            // 존재하지 않으면 새로 추가
-            App *app = [[App alloc] initWithAppId:[appData[@"uid"] intValue]
-                                             name:appData[@"name"]
-                                           apName:appData[@"apName"]
-                                     packageName:packageName
-                                           isAdd:YES
-                                       activate:YES
-                                     triggerType:@"LOCATION"
-                                   triggerActive:YES
-                               timeTriggerActive:NO
-                             motionTriggerActive:NO
-                                     advancedMode:NO
-                                      isForeground:NO
-                                             time:@"00:00:00"
-                                              week:@"FFFFFFF"
-                                            count:0];
-            [DBManager.shared insertAppWithApp:app];
-            NSLog(@"App data added to database for packageName %@", packageName);
-        }
-    }
-
-    // 저장된 데이터베이스 전체 데이터 로그 출력
-    NSArray *allApps = [DBManager.shared fetchAllApps];
-    NSLog(@"--- All Apps in Database ---");
-    for (App *app in allApps) {
-        NSLog(@"AppId: %ld, Name: %@, apName: %@, PackageName: %@, isAdd: %d, Activate: %d, TriggerType: %@, TriggerActive: %d, TimeTriggerActive: %d, MotionTriggerActive: %d, AdvancedMode: %d, IsForeground: %d",
-              (long)app.appId,
-              app.name,
-              app.apName,
-              app.packageName,
-              app.isAdd,
-              app.activate,
-              app.triggerType,
-              app.triggerActive,
-              app.timeTriggerActive,
-              app.motionTriggerActive,
-              app.advancedMode,
-              app.isForeground);
-    }
-    NSLog(@"--- End of All Apps ---");
-}
 - (void)processResponseData:(NSData *)data {
     NSError *error;
     NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
@@ -183,7 +139,7 @@ RCT_EXPORT_METHOD(updateActivateValue:(NSString *)packageName isActive:(BOOL)isA
                                          name:appData[@"name"]
                                        apName:appData[@"name"] // Assuming `apName` is the same as `name` from response
                                  packageName:packageName
-                                        isAdd:YES
+                                        isAdd:NO
                                     activate:YES
                                   triggerType:@"LOCATION"
                                 triggerActive:YES
