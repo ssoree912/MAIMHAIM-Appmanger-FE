@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 
-const API_BASE_URL = 'http://192.168.219.101:8080/api/v1';
-// const API_BASE_URL = 'http://54.180.201.68:8080/api/v1';
+// const API_BASE_URL = 'http://192.168.219.101:8080/api/v1';
+const API_BASE_URL = 'http://54.180.201.68:8080/api/v1';
 
 
 export const addUser = async (uuid) => {

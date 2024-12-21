@@ -2,7 +2,7 @@ import Foundation
 
 class ApiService {
     static let shared = ApiService() // 싱글톤 패턴
-    private let baseURL = Constants.localURL // 서버 기본 URL
+  private let baseURL = Constants.baseURL // 서버 기본 URL
     
     private init() {} // 외부에서 초기화 방지
 

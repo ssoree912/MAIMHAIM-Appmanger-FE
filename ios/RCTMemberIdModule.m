@@ -57,7 +57,7 @@ RCT_EXPORT_METHOD(updateAddAppValue:(NSString *)packageName isAdd:(BOOL)isAdd re
 
 // 서버로 데이터 POST 전송
 - (void)sendDataToServerWithMemberId:(NSString *)memberId {
-  NSString *urlString = [NSString stringWithFormat:@"%@/api/v2/managed-apps", LOCAL_URL];
+  NSString *urlString = [NSString stringWithFormat:@"%@/api/v2/managed-apps", BASE_URL];
     NSURL *url = [NSURL URLWithString:urlString];
 
     NSMutableArray *appsArray = [NSMutableArray array];
