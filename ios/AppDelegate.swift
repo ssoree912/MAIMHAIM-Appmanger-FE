@@ -297,6 +297,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                       switch result {
                       case .success(let response):
                           print("[LOG] Successfully sent count to server: \(response)")
+                          print("[LOG] Successfully sent count to server: \(response)")
                       case .failure(let error):
                           print("[LOG] Failed to send count to server: \(error)")
                       }

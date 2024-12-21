@@ -64,18 +64,18 @@ const HomeScreen: React.FC = () => {
            initializeUUID();
          }, []);
 
-useEffect(() => {
-    const checkDatabaseConnection = async () => {
-      try {
-        console.log('Checking database connection...');
-        // await DatabaseService.getAllApps(); // 모든 레코드 조회
-      } catch (error) {
-        console.error('Error accessing database:', error);
-      }
-    };
+// useEffect(() => {
+//     const checkDatabaseConnection = async () => {
+//       try {
+//         console.log('Checking database connection...');
+//         // await DatabaseService.getAllApps(); // 모든 레코드 조회
+//       } catch (error) {
+//         console.error('Error accessing database:', error);
+//       }
+//     };
 
-    checkDatabaseConnection();
-  }, []);
+//     checkDatabaseConnection();
+//   }, []);
 
 
     // 초기 Foreground 서비스 및 isActive 상태 설정
@@ -132,12 +132,12 @@ useEffect(() => {
     useEffect(() => {
         const fetchTotalCount = async () => {
           const memberId = await AsyncStorage.getItem('memberId');
-          const response = await getCount(memberId);
-          console.log('Response:', response.count);
-          
-          if (response !== null) {
-            setTotalCount(response.count);
-          }
+          let count = 0;
+          if (memberId !== null) {
+            const response = await getCount(memberId)
+            count = response.count
+          };          
+            setTotalCount(count);
         };
 
         fetchTotalCount();
