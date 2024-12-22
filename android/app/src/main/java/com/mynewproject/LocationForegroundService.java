@@ -55,6 +55,11 @@ import com.google.android.gms.location.LocationServices;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.mynewproject.location.AppLocationStore;
+import com.mynewproject.location.AppServerClient;
+import android.content.SharedPreferences;
+import org.json.JSONObject;
+
 
 public class LocationForegroundService extends Service {
 
@@ -470,6 +475,34 @@ public class LocationForegroundService extends Service {
                     notificationHelper.sendNotification(SSID_name, appName + "로 진입함", getApp.getPackageName());
                     entryStartTime = 0; // 진입 후 타이머 초기화
                     isHomeWifiDetected = true;
+
+                    // **SharedPreferences에서 memberId 가져오기**
+                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+                    String memberId = sharedPreferences.getString("memberId", "0"); // 기본값 0
+
+                    // **서버로 위치 데이터 전송 추가**
+                    JSONObject locationData = AppLocationStore.getLocationData(appName); // 패키지 이름으로 위치 데이터 가져오기
+                    if (locationData != null) {
+                        try {
+                            JSONObject payload = new JSONObject();
+                            payload.put("memberId", 1); // 필요 시 동적으로 설정
+                            payload.put("type", "LOCATION");
+                            payload.put("raw", locationData);
+
+                            // 서버로 데이터 전송
+                            AppServerClient.sendDataToServer(appName, payload);
+
+                            Log.d("wifi_information2", "Location data sent to server for: " + appName);
+                        } catch (Exception e) {
+                            Log.e("wifi_information2", "Error sending location data: " + e.getMessage());
+                        }
+                    } else {
+                        Log.e("wifi_information2", "No location data found for app: " + appName);
+                    }
+
+
+
+
                     if( getApp.isMotionTriggerActive() && (getApp.getTriggerType().equals(TriggerType.MOTION))&&getApp.isAdvancedMode() ){
                         isShakeAble = true;
                         shakePackageName = getApp.getPackageName();
