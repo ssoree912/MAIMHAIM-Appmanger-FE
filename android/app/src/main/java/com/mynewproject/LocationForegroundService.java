@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -554,7 +555,7 @@ public class LocationForegroundService extends Service {
 
         switch (geofenceId) {
             case "starbucks":
-                openApp("com.starbucks.app");
+                openApp("com.starbucks.co");
                 ServerCommunicator.sendDataToServer(
                         this,
                         geofenceId,
