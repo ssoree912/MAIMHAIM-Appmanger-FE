@@ -12,9 +12,11 @@ interface StyleTabProps {
 const StyleTab = ({menus, setIndex}: StyleTabProps) => {
   const [activeTab, setActiveTab] = useState(0);
   const translateX = useRef(new Animated.Value(0)).current;
+  const [containerWidth, setContainerWidth] = useState(0);
   const PADDING = 2;
-  const tabWidth =
-    (Dimensions.get('window').width - PADDING * 2) / menus.length;
+  const tabWidth = containerWidth
+    ? (containerWidth - PADDING * 2) / menus.length
+    : 0;
 
   const handleSelect = (i: number) => {
     setActiveTab(i);
@@ -28,7 +30,8 @@ const StyleTab = ({menus, setIndex}: StyleTabProps) => {
   };
 
   return (
-    <TabContainer>
+    <TabContainer
+      onLayout={event => setContainerWidth(event.nativeEvent.layout.width)}>
       <SelectedTab $tabWidth={tabWidth} style={{transform: [{translateX}]}} />
       {menus.map((value, index) => (
         <Tab key={`styleTab${index}`} onPress={() => handleSelect(index)}>
