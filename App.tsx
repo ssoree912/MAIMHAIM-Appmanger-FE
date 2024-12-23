@@ -19,6 +19,7 @@ import Loding from './screens/loding/main';
 import TmoneyLoding from './screens/loding/tmoneyLoding';
 import ComingSoonPage from './screens/comingSoonPage/ComingSoonPage';
 import BottomBanner from './components/BottomBanner';
+import ReportScreen from './screens/report/ReportScreen';
 
 const App: React.FC = () => (
   <RecoilRoot>
@@ -34,16 +35,18 @@ const AppRoutes: React.FC = () => {
 
   useEffect(() => {
     const handleBackPress = () => {
-      if (location.pathname === '/') {
-        Alert.alert('앱 종료', '앱을 종료하시겠습니까?', [
-          {text: '취소', style: 'cancel'},
-          {text: '종료', onPress: () => BackHandler.exitApp()},
-        ]);
-        return true;
-      } else {
-        navigate(-1);
-        return true;
+      if (location.pathname !== 'report') {
+        if (location.pathname === '/') {
+          Alert.alert('앱 종료', '앱을 종료하시겠습니까?', [
+            {text: '취소', style: 'cancel'},
+            {text: '종료', onPress: () => BackHandler.exitApp()},
+          ]);
+        } else {
+          navigate(-1);
+        }
       }
+
+      return true;
     };
 
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
@@ -63,12 +66,11 @@ const AppRoutes: React.FC = () => {
         <Route path="/loding/main" element={<Loding />} />
 
         <Route path="/loding/TmoneyLoding" element={<TmoneyLoding />} />
-        <Route path="/report" element={<ComingSoonPage />} />
+        <Route path="/report" element={<ReportScreen />} />
         <Route path="/setting" element={<ComingSoonPage />} />
       </Routes>
 
       {location.pathname !== '/loding/main' &&
-
         location.pathname !== '/loding/TmoneyLoding' && <BottomBanner />}
     </>
   );
