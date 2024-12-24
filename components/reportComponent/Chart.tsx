@@ -7,7 +7,7 @@ const screenWidth = Dimensions.get('window').width;
 
 const Chart = ({isDetail}: {isDetail: boolean}) => {
   const data = [
-    {value: 20, label: 'Q1', frontColor: `${styles.colors.gray[400]}`},
+    {value: 18, label: 'Q1', frontColor: `${styles.colors.gray[400]}`},
     {value: 15, label: 'Q2', frontColor: `${styles.colors.gray[300]}`},
     {value: 10, label: 'Q3', frontColor: `${styles.colors.gray[200]}`},
     {value: 5, label: 'Q4', frontColor: `${styles.colors.gray[100]}`},

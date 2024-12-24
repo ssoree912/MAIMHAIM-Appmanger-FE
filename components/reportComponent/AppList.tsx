@@ -1,29 +1,87 @@
-import React from 'react';
-import {Button, Touchable, TouchableOpacity, View, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Button,
+  Touchable,
+  TouchableOpacity,
+  View,
+  Text,
+  BackHandler,
+} from 'react-native';
 import styled from 'styled-components';
 import {styles} from '../../styles/styleGuide';
 import AppItem from './AppItem';
+import {useNavigate} from 'react-router-native';
 
 interface AppItemProps {
   appName: string;
   times: number;
+  isSelected: boolean;
 }
 
 const AppList = () => {
+  const [isLongPress, setIsLongPress] = useState(false);
+  const navigate = useNavigate();
+
   const data: AppItemProps[] = [
-    {appName: 'Amazon Fresh', times: 18},
-    {appName: 'Starbucks', times: 16},
-    {appName: 'Target', times: 9},
-    {appName: 'Wallmart', times: 5},
+    {appName: 'Amazon Fresh', times: 18, isSelected: false},
+    {appName: 'Starbucks', times: 16, isSelected: false},
+    {appName: 'Target', times: 9, isSelected: false},
+    {appName: 'Wallmart', times: 5, isSelected: false},
   ];
+
+  const [mockData, setMockData] = useState(data);
+
+  const changeSelectedState = (index: number) => {
+    setMockData(prevState =>
+      prevState.map((item, i) =>
+        i === index ? {...item, isSelected: !item.isSelected} : item,
+      ),
+    );
+  };
+
+  const handlePress = (index: number) => {
+    if (isLongPress) {
+      changeSelectedState(index);
+    }
+  };
+
+  const handleLongPress = (index: number) => {
+    if (!isLongPress) {
+      changeSelectedState(index);
+      setIsLongPress(true);
+    } else {
+      changeSelectedState(index);
+    }
+  };
+
+  useEffect(() => {
+    const handleBackButton = () => {
+      if (isLongPress) {
+        data.forEach(value => (value.isSelected = false));
+        setIsLongPress(false);
+      } else {
+        navigate(-1);
+      }
+      return true;
+    };
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, []);
 
   return (
     <Container>
-      {data.map((value, index) => (
+      {mockData.map((value, index) => (
         <AppItem
           key={`AppListIndex${index}`}
           appName={value.appName}
           times={value.times}
+          isSelected={value.isSelected}
+          isLongPress={isLongPress}
+          handleLongPress={() => handleLongPress(index)}
+          handlePress={() => handlePress(index)}
         />
       ))}
       <MoreButton>

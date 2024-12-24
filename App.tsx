@@ -37,16 +37,18 @@ const AppRoutes = () => {
 
   useEffect(() => {
     const handleBackPress = () => {
-      if (location.pathname === '/') {
-        Alert.alert('앱 종료', '앱을 종료하시겠습니까?', [
-          {text: '취소', style: 'cancel'},
-          {text: '종료', onPress: () => BackHandler.exitApp()},
-        ]);
-        return true;
-      } else {
-        navigate(-1);
-        return true;
+      if (location.pathname !== 'report') {
+        if (location.pathname === '/') {
+          Alert.alert('앱 종료', '앱을 종료하시겠습니까?', [
+            {text: '취소', style: 'cancel'},
+            {text: '종료', onPress: () => BackHandler.exitApp()},
+          ]);
+        } else {
+          navigate(-1);
+        }
       }
+
+      return true;
     };
 
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);

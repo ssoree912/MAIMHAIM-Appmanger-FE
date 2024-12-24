@@ -3,17 +3,33 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components';
 import {styles} from '../../styles/styleGuide';
 import ArrowIcon from '../../assets/defaultIcon/arrow_icon.svg';
+import CheckIcon from '../../assets/defaultIcon/check_icon.svg';
 
 interface AppItemProps {
   appName: string;
   times: number;
+  handleLongPress: () => void;
+  isSelected?: boolean;
+  isLongPress?: boolean;
+  handlePress: () => void;
 }
 
-const AppItem = ({appName, times}: AppItemProps) => {
+const AppItem = ({
+  appName,
+  times,
+  handleLongPress,
+  isLongPress,
+  isSelected,
+  handlePress,
+}: AppItemProps) => {
   return (
-    <Container>
+    <Container
+      onLongPress={handleLongPress}
+      $isLongPress={isLongPress}
+      $isSelected={isSelected}
+      onPress={handlePress}>
       <LeftSection>
-        <Icon />
+        {isSelected && isLongPress ? <CheckIcon /> : <Icon />}
         <AppNameText>{appName}</AppNameText>
       </LeftSection>
       <RightSection>
@@ -28,7 +44,10 @@ const AppItem = ({appName, times}: AppItemProps) => {
 
 export default AppItem;
 
-const Container = styled(View)`
+const Container = styled(TouchableOpacity)<{
+  $isSelected?: boolean;
+  $isLongPress?: boolean;
+}>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,7 +56,13 @@ const Container = styled(View)`
   height: 52px;
   padding: 12px 0 12px 12px;
   border-radius: 15px;
-  background-color: ${styles.colors.gray[100]};
+  background-color: ${props =>
+    props.$isLongPress
+      ? props.$isSelected
+        ? styles.colors.gray[200]
+        : styles.colors.gray[50]
+      : styles.colors.gray[100]};
+  opacity: ${props => (props.$isLongPress && !props.$isSelected ? 0.4 : 1)};
 `;
 
 const LeftSection = styled(View)`
@@ -56,7 +81,6 @@ const RightSection = styled(View)`
 const Icon = styled(View)`
   width: 28px;
   height: 28px;
-  margin-right: 16px;
   border-radius: 5px;
   background-color: ${styles.colors.gray[50]};
 `;
@@ -65,6 +89,7 @@ const AppNameText = styled(Text)`
   font-size: 16px;
   font-weight: 600;
   color: ${styles.colors.gray[800]};
+  margin-left: 16px;
 `;
 
 const TimesText = styled(Text)`
