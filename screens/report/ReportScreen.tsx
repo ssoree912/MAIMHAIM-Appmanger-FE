@@ -6,6 +6,8 @@ import DateView from '../../components/reportComponent/DateView';
 import AppList from '../../components/reportComponent/AppList';
 import StyleTab from '../../components/reportComponent/StyleTab';
 import Chart from '../../components/reportComponent/Chart';
+import MapReport from '../../components/reportComponent/MapReport';
+import TimelineList from '../../components/reportComponent/TimelineList';
 
 const ReportScreen = () => {
   const [index, setIndex] = useState(0);
@@ -28,9 +30,10 @@ const ReportScreen = () => {
         <SubTitle>Top Visited Apps</SubTitle>
         <DateView date="November, Week 1" />
         <StyleTab menus={templist} setIndex={setIndex} />
-        {/* <Chart isDetail={false} /> */}
-        <Chart data={chartData} type="report" />
-        <AppList />
+        {index === 1 && <MapReport />}
+        {index === 0 && <Chart data={chartData} type="report" />}
+        {(index === 0 || index === 1) && <AppList />}
+        {index === 2 && <TimelineList />}
       </BottomSection>
     </Conatiner>
   );
