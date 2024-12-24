@@ -23,7 +23,7 @@ const ReportDetail = () => {
       <DetailHeader headerTitle={appName} />
       <BottomSection>
         <DateView date="November, Week 1" />
-        <TestChart data={dataDetail} type="detail" />
+        <Chart data={dataDetail} type="detail" />
         <ListTitle>Branch Overview</ListTitle>
         <OverviewList appName={appName} />
       </BottomSection>
