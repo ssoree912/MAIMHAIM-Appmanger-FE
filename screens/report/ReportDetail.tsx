@@ -2,11 +2,10 @@ import React from 'react';
 import {ScrollView, Text, View} from 'react-native';
 import {styled} from 'styled-components';
 import DetailHeader from '../../components/commonComponent/DetailHeader';
-import Chart from '../../components/reportComponent/Chart';
 import DateView from '../../components/reportComponent/DateView';
 import OverviewList from '../../components/reportComponent/OverviewList';
 import {styles} from '../../styles/styleGuide';
-import TestChart from '../../components/reportComponent/TestChart';
+import Chart from '../../components/reportComponent/Chart';
 
 const ReportDetail = () => {
   const dataDetail = [

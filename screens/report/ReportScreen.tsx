@@ -6,7 +6,6 @@ import DateView from '../../components/reportComponent/DateView';
 import AppList from '../../components/reportComponent/AppList';
 import StyleTab from '../../components/reportComponent/StyleTab';
 import Chart from '../../components/reportComponent/Chart';
-import TestChart from '../../components/reportComponent/TestChart';
 
 const ReportScreen = () => {
   const [index, setIndex] = useState(0);
