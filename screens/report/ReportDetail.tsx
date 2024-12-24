@@ -6,15 +6,25 @@ import Chart from '../../components/reportComponent/Chart';
 import DateView from '../../components/reportComponent/DateView';
 import OverviewList from '../../components/reportComponent/OverviewList';
 import {styles} from '../../styles/styleGuide';
+import TestChart from '../../components/reportComponent/TestChart';
 
 const ReportDetail = () => {
+  const dataDetail = [
+    {value: 1, label: 'Sun', color: `${styles.colors.gray[200]}`},
+    {value: 2, label: 'Mon', color: `${styles.colors.gray[400]}`},
+    {value: 0, label: 'Tue', color: `${styles.colors.gray[100]}`},
+    {value: 2, label: 'Wed', color: `${styles.colors.gray[400]}`},
+    {value: 4, label: 'Thu', color: `${styles.colors.gray[600]}`},
+    {value: 3, label: 'Fri', color: `${styles.colors.gray[400]}`},
+    {value: 2, label: 'Sat', color: `${styles.colors.gray[400]}`},
+  ];
   const appName = 'Starbucks';
   return (
     <Conatiner>
       <DetailHeader headerTitle={appName} />
       <BottomSection>
         <DateView date="November, Week 1" />
-        <Chart isDetail={true} />
+        <TestChart data={dataDetail} type="detail" />
         <ListTitle>Branch Overview</ListTitle>
         <OverviewList appName={appName} />
       </BottomSection>
@@ -28,7 +38,6 @@ const Conatiner = styled(ScrollView)`
   display: flex;
   width: 100%;
   height: 100%;
-  margin-bottom: 80px;
 `;
 
 const BottomSection = styled(View)`

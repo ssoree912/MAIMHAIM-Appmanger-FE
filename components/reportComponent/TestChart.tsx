@@ -8,23 +8,29 @@ const roundUpToNearest = (num: number, multiple: number) => {
   return Math.ceil(num / multiple) * multiple;
 };
 
-const TestChart = ({data}) => {
+const TestChart = ({
+  data,
+  yAxisSteps = 4,
+  type = 'report',
+}: {
+  data: any[];
+  type?: string;
+  yAxisSteps?: number;
+}) => {
   const [containerWidth, setContainerWidth] = useState(0);
   const chartScrollRef = useRef<ScrollView>(null);
   const labelScrollRef = useRef<ScrollView>(null);
   const chartHeight = 176;
-  const barWidth = 36;
-  const barSpacing = 32;
-  const leftMargin = 44;
-  const rightMargin = 44;
-  const yAxisSteps = 4;
+  const margin = type === 'report' ? 44 : 22;
+  const barWidth = type === 'report' ? 36 : 20;
+  const radius = type === 'report' ? 10 : 5;
+  const spacing =
+    type === 'report' ? 32 : (containerWidth - (margin * 2 + barWidth * 7)) / 6;
+  const weekList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const rawMaxValue = Math.max(...data.map(item => item.value));
-  const maxValue = roundUpToNearest(rawMaxValue, 5);
+  const maxValue = roundUpToNearest(rawMaxValue, yAxisSteps);
   const tempChartWidth =
-    leftMargin +
-    data.length * (barWidth + barSpacing) -
-    barSpacing +
-    rightMargin;
+    margin * 2 + data.length * (barWidth + spacing) - spacing;
   const chartWidth =
     tempChartWidth > containerWidth ? tempChartWidth : containerWidth;
 
@@ -43,14 +49,19 @@ const TestChart = ({data}) => {
           <ScrollView
             ref={chartScrollRef}
             horizontal
-            contentContainerStyle={{width: chartWidth}}
+            contentContainerStyle={{
+              width: type === 'report' ? chartWidth : containerWidth,
+            }}
             showsHorizontalScrollIndicator={false}
             scrollEventThrottle={1}
             onScroll={handleScroll}
             alwaysBounceHorizontal={false}
+            scrollEnabled={type === 'report'}
             overScrollMode="never"
             bounces={false}>
-            <Svg height={chartHeight} width={chartWidth}>
+            <Svg
+              height={chartHeight}
+              width={type === 'report' ? chartWidth : containerWidth}>
               {[...Array(yAxisSteps + 1)].map((_, index) => {
                 const y = (chartHeight / yAxisSteps) * index;
                 return (
@@ -68,7 +79,7 @@ const TestChart = ({data}) => {
 
               {data.map((item, index) => {
                 const barHeight = (item.value / maxValue) * chartHeight;
-                const x = leftMargin + index * (barWidth + barSpacing); // 첫 번째 바에 왼쪽 마진 추가
+                const x = margin + index * (barWidth + spacing); // 첫 번째 바에 왼쪽 마진 추가
                 const y = chartHeight - barHeight;
 
                 return (
@@ -77,10 +88,10 @@ const TestChart = ({data}) => {
                       <ClipPath id={`clip-${index}`}>
                         <Path
                           d={`M${x},${y + barHeight} 
-                           L${x},${y + 10} 
-                           Q${x},${y} ${x + 10},${y} 
-                           L${x + barWidth - 10},${y} 
-                           Q${x + barWidth},${y} ${x + barWidth},${y + 10} 
+                           L${x},${y + radius} 
+                           Q${x},${y} ${x + radius},${y} 
+                           L${x + barWidth - radius},${y} 
+                           Q${x + barWidth},${y} ${x + barWidth},${y + radius} 
                            L${x + barWidth},${y + barHeight} Z`}
                         />
                       </ClipPath>
@@ -99,22 +110,31 @@ const TestChart = ({data}) => {
             </Svg>
           </ScrollView>
         </ChartCard>
-        <XLabelContainer
-          ref={labelScrollRef}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          scrollEnabled={false}
-          contentContainerStyle={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            gap: 24,
-            width: chartWidth,
-          }}>
-          {[...Array(data.length)].map((_, index) => {
-            return <XLabel key={index} />;
-          })}
-        </XLabelContainer>
+        {type === 'report' && (
+          <XLabelContainer
+            ref={labelScrollRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            scrollEnabled={false}
+            contentContainerStyle={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              gap: 24,
+              width: chartWidth,
+            }}>
+            {[...Array(data.length)].map((_, index) => (
+              <XLabel key={index} />
+            ))}
+          </XLabelContainer>
+        )}
+        {type === 'detail' && (
+          <XLabelDetailContainer>
+            {weekList.map((value, index) => (
+              <XLabelText key={index}>{value}</XLabelText>
+            ))}
+          </XLabelDetailContainer>
+        )}
       </LeftSection>
       <YLabelContainer>
         {[...Array(yAxisSteps + 1)].map((_, index) => {
@@ -160,6 +180,22 @@ const XLabel = styled(View)`
   height: 44px;
   border-radius: 8.25px;
   border: 1px solid ${styles.colors.gray[200]};
+`;
+
+const XLabelText = styled(Text)`
+  color: ${styles.colors.gray[600]};
+  font-size: 12px;
+  flex: 1;
+  text-align: center;
+`;
+
+const XLabelDetailContainer = styled(View)`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding: 0 8px;
 `;
 
 const ChartCard = styled(View)`

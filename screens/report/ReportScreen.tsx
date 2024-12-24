@@ -30,7 +30,7 @@ const ReportScreen = () => {
         <DateView date="November, Week 1" />
         <StyleTab menus={templist} setIndex={setIndex} />
         {/* <Chart isDetail={false} /> */}
-        <TestChart data={chartData} />
+        <TestChart data={chartData} type="report" />
         <AppList />
       </BottomSection>
     </Conatiner>
