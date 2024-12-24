@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import {styles} from '../../styles/styleGuide';
 import ArrowIcon from '../../assets/defaultIcon/arrow_icon.svg';
 import CheckIcon from '../../assets/defaultIcon/check_icon.svg';
+import {useNavigate} from 'react-router-native';
 
 interface AppItemProps {
   appName: string;
@@ -22,19 +23,22 @@ const AppItem = ({
   isSelected,
   handlePress,
 }: AppItemProps) => {
+  const navigate = useNavigate();
+
   return (
     <Container
       onLongPress={handleLongPress}
       $isLongPress={isLongPress}
       $isSelected={isSelected}
-      onPress={handlePress}>
+      onPress={handlePress}
+      activeOpacity={isLongPress ? 0.7 : 1}>
       <LeftSection>
         {isSelected && isLongPress ? <CheckIcon /> : <Icon />}
         <AppNameText>{appName}</AppNameText>
       </LeftSection>
       <RightSection>
         <TimesText>{times} times</TimesText>
-        <ArrowTouchable>
+        <ArrowTouchable onPress={() => navigate('/reportdetail')}>
           <ArrowIcon />
         </ArrowTouchable>
       </RightSection>

@@ -84,11 +84,11 @@ const AppRoutes = () => {
         <Route path="/loding/TmoneyLoding" element={<TmoneyLoding />} />
         <Route path="/report" element={<ReportScreen />} />
         <Route path="/setting" element={<ComingSoonPage />} />
-        <Route path="/report/:id" element={<ReportDetail />} />
+        <Route path="/reportdetail" element={<ReportDetail />} />
       </Routes>
       {location.pathname !== '/loding/main' &&
         location.pathname !== '/loding/TmoneyLoding' &&
-        location.pathname !== '/report/:id' && <BottomNavigationBar />}
+        location.pathname !== '/reportdetail' && <BottomNavigationBar />}
     </>
   );
 };
