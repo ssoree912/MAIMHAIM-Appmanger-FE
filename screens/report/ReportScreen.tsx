@@ -6,10 +6,19 @@ import DateView from '../../components/reportComponent/DateView';
 import AppList from '../../components/reportComponent/AppList';
 import StyleTab from '../../components/reportComponent/StyleTab';
 import Chart from '../../components/reportComponent/Chart';
+import TestChart from '../../components/reportComponent/TestChart';
 
 const ReportScreen = () => {
   const [index, setIndex] = useState(0);
   const templist = ['Bar Chart', 'Map', 'Timeline'];
+  const [chartData, setChartData] = useState([
+    {value: 18, label: 'Q1', color: '#909090'},
+    {value: 15, label: 'Q2', color: '#B0B0B0'},
+    {value: 10, label: 'Q3', color: '#D0D0D0'},
+    {value: 5, label: 'Q4', color: '#F0F0F0'},
+    {value: 5, label: 'Q4', color: '#F0F0F0'},
+    {value: 5, label: 'Q4', color: '#F0F0F0'},
+  ]);
 
   return (
     <Conatiner>
@@ -20,7 +29,8 @@ const ReportScreen = () => {
         <SubTitle>Top Visited Apps</SubTitle>
         <DateView date="November, Week 1" />
         <StyleTab menus={templist} setIndex={setIndex} />
-        <Chart isDetail={false} />
+        {/* <Chart isDetail={false} /> */}
+        <TestChart data={chartData} />
         <AppList />
       </BottomSection>
     </Conatiner>
