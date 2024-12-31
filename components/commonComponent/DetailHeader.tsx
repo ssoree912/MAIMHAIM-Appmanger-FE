@@ -22,7 +22,7 @@ const DetailHeader = ({headerTitle}: {headerTitle: string}) => {
 export default DetailHeader;
 
 const Container = styled(View)`
-  padding: 16px 10px 10px 10px;
+  padding: 54px 10px 10px 10px;
   width: 100%;
   display: flex;
   flex-direction: row;
