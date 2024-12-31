@@ -1,56 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components/native';
 import MapView, {Marker, Region} from 'react-native-maps';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {debounce} from 'lodash';
-import calculateDistance from '../../utils/calculateDistance';
+import {View, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {ClusterType, DataPointType} from '../../interface/interface';
+import {styles} from '../../styles/styleGuide';
+import clusterData from '../../utils/clusterData';
+import {debounce} from 'lodash';
+import {ClusterType} from '../../interface/interface';
 
-const clusterApps = (
-  data: DataPointType[],
-  threshold: number,
-): ClusterType[] => {
-  const clusters: ClusterType[] = [];
-
-  data.forEach(point => {
-    let addedToCluster = false;
-
-    for (let cluster of clusters) {
-      const distance = calculateDistance(
-        cluster.latitude,
-        cluster.longitude,
-        point.coordinate.latitude,
-        point.coordinate.longitude,
-      );
-
-      if (distance < threshold && cluster.app!.appId === point.app.appId) {
-        cluster.latitude =
-          (cluster.latitude * cluster.count + point.coordinate.latitude) /
-          (cluster.count + 1);
-        cluster.longitude =
-          (cluster.longitude * cluster.count + point.coordinate.longitude) /
-          (cluster.count + 1);
-        cluster.count += 1;
-        addedToCluster = true;
-        break;
-      }
-    }
-
-    if (!addedToCluster) {
-      clusters.push({
-        latitude: point.coordinate.latitude,
-        longitude: point.coordinate.longitude,
-        app: point.app,
-        count: 1,
-      });
-    }
-  });
-
-  return clusters;
-};
-
-const MapReportDetail = ({data}: {data: DataPointType[]}) => {
+const MapReportDetail = () => {
   const [region, setRegion] = useState<Region>({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -58,15 +16,25 @@ const MapReportDetail = ({data}: {data: DataPointType[]}) => {
     longitudeDelta: 0.05,
   });
 
+  const zoomButtonPressed = useRef(false);
+
   const [clusters, setClusters] = useState<ClusterType[]>([]);
-  const zoomButtonPressed = useRef<boolean>(false);
+
+  const data = [
+    {latitude: 37.78825, longitude: -122.4324},
+    {latitude: 37.78835, longitude: -122.4328},
+    {latitude: 37.78845, longitude: -122.4326},
+    {latitude: 37.78885, longitude: -122.4332},
+    {latitude: 37.78925, longitude: -122.4344},
+  ];
 
   useEffect(() => {
-    const baseThreshold = 100; // meters
+    const baseThreshold = 100;
     const threshold = baseThreshold * region.latitudeDelta * 100;
-    const clusteredData = clusterApps(data, threshold);
+
+    const clusteredData = clusterData(data, threshold);
     setClusters(clusteredData);
-  }, [region, data]);
+  }, [region]);
 
   const zoomIn = () => {
     zoomButtonPressed.current = true;
@@ -111,13 +79,14 @@ const MapReportDetail = ({data}: {data: DataPointType[]}) => {
                 coordinate={{
                   latitude: cluster.latitude,
                   longitude: cluster.longitude,
-                }}>
+                }}
+                anchor={{x: 0.5, y: 0.5}}>
                 <ClusterBubble
                   size={size}
                   colors={['#ffffff30', '#B4B4B4']}
                   start={{x: 0, y: 0}}
                   end={{x: 0, y: 1}}>
-                  <MarkerImage source={{uri: cluster.app!.image}} size={size} />
+                  <ClusterText size={size}>{cluster.count}</ClusterText>
                 </ClusterBubble>
               </Marker>
             );
@@ -162,10 +131,10 @@ const ClusterBubble = styled(LinearGradient)<{size: number}>`
   align-items: center;
 `;
 
-const MarkerImage = styled(Image)<{size: number}>`
-  width: ${props => props.size * 0.6}px;
-  height: ${props => props.size * 0.6}px;
-  border-radius: ${props => (props.size * 0.6) / 6}px;
+const ClusterText = styled(Text)<{size: number}>`
+  color: ${styles.colors.gray[600]};
+  font-size: ${props => props.size / 3}px;
+  font-weight: bold;
 `;
 
 const ZoomControls = styled(View)`

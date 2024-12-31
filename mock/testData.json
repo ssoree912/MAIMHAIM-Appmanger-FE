@@ -1,0 +1,66 @@
+{
+  "data": {
+    "maps": [
+      {
+        "app": {
+          "appId": 43,
+          "appName": "스타벅스",
+          "image": "https://appmanager-asset.s3.ap-northeast-2.amazonaws.com/appimage/starbucks.png"
+        },
+        "coordinate": {
+          "latitude": 37.78825,
+          "longitude": -122.4324
+        }
+      },
+      {
+        "app": {
+          "appId": 43,
+          "appName": "스타벅스",
+          "image": "https://appmanager-asset.s3.ap-northeast-2.amazonaws.com/appimage/starbucks.png"
+        },
+        "coordinate": {
+          "latitude": 37.78835,
+          "longitude": -122.4328
+        }
+      },
+      {
+        "app": {
+          "appId": 43,
+          "appName": "스타벅스",
+          "image": "https://appmanager-asset.s3.ap-northeast-2.amazonaws.com/appimage/starbucks.png"
+        },
+        "coordinate": {
+          "latitude": 37.76,
+          "longitude": -122.4328
+        }
+      },
+      {
+        "app": {
+          "appId": 48,
+          "appName": "CES 2025",
+          "image": "https://appmanager-asset.s3.ap-northeast-2.amazonaws.com/appimage/ces.webp"
+        },
+        "coordinate": {
+          "latitude": 37.77,
+          "longitude": -122.4328
+        }
+      }
+    ],
+    "reports": [
+      {
+        "appName": "CES 2025",
+        "image": "https://appmanager-asset.s3.ap-northeast-2.amazonaws.com/appimage/ces.webp",
+        "count": 4,
+        "appId": 48,
+        "weeklyReport": [0, 0, 4, 0, 0, 0, 0]
+      },
+      {
+        "appName": "스타벅스",
+        "image": "https://appmanager-asset.s3.ap-northeast-2.amazonaws.com/appimage/starbucks.png",
+        "count": 3,
+        "appId": 43,
+        "weeklyReport": [0, 0, 1, 2, 0, 0, 0]
+      }
+    ]
+  }
+}

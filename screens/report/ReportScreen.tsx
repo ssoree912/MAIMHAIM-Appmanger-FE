@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import styled from 'styled-components';
 import {styles} from '../../styles/styleGuide';
@@ -6,13 +6,15 @@ import DateView from '../../components/reportComponent/DateView';
 import AppList from '../../components/reportComponent/AppList';
 import StyleTab from '../../components/reportComponent/StyleTab';
 import Chart from '../../components/reportComponent/Chart';
-import MapReport from '../../components/reportComponent/MapReport';
+import MapReportDetail from '../../components/reportComponent/MapReportDetail';
 import TimelineList from '../../components/reportComponent/TimelineList';
 import MapTimeline from '../../components/reportComponent/MapTimeline';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatabaseService from '../../utils/DatabaseService';
-import { getReports } from '../../services/apiServices';
+import {getReports} from '../../services/apiServices';
+import MapReport from '../../components/reportComponent/MapReport';
+import data from '../../mock/testData.json';
 
 const ReportScreen = () => {
   const [index, setIndex] = useState(0);
@@ -24,16 +26,18 @@ const ReportScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
 
   // 한국 날짜 기준!!
-    const getWeekStartDate = (date = new Date()) => {
-        const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
-        const localDate = new Date(date.getTime() - timezoneOffset); // Adjust for local timezone
-        const currentDay = localDate.getDay(); // 0 (Sunday) to 6 (Saturday)
-        const diff = localDate.getDate() - currentDay;
-        const weekStart = new Date(localDate.setDate(diff));
-        return weekStart.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-      };
+  const getWeekStartDate = (date = new Date()) => {
+    const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
+    const localDate = new Date(date.getTime() - timezoneOffset); // Adjust for local timezone
+    const currentDay = localDate.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const diff = localDate.getDate() - currentDay;
+    const weekStart = new Date(localDate.setDate(diff));
+    console.log(weekStart);
 
-   /*라스베거스 날짜 기준
+    return weekStart.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  };
+
+  /*라스베거스 날짜 기준
    const getWeekStartDate = (date = new Date()) => {
       const lasVegasTimezoneOffset = -8 * 60 * 60 * 1000; // Las Vegas timezone offset in milliseconds (-8 hours)
       const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000); // Convert to UTC
@@ -46,14 +50,14 @@ const ReportScreen = () => {
     */
 
   const getWeekString = (dateString: string): string => {
-      const date = new Date(dateString);
-      const month = date.toLocaleString('default', {month: 'long'});
-      const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-      const dayOffset = (date.getDay() - firstDayOfMonth.getDay() + 7) % 7;
-      const week = Math.ceil((date.getDate() + dayOffset) / 7);
+    const date = new Date(dateString);
+    const month = date.toLocaleString('default', {month: 'long'});
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const dayOffset = (date.getDay() - firstDayOfMonth.getDay() + 7) % 7;
+    const week = Math.ceil((date.getDate() + dayOffset) / 7);
 
-      return `${month.charAt(0).toUpperCase() + month.slice(1)}, Week ${week}`;
-    };
+    return `${month.charAt(0).toUpperCase() + month.slice(1)}, Week ${week}`;
+  };
 
   const generateRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -67,7 +71,9 @@ const ReportScreen = () => {
   const fetchMemberId = async () => {
     try {
       const storedMemberId = await AsyncStorage.getItem('memberId');
-      if (!storedMemberId) throw new Error('Member ID not found in AsyncStorage.');
+      if (!storedMemberId) {
+        throw new Error('Member ID not found in AsyncStorage.');
+      }
       return parseInt(storedMemberId, 10);
     } catch (error) {
       console.error('Error fetching memberId:', error);
@@ -76,7 +82,7 @@ const ReportScreen = () => {
     }
   };
 
-  const fetchWeeklyData = async (date) => {
+  const fetchWeeklyData = async date => {
     try {
       setLoading(true);
       console.log(`Fetching data for date: ${date}`);
@@ -105,28 +111,29 @@ const ReportScreen = () => {
     }
   };
 
+  useEffect(() => {
+    const currentWeekStartDate = getWeekStartDate();
+    setSelectedDate(currentWeekStartDate);
+    fetchWeeklyData(currentWeekStartDate);
+  }, []);
 
-    useEffect(() => {
-      const currentWeekStartDate = getWeekStartDate();
-      setSelectedDate(currentWeekStartDate);
-      fetchWeeklyData(currentWeekStartDate);
-    }, []);
+  const handlePrevWeek = () => {
+    const currentDate = new Date(selectedDate);
+    currentDate.setDate(currentDate.getDate() - 7);
+    const newDate = currentDate.toISOString().split('T')[0];
+    setSelectedDate(newDate);
+    fetchWeeklyData(newDate);
+  };
 
-    const handlePrevWeek = () => {
-      const currentDate = new Date(selectedDate);
-      currentDate.setDate(currentDate.getDate() - 7);
-      const newDate = currentDate.toISOString().split('T')[0];
-      setSelectedDate(newDate);
-      fetchWeeklyData(newDate);
-    };
+  const handleNextWeek = () => {
+    const currentDate = new Date(selectedDate);
+    currentDate.setDate(currentDate.getDate() + 7);
+    const newDate = currentDate.toISOString().split('T')[0];
+    setSelectedDate(newDate);
+    fetchWeeklyData(newDate);
+  };
 
-    const handleNextWeek = () => {
-      const currentDate = new Date(selectedDate);
-      currentDate.setDate(currentDate.getDate() + 7);
-      const newDate = currentDate.toISOString().split('T')[0];
-      setSelectedDate(newDate);
-      fetchWeeklyData(newDate);
-    };
+  const mapsData = data.data.maps;
 
   return (
     <Conatiner>
@@ -134,15 +141,20 @@ const ReportScreen = () => {
         <ScreenTitle>Report</ScreenTitle>
       </TopSection>
       {loading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Text>Loading data...</Text>
         </View>
       ) : (
         <BottomSection>
           <SubTitle>Top Visited Apps</SubTitle>
-          <DateView date={getWeekString(selectedDate)} onPrevious={handlePrevWeek} onNext={handleNextWeek} />
+          <DateView
+            date={getWeekString(selectedDate)}
+            onPrevious={handlePrevWeek}
+            onNext={handleNextWeek}
+          />
           <StyleTab menus={templist} setIndex={setIndex} />
-          {index === 1 && <MapReport />}
+          {/* {index === 1 && <MapReportDetail />} */}
+          {index === 1 && <MapReport data={mapsData} />}
           {index === 0 && <Chart data={chartData} type="report" />}
           {(index === 0 || index === 1) && <AppList />}
           {index === 2 && <MapTimeline />}
