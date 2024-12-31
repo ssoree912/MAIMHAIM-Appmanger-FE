@@ -36,3 +36,11 @@ export interface ClusterType {
   app?: AppDataType;
   count: number;
 }
+
+export interface AppItemType {
+  appId: number;
+  appName: string;
+  weeklyReport: number[];
+  count: number;
+  image: string;
+}

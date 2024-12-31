@@ -10,12 +10,16 @@ import {ClusterType, CoordinateType} from '../../interface/interface';
 import data from '../../mock/testData2.json';
 
 const MapReportDetail = ({appId}: {appId: number}) => {
+  // TODO: 나중에 파라미터로 넘어오는 appId를 가지고 mapReportDetail api호출하시면 됩니다.
+
+  // TODO: 지도호출을 위한 기본 좌표 설정은 추후 네이티브 앱이랑 연결하실 때 사용자 위치를 가져올 수 있게 되면 그걸 기준으로 하시면 됩니다.
   const [region, setRegion] = useState<Region>({
     latitude: 37.78825,
     longitude: -122.4324,
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
+
   const zoomButtonPressed = useRef(false);
   const iconUrl = data.data.app.image;
   const coordinateData: CoordinateType[] = data.data.coordinates;
