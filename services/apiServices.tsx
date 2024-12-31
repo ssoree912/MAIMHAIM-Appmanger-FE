@@ -214,11 +214,34 @@ export const getReports = async (memberId, startDate) => {
   }
 };
 
-
 // 앱별 리포트 조회 API
 export const getAppReport = async (memberId, startDate, appId) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/reports/${memberId}/${startDate}/${appId}`);
+    return response.data; // 필요한 데이터만 반환
+  } catch (error) {
+    console.error("Error in getAppReport:", error.message);
+    console.error("Error details:", error.response?.data || error);
+    throw error; // 에러를 다시 던져 상위에서 처리
+  }
+};
+
+// 전체 맵 조회 API
+export const getMaps = async (memberId, startDate) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/reports/map/${memberId}/${startDate}`);
+    return response.data; // 필요한 데이터만 반환
+  } catch (error) {
+    console.error("Error in getReports:", error.message);
+    console.error("Error details:", error.response?.data || error);
+    throw error; // 에러를 다시 던져 상위에서 처리
+  }
+};
+
+// 앱별 리포트 조회 API
+export const getDetailMaps = async (memberId, startDate, appId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/reports/map/${memberId}/${startDate}/${appId}`);
     return response.data; // 필요한 데이터만 반환
   } catch (error) {
     console.error("Error in getAppReport:", error.message);
