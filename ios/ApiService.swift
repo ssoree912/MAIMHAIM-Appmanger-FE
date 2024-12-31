@@ -2,7 +2,7 @@ import Foundation
 
 class ApiService {
     static let shared = ApiService() // 싱글톤 패턴
-  private let baseURL = Constants.baseURL // 서버 기본 URL
+    private let baseURL = Constants.baseURL // 서버 기본 URL
     
     private init() {} // 외부에서 초기화 방지
 
@@ -11,8 +11,15 @@ class ApiService {
     ///   - packageName: URL 경로에 포함될 패키지 이름
     ///   - memberId: 요청 바디에 포함될 멤버 ID
     ///   - type: 요청 바디에 포함될 타입 (예: LOCATION)
+    ///   - raw: 요청 바디에 포함될 raw 객체 (location, address, latitude, longitude)
     ///   - completion: 요청 결과를 처리하는 클로저
-    func addCount(packageName: String, memberId: Int, type: String, completion: @escaping (Result<String, Error>) -> Void) {
+    func addCount(
+        packageName: String,
+        memberId: Int,
+        type: String,
+        raw: [String: Any],
+        completion: @escaping (Result<String, Error>) -> Void
+    ) {
         // URL 생성
         let urlString = "\(baseURL)/api/v2/apps/\(packageName)/count"
         guard let url = URL(string: urlString) else {
@@ -23,7 +30,8 @@ class ApiService {
         // 요청 바디 데이터 생성
         let requestBody: [String: Any] = [
             "memberId": memberId,
-            "type": type
+            "type": type,
+            "raw": raw
         ]
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody, options: []) else {

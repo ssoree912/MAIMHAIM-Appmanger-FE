@@ -296,9 +296,14 @@
                     
                     // UserDefaults에서 memberId 가져오기
                     let memberId = UserDefaults.standard.string(forKey: "memberId") ?? "0"
-                    
+                  let raswObject : [String: Any] = [
+                    "location": "Starbucks (Convention Center)",
+                    "address": "3150 Paradise Rd, Las Vegas, NV 89109, USA",
+                    "latitude": 36.13163,
+                    "longitude": -115.153798
+                ]
                     // 서버에 POST 요청
-                    ApiService.shared.addCount(packageName: appInfo.packageName, memberId: Int(memberId) ?? 0, type: "LOCATION") { result in
+                  ApiService.shared.addCount(packageName: appInfo.packageName, memberId: Int(memberId) ?? 0, type: "LOCATION",raw:raswObject) { result in
                         switch result {
                         case .success(let response):
                             print("[LOG] Successfully sent count to server: \(response)")
