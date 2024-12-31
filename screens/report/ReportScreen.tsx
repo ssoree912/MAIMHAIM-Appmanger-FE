@@ -9,10 +9,10 @@ import Chart from '../../components/reportComponent/Chart';
 import MapReport from '../../components/reportComponent/MapReport';
 import TimelineList from '../../components/reportComponent/TimelineList';
 import MapTimeline from '../../components/reportComponent/MapTimeline';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DatabaseService from '../../utils/DatabaseService';
 import {getReports} from '../../services/apiServices';
+import data from '../../mock/testData.json';
+import MapReportDetail from '../../components/reportComponent/MapReportDetail';
 
 const ReportScreen = () => {
   const [index, setIndex] = useState(0);
@@ -22,6 +22,7 @@ const ReportScreen = () => {
 
   const [memberId, setMemberId] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
+  const [appId, setAppId] = useState<number | null>(null);
 
   const getWeekStartDate = (date = new Date()) => {
     const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
@@ -59,7 +60,9 @@ const ReportScreen = () => {
   const fetchMemberId = async () => {
     try {
       const storedMemberId = await AsyncStorage.getItem('memberId');
-      if (!storedMemberId) throw new Error('Member ID not found in AsyncStorage.');
+      if (!storedMemberId) {
+        throw new Error('Member ID not found in AsyncStorage.');
+      }
       return parseInt(storedMemberId, 10);
     } catch (error) {
       console.error('Error fetching memberId:', error);
@@ -67,7 +70,7 @@ const ReportScreen = () => {
     }
   };
 
-  const fetchWeeklyData = async (date) => {
+  const fetchWeeklyData = async date => {
     try {
       setLoading(true);
       console.log(`Fetching data for date: ${date}`);
@@ -127,11 +130,23 @@ const ReportScreen = () => {
       ) : (
         <BottomSection>
           <SubTitle>Top Visited Apps</SubTitle>
-          <DateView date={getWeekString(selectedDate)} onPrevious={handlePrevWeek} onNext={handleNextWeek} />
-          <StyleTab menus={templist} setIndex={setIndex} />
-          {index === 1 && <MapReport appData={chartData} />}
-          {index === 0 && <Chart data={chartData} type="report" />}
-          {(index === 0 || index === 1) && <AppList apps={chartData} />}
+          <DateView
+            date={getWeekString(selectedDate)}
+            onPrevious={handlePrevWeek}
+            onNext={handleNextWeek}
+          />
+          <StyleTab menus={templist} setIndex={setIndex} index={index} />
+          {index === 1 && appId === null && <MapReport data={data.data.maps} />}
+          {index === 1 && appId !== null && <MapReportDetail appId={appId} />}
+          {index === 0 && <Chart data={chartData} />}
+          {(index === 0 || index === 1) && (
+            <AppList
+              apps={chartData}
+              styleIndex={index}
+              appId={appId}
+              setAppId={setAppId}
+            />
+          )}
           {index === 2 && <MapTimeline />}
           {index === 2 && <TimelineList />}
         </BottomSection>

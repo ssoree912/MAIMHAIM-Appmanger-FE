@@ -1,9 +1,7 @@
+import {CoordinateType} from '../interface/interface';
 import calculateDistance from './calculateDistance';
 
-const clusterData = (
-  data: Array<{latitude: number; longitude: number}>,
-  threshold: number,
-) => {
+const clusterData = (data: CoordinateType[], threshold: number) => {
   const clusters: Array<{latitude: number; longitude: number; count: number}> =
     [];
 

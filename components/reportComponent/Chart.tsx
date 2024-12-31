@@ -10,65 +10,62 @@ const roundUpToNearest = (num: number, multiple: number) => {
 
 const predefinedColors = ['#41B7AD', '#48CBC0', '#C6EFEB', '#C6EFEB'];
 
-
 const Chart = ({
   data,
   yAxisSteps = 4,
-  type = 'report',
 }: {
   data: any[]; // 원본 데이터를 받음
-  type?: string;
   yAxisSteps?: number;
 }) => {
   const [containerWidth, setContainerWidth] = useState(0);
-    const chartScrollRef = useRef<ScrollView>(null);
-    const labelScrollRef = useRef<ScrollView>(null);
-    const chartHeight = 176;
-    const margin = type === 'report' ? 44 : 22;
-    const barWidth = type === 'report' ? 36 : 20;
-    const radius = type === 'report' ? 10 : 5;
-    const spacing =
-      type === 'report' ? 32 : (containerWidth - (margin * 2 + barWidth * 7)) / 6;
+  const chartScrollRef = useRef<ScrollView>(null);
+  const labelScrollRef = useRef<ScrollView>(null);
+  const chartHeight = 176;
+  const margin = 44;
+  const barWidth = 36;
+  const radius = barWidth / 2;
+  const spacing = 32;
 
-    console.log('Raw data passed to Chart:', data);
+  console.log('Raw data passed to Chart:', data);
 
-    // 데이터 정제
-    const processedData = data
-      .filter((entry) => entry && typeof entry.appName === 'string')
-      .sort((a, b) => b.count - a.count) // value가 많은 순으로 정렬
-      .slice(0, 4) // 상위 4개만 선택
-      .map((entry, index) => ({
-        value: entry.count || 0,
-        label: entry.appName || 'Unknown',
-        color: predefinedColors[index] || '#CCCCCC', // 지정된 색상 사용, 없으면 기본색
-         image: entry.image, // 앱 이미지 추가
-      }));
+  // 데이터 정제
+  const processedData = data
+    .filter(entry => entry && typeof entry.appName === 'string')
+    .sort((a, b) => b.count - a.count) // value가 많은 순으로 정렬
+    .slice(0, 4) // 상위 4개만 선택
+    .map((entry, index) => ({
+      value: entry.count || 0,
+      label: entry.appName || 'Unknown',
+      color: predefinedColors[index] || '#CCCCCC', // 지정된 색상 사용, 없으면 기본색
+      image: entry.image, // 앱 이미지 추가
+    }));
 
-    console.log('Processed data for Chart:', processedData);
+  console.log('Processed data for Chart:', processedData);
 
-    if (!processedData || processedData.length === 0) {
-      console.warn('Chart data is empty or invalid:', processedData);
-      return (
-        <EmptyChartContainer>
-          <EmptyText>No data available</EmptyText>
-        </EmptyChartContainer>
-      );
+  if (!processedData || processedData.length === 0) {
+    console.warn('Chart data is empty or invalid:', processedData);
+    return (
+      <EmptyChartContainer>
+        <EmptyText>No data available</EmptyText>
+      </EmptyChartContainer>
+    );
+  }
+
+  const rawMaxValue = Math.max(...processedData.map(item => item.value));
+  const maxValue =
+    rawMaxValue > 0 ? roundUpToNearest(rawMaxValue, yAxisSteps) : 1;
+
+  const tempChartWidth =
+    margin * 2 + processedData.length * (barWidth + spacing) - spacing;
+  const chartWidth =
+    tempChartWidth > containerWidth ? tempChartWidth : containerWidth;
+
+  const handleScroll = event => {
+    const scrollX = event.nativeEvent.contentOffset.x;
+    if (chartScrollRef.current) {
+      chartScrollRef.current.scrollTo({x: scrollX, animated: false});
     }
-
-    const rawMaxValue = Math.max(...processedData.map((item) => item.value));
-    const maxValue = rawMaxValue > 0 ? roundUpToNearest(rawMaxValue, yAxisSteps) : 1;
-
-    const tempChartWidth =
-      margin * 2 + processedData.length * (barWidth + spacing) - spacing;
-    const chartWidth =
-      tempChartWidth > containerWidth ? tempChartWidth : containerWidth;
-
-     const handleScroll = (event) => {
-        const scrollX = event.nativeEvent.contentOffset.x;
-        if (chartScrollRef.current) {
-          chartScrollRef.current.scrollTo({x: scrollX, animated: false});
-        }
-      };
+  };
 
   return (
     <ChartContainer>
@@ -79,18 +76,15 @@ const Chart = ({
             ref={chartScrollRef}
             horizontal
             contentContainerStyle={{
-              width: type === 'report' ? chartWidth : containerWidth,
+              width: chartWidth,
             }}
             showsHorizontalScrollIndicator={false}
             scrollEventThrottle={1}
             onScroll={handleScroll}
             alwaysBounceHorizontal={false}
-            scrollEnabled={type === 'report'}
             overScrollMode="never"
             bounces={false}>
-            <Svg
-              height={chartHeight}
-              width={type === 'report' ? chartWidth : containerWidth}>
+            <Svg height={chartHeight} width={chartWidth}>
               {[...Array(yAxisSteps + 1)].map((_, index) => {
                 const y = (chartHeight / yAxisSteps) * index;
                 return (
@@ -107,19 +101,24 @@ const Chart = ({
               })}
 
               {processedData.map((item, index) => {
-                 if (!item || typeof item.value !== "number") {
-                   console.error(`Invalid item at index ${index}:`, item);
-                   return null; // 잘못된 항목은 무시
-                 }
-                 console.log(`Item being rendered (index: ${index}):`, item);
-                 const barHeight = maxValue > 0 ? (item.value / maxValue) * chartHeight : 0;
-                 console.log(`Calculated barHeight: ${barHeight} for index ${index}`);
+                if (!item || typeof item.value !== 'number') {
+                  console.error(`Invalid item at index ${index}:`, item);
+                  return null; // 잘못된 항목은 무시
+                }
+                console.log(`Item being rendered (index: ${index}):`, item);
+                const barHeight =
+                  maxValue > 0 ? (item.value / maxValue) * chartHeight : 0;
+                console.log(
+                  `Calculated barHeight: ${barHeight} for index ${index}`,
+                );
 
-                 console.log(`Rendering AppIcon for index ${index}:`, item.image); // 로그 추가
-                 const x = margin + index * (barWidth + spacing);
-                 console.log(`Calculated x position for index ${index}: ${x}`);
-                 const y = chartHeight - barHeight;
-
+                console.log(
+                  `Rendering AppIcon for index ${index}:`,
+                  item.image,
+                ); // 로그 추가
+                const x = margin + index * (barWidth + spacing);
+                console.log(`Calculated x position for index ${index}: ${x}`);
+                const y = chartHeight - barHeight;
 
                 return (
                   <React.Fragment key={index}>
@@ -147,37 +146,33 @@ const Chart = ({
                 );
               })}
             </Svg>
-
           </ScrollView>
         </ChartCard>
-        {type === 'report' && (
-          <XLabelContainer>
-            {processedData.map((item, index) => {
-              const x = margin + index * (barWidth + spacing);
-              console.log(`Rendering AppIcon for index ${index}:`, item.image);
-
-              return (
-                <AppIconWrapper key={`icon-${index}`} style={{left: x}}>
-                  <AppIcon
-                    source={{uri: item.image}}
-                    onLoad={() => console.log(`Image loaded for index ${index}: ${item.image}`)}
-                    onError={(error) =>
-                      console.error(`Image failed to load for index ${index}:`, error)
-                    }
-                  />
-                </AppIconWrapper>
-              );
-            })}
-          </XLabelContainer>
-        )}
-
-        {type === 'detail' && (
-          <XLabelDetailContainer>
-            {weekList.map((value, index) => (
-              <XLabelText key={index}>{value}</XLabelText> // weekList는 문자열 배열이므로 'value'를 사용
-            ))}
-          </XLabelDetailContainer>
-        )}
+        <XLabelContainer
+          ref={labelScrollRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={false}
+          contentContainerStyle={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            gap: 24,
+            width: chartWidth,
+          }}>
+          {processedData.map((item, index) => (
+            <AppIcon
+              key={`icon-${index}`}
+              source={{uri: item.image}}
+              onLoad={() =>
+                console.log(`Image loaded for index ${index}: ${item.image}`)
+              }
+              onError={error =>
+                console.error(`Image failed to load for index ${index}:`, error)
+              }
+            />
+          ))}
+        </XLabelContainer>
       </LeftSection>
       <YLabelContainer>
         {[...Array(yAxisSteps + 1)].map((_, index) => {
@@ -214,47 +209,17 @@ const LeftSection = styled(View)`
   gap: 4px;
 `;
 
-const XLabelContainer = styled(View)`
-  position: absolute;
-  top: 190px; /* 차트 아래에 위치 */
-  flex-direction: row;
-  justify-content: flex-start;
-  width: 100%;
-  height: 44px; /* 아이콘 높이에 맞춤 */
+const XLabelContainer = styled(ScrollView)`
   padding: 0 40px;
-`;
-
-
-const XLabel = styled(View)`
-  width: 44px;
-  height: 44px;
-  border-radius: 8.25px;
-  border: 1px solid ${styles.colors.gray[200]};
-`;
-
-const XLabelText = styled(Text)`
-  color: ${styles.colors.gray[600]};
-  font-size: 12px;
-  flex: 1;
-  text-align: center;
-`;
-
-const XLabelDetailContainer = styled(View)`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 8px;
 `;
 
 const ChartCard = styled(View)`
   width: 100%;
-  margin: 8px 0 36px 0; /* 차트와 리스트 간격 */
+  margin: 8px 0; /* 차트와 리스트 간격 */
   border-radius: 12px;
   border: 1px solid ${styles.colors.gray[100]};
   overflow: hidden;
 `;
-
 
 // 추가된 빈 차트 스타일
 const EmptyChartContainer = styled(View)`
@@ -267,32 +232,16 @@ const EmptyChartContainer = styled(View)`
   border-radius: 12px;
 `;
 
-const IconContainer = styled(View)`
-  position: absolute;
-  width: 100%;
-  top: 183px;
-  flex-direction: row;
-  gap: 0;
-  justify-content: flex-start;
-`;
-
 const EmptyText = styled(Text)`
   font-size: 16px;
   color: ${styles.colors.gray[600]};
 `;
 
-const AppIconWrapper = styled(View)`
-  position: absolute;
+const AppIcon = styled(Image)`
   width: 44px;
   height: 44px;
-  align-items: center;
-`;
-
-const AppIcon = styled(Image)`
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  background-color: ${styles.colors.gray[100]};
+  border-radius: 8.25px;
+  background-color: #ffffff;
 `;
 
 export default Chart;
