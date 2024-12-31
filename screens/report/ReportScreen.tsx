@@ -135,7 +135,7 @@ const ReportScreen = () => {
             onPrevious={handlePrevWeek}
             onNext={handleNextWeek}
           />
-          <StyleTab menus={templist} setIndex={setIndex} />
+          <StyleTab menus={templist} setIndex={setIndex} index={index} />
           {index === 1 && appId === null && <MapReport data={data.data.maps} />}
           {index === 1 && appId !== null && <MapReportDetail appId={appId} />}
           {index === 0 && <Chart data={chartData} />}
