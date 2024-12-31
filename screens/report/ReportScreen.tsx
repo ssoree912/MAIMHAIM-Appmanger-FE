@@ -11,6 +11,7 @@ import TimelineList from '../../components/reportComponent/TimelineList';
 import MapTimeline from '../../components/reportComponent/MapTimeline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getReports} from '../../services/apiServices';
+import {getMaps} from '../../services/apiServices';
 import data from '../../mock/testData.json';
 import MapReportDetail from '../../components/reportComponent/MapReportDetail';
 
@@ -23,6 +24,7 @@ const ReportScreen = () => {
   const [memberId, setMemberId] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [appId, setAppId] = useState<number | null>(null);
+  const [mapsData, setMapsData] = useState<any[]>([]);
 
   const getWeekStartDate = (date = new Date()) => {
     const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
@@ -95,11 +97,21 @@ const ReportScreen = () => {
   };
 
   useEffect(() => {
+    const initMemberId = async () => {
+      const fetchedId = await fetchMemberId();
+      setMemberId(fetchedId);  // 상태에 저장
+    };
+    initMemberId();
+  }, []);
+
+
+  useEffect(() => {
     const currentWeekStartDate = getWeekStartDate();
     const todayDate = getTodayDate();
     console.log(`Today: ${todayDate}, Week Start: ${currentWeekStartDate}`);
     setSelectedDate(todayDate);
     fetchWeeklyData(todayDate);
+     fetchMapsData(todayDate);
   }, []);
 
   const handlePrevWeek = () => {
@@ -108,6 +120,7 @@ const ReportScreen = () => {
     const newDate = currentDate.toISOString().split('T')[0];
     setSelectedDate(newDate);
     fetchWeeklyData(newDate);
+    fetchMapsData(newDate);
   };
 
   const handleNextWeek = () => {
@@ -116,6 +129,31 @@ const ReportScreen = () => {
     const newDate = currentDate.toISOString().split('T')[0];
     setSelectedDate(newDate);
     fetchWeeklyData(newDate);
+    fetchMapsData(newDate);
+  };
+
+  const fetchMapsData = async (date: string) => {
+    try {
+      setLoading(true);
+      console.log(`Fetching maps data for date: ${date}`);
+
+      const memberId = await fetchMemberId();
+      console.log(`Using memberId: ${memberId}`);
+
+      // getMaps는 "maps" 데이터를 가져오는 API라고 가정
+      const response = await getMaps(memberId, date);
+      console.log('Maps response:', response);
+
+      // 실제 응답이 { data: { maps: [...] } } 형태일 때:
+      const newMapsData = response?.data?.maps || [];
+      setMapsData(newMapsData);
+      console.log('Updated mapsData:', newMapsData);
+    } catch (error) {
+      console.error('Error fetching maps data:', error);
+      setMapsData([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -136,8 +174,15 @@ const ReportScreen = () => {
             onNext={handleNextWeek}
           />
           <StyleTab menus={templist} setIndex={setIndex} index={index} />
-          {index === 1 && appId === null && <MapReport data={data.data.maps} />}
-          {index === 1 && appId !== null && <MapReportDetail appId={appId} />}
+         {index === 1 && appId === null && <MapReport data={mapsData} />}
+         {index === 1 && appId !== null && (
+           <MapReportDetail
+             appId={appId}
+             memberId={memberId}
+             startDate={selectedDate} // 또는 다른 변수가 있다면 그걸 사용
+           />
+         )}
+
           {index === 0 && <Chart data={chartData} />}
           {(index === 0 || index === 1) && (
             <AppList

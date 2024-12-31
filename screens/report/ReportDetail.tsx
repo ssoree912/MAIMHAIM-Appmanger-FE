@@ -37,37 +37,37 @@ const ReportDetail = () => {
   }));
 
   const getWeekStartDate = (date = new Date()) => {
-    const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
-    const localDate = new Date(date.getTime() - timezoneOffset); // Adjust for local timezone
-    return localDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-  };
+     const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
+     const localDate = new Date(date.getTime() - timezoneOffset); // Adjust for local timezone
+     return localDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+   };
 
-  const getTodayDate = () => {
-    const date = new Date();
-    const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
-    const localDate = new Date(date.getTime() - timezoneOffset); // Adjust for local timezone
-    return localDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-  };
+   const getTodayDate = () => {
+     const date = new Date();
+     const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset in milliseconds
+     const localDate = new Date(date.getTime() - timezoneOffset); // Adjust for local timezone
+     return localDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+   };
 
-  const getWeekString = (dateString: string): string => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = date.toLocaleString('en-US', {month: 'long'});
-    const day = date.getDate();
+   const getWeekString = (dateString: string): string => {
+     const date = new Date(dateString);
+     const year = date.getFullYear();
+     const month = date.toLocaleString('en-US', {month: 'long'});
+     const day = date.getDate();
 
-    const firstDayOfMonth = new Date(year, date.getMonth(), 1);
-    const weekOffset = firstDayOfMonth.getDay(); // 0 (Sunday) to 6 (Saturday)
+     const firstDayOfMonth = new Date(year, date.getMonth(), 1);
+     const weekOffset = firstDayOfMonth.getDay(); // 0 (Sunday) to 6 (Saturday)
 
-    const week = Math.ceil((day + weekOffset) / 7);
+     const week = Math.ceil((day + weekOffset) / 7);
 
-    if (week > 5 && day > 28) {
-      const nextMonth = new Date(year, date.getMonth() + 1, 1);
-      const nextMonthName = nextMonth.toLocaleString('en-US', {month: 'long'});
-      return `${nextMonthName}, Week 1`;
-    }
+     if (week > 5 && day > 28) {
+       const nextMonth = new Date(year, date.getMonth() + 1, 1);
+       const nextMonthName = nextMonth.toLocaleString('en-US', {month: 'long'});
+       return `${nextMonthName}, Week 1`;
+     }
 
-    return `${month}, Week ${week}`;
-  };
+     return `${month}, Week ${week}`;
+   };
 
   const handlePrevWeek = () => {
     const currentDate = new Date(selectedDate);
@@ -121,7 +121,9 @@ const ReportDetail = () => {
   };
 
   useEffect(() => {
-    const todayDate = new Date().toISOString().split('T')[0];
+        const currentWeekStartDate = getWeekStartDate();
+        const todayDate = getTodayDate();
+        console.log(`Today: ${todayDate}, Week Start: ${currentWeekStartDate}`);
     setSelectedDate(todayDate);
     fetchWeeklyData(todayDate);
   }, []);

@@ -51,12 +51,13 @@ const clusterApps = (
 };
 
 const MapReport = ({data}: {data: DataPointType[]}) => {
-  const [region, setRegion] = useState<Region>({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.05,
-    longitudeDelta: 0.05,
-  });
+    // 초기 지도 위치를 라스베이거스 컨벤션 센터 부근으로 설정
+    const [region, setRegion] = useState<Region>({
+      latitude: 36.1372,
+      longitude: -115.1519,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
+    });
 
   const [clusters, setClusters] = useState<ClusterType[]>([]);
   const zoomButtonPressed = useRef<boolean>(false);
@@ -103,8 +104,8 @@ const MapReport = ({data}: {data: DataPointType[]}) => {
           zoomEnabled={true}
           scrollEnabled={true}>
           {clusters.map((cluster, index) => {
-            const baseSize = 30;
-            const size = baseSize + Math.floor(cluster.count / 4) * 10;
+            const baseSize = 25;
+            const size = baseSize + Math.floor(cluster.count / 3) * 11;
             return (
               <Marker
                 key={index}
