@@ -41,11 +41,7 @@ public class AppLocationStore {
                     .put("latitude", 36.099827)
                     .put("longitude", -115.104259));
 
-            FIXED_LOCATIONS.put("hollys", new JSONObject()
-                    .put("location", "The Coffee Bean & Tea Leaf")
-                    .put("address", "3645 S Las Vegas Blvd, Las Vegas, NV 89109, USA")
-                    .put("latitude", 36.114075)
-                    .put("longitude", -115.172571));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
