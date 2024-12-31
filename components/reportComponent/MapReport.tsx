@@ -92,7 +92,7 @@ const MapReportDetail = ({data}: {data: DataPointType[]}) => {
     } else {
       zoomButtonPressed.current = false;
     }
-  }, 200);
+  }, 100);
 
   return (
     <Container>

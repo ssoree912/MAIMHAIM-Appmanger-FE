@@ -1,38 +1,31 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components/native';
 import MapView, {Marker, Region} from 'react-native-maps';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from '../../styles/styleGuide';
 import clusterData from '../../utils/clusterData';
 import {debounce} from 'lodash';
-import {ClusterType} from '../../interface/interface';
+import {ClusterType, CoordinateType} from '../../interface/interface';
+import data from '../../mock/testData2.json';
 
-const MapReportDetail = () => {
+const MapReportDetail = ({appId}: {appId: number}) => {
   const [region, setRegion] = useState<Region>({
     latitude: 37.78825,
     longitude: -122.4324,
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
-
   const zoomButtonPressed = useRef(false);
-
+  const iconUrl = data.data.app.image;
+  const coordinateData: CoordinateType[] = data.data.coordinates;
   const [clusters, setClusters] = useState<ClusterType[]>([]);
-
-  const data = [
-    {latitude: 37.78825, longitude: -122.4324},
-    {latitude: 37.78835, longitude: -122.4328},
-    {latitude: 37.78845, longitude: -122.4326},
-    {latitude: 37.78885, longitude: -122.4332},
-    {latitude: 37.78925, longitude: -122.4344},
-  ];
 
   useEffect(() => {
     const baseThreshold = 100;
     const threshold = baseThreshold * region.latitudeDelta * 100;
 
-    const clusteredData = clusterData(data, threshold);
+    const clusteredData = clusterData(coordinateData, threshold);
     setClusters(clusteredData);
   }, [region]);
 
@@ -60,7 +53,7 @@ const MapReportDetail = () => {
     } else {
       zoomButtonPressed.current = false;
     }
-  }, 200);
+  }, 100);
 
   return (
     <Container>
@@ -92,6 +85,7 @@ const MapReportDetail = () => {
             );
           })}
         </StyledMap>
+        <IconImage source={{uri: iconUrl}} />
       </MapContainer>
       <ZoomControls>
         <ZoomButton onPress={zoomIn}>
@@ -110,6 +104,7 @@ const Container = styled(View)`
   height: 289px;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 const MapContainer = styled(View)`
@@ -157,6 +152,17 @@ const ZoomText = styled(Text)`
   color: white;
   font-size: 12px;
   font-weight: bold;
+`;
+
+const IconImage = styled(Image)`
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  z-index: 99;
+  top: 27;
+  left: 26;
+  background-color: white;
+  border-radius: 10px;
 `;
 
 export default MapReportDetail;

@@ -153,8 +153,8 @@ const ReportScreen = () => {
             onNext={handleNextWeek}
           />
           <StyleTab menus={templist} setIndex={setIndex} />
-          {/* {index === 1 && <MapReportDetail />} */}
-          {index === 1 && <MapReport data={mapsData} />}
+          {index === 1 && <MapReportDetail appId={3} />}
+          {/* {index === 1 && <MapReport data={mapsData} />} */}
           {index === 0 && <Chart data={chartData} type="report" />}
           {(index === 0 || index === 1) && <AppList />}
           {index === 2 && <MapTimeline />}
