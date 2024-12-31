@@ -144,11 +144,11 @@ const ReportDetail = () => {
         {loading ? (
           <Text>Loading...</Text>
         ) : (
-          <>
+          <BottomSectionContainer>
             <Chart_detail data={chartData} />
             <ListTitle>Branch Overview</ListTitle>
             <OverviewList appName={appName} data={overviewData} />
-          </>
+          </BottomSectionContainer>
         )}
       </BottomSection>
     </Conatiner>
@@ -175,4 +175,9 @@ const ListTitle = styled(Text)`
   color: ${styles.colors.gray[800]};
   font-weight: bold;
   margin: 24px 0 16px 0;
+`;
+
+const BottomSectionContainer = styled(View)`
+  width: 100%;
+  padding-top: 20px;
 `;
