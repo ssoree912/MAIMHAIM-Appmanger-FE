@@ -50,7 +50,7 @@ const clusterApps = (
   return clusters;
 };
 
-const MapReportDetail = ({data}: {data: DataPointType[]}) => {
+const MapReport = ({data}: {data: DataPointType[]}) => {
   const [region, setRegion] = useState<Region>({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -190,4 +190,4 @@ const ZoomText = styled(Text)`
   font-weight: bold;
 `;
 
-export default MapReportDetail;
+export default MapReport;
