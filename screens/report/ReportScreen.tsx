@@ -138,7 +138,7 @@ const ReportScreen = () => {
           <StyleTab menus={templist} setIndex={setIndex} />
           {index === 1 && appId === null && <MapReport data={data.data.maps} />}
           {index === 1 && appId !== null && <MapReportDetail appId={appId} />}
-          {index === 0 && <Chart data={chartData} type="report" />}
+          {index === 0 && <Chart data={chartData} />}
           {(index === 0 || index === 1) && (
             <AppList
               apps={chartData}
