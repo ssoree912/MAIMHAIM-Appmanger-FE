@@ -1,0 +1,19 @@
+{
+  "data": {
+    "app": {
+      "appId": 43,
+      "appName": "스타벅스",
+      "image": "https://appmanager-asset.s3.ap-northeast-2.amazonaws.com/appimage/starbucks.png"
+    },
+    "coordinates": [
+      {
+        "latitude": 37.78835,
+        "longitude": -122.4328
+      },
+      {
+        "latitude": 37.78825,
+        "longitude": -122.4324
+      }
+    ]
+  }
+}

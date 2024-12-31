@@ -62,7 +62,7 @@ const MapTimeline = () => {
     } else {
       zoomButtonPressed.current = false;
     }
-  }, 200);
+  }, 100);
 
   return (
     <Container>

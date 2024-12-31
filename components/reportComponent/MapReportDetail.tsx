@@ -1,56 +1,18 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components/native';
 import MapView, {Marker, Region} from 'react-native-maps';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {debounce} from 'lodash';
-import calculateDistance from '../../utils/calculateDistance';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {ClusterType, DataPointType} from '../../interface/interface';
+import {styles} from '../../styles/styleGuide';
+import clusterData from '../../utils/clusterData';
+import {debounce} from 'lodash';
+import {ClusterType, CoordinateType} from '../../interface/interface';
+import data from '../../mock/testData2.json';
 
-const clusterApps = (
-  data: DataPointType[],
-  threshold: number,
-): ClusterType[] => {
-  const clusters: ClusterType[] = [];
+const MapReportDetail = ({appId}: {appId: number}) => {
+  // TODO: 나중에 파라미터로 넘어오는 appId를 가지고 mapReportDetail api호출하시면 됩니다.
 
-  data.forEach(point => {
-    let addedToCluster = false;
-
-    for (let cluster of clusters) {
-      const distance = calculateDistance(
-        cluster.latitude,
-        cluster.longitude,
-        point.coordinate.latitude,
-        point.coordinate.longitude,
-      );
-
-      if (distance < threshold && cluster.app!.appId === point.app.appId) {
-        cluster.latitude =
-          (cluster.latitude * cluster.count + point.coordinate.latitude) /
-          (cluster.count + 1);
-        cluster.longitude =
-          (cluster.longitude * cluster.count + point.coordinate.longitude) /
-          (cluster.count + 1);
-        cluster.count += 1;
-        addedToCluster = true;
-        break;
-      }
-    }
-
-    if (!addedToCluster) {
-      clusters.push({
-        latitude: point.coordinate.latitude,
-        longitude: point.coordinate.longitude,
-        app: point.app,
-        count: 1,
-      });
-    }
-  });
-
-  return clusters;
-};
-
-const MapReport = ({data}: {data: DataPointType[]}) => {
+  // TODO: 지도호출을 위한 기본 좌표 설정은 추후 네이티브 앱이랑 연결하실 때 사용자 위치를 가져올 수 있게 되면 그걸 기준으로 하시면 됩니다.
   const [region, setRegion] = useState<Region>({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -58,15 +20,18 @@ const MapReport = ({data}: {data: DataPointType[]}) => {
     longitudeDelta: 0.05,
   });
 
+  const zoomButtonPressed = useRef(false);
+  const iconUrl = data.data.app.image;
+  const coordinateData: CoordinateType[] = data.data.coordinates;
   const [clusters, setClusters] = useState<ClusterType[]>([]);
-  const zoomButtonPressed = useRef<boolean>(false);
 
   useEffect(() => {
-    const baseThreshold = 100; // meters
+    const baseThreshold = 100;
     const threshold = baseThreshold * region.latitudeDelta * 100;
-    const clusteredData = clusterApps(data, threshold);
+
+    const clusteredData = clusterData(coordinateData, threshold);
     setClusters(clusteredData);
-  }, [region, data]);
+  }, [region]);
 
   const zoomIn = () => {
     zoomButtonPressed.current = true;
@@ -111,18 +76,20 @@ const MapReport = ({data}: {data: DataPointType[]}) => {
                 coordinate={{
                   latitude: cluster.latitude,
                   longitude: cluster.longitude,
-                }}>
+                }}
+                anchor={{x: 0.5, y: 0.5}}>
                 <ClusterBubble
                   size={size}
                   colors={['#ffffff30', '#B4B4B4']}
                   start={{x: 0, y: 0}}
                   end={{x: 0, y: 1}}>
-                  <MarkerImage source={{uri: cluster.app!.image}} size={size} />
+                  <ClusterText size={size}>{cluster.count}</ClusterText>
                 </ClusterBubble>
               </Marker>
             );
           })}
         </StyledMap>
+        <IconImage source={{uri: iconUrl}} />
       </MapContainer>
       {/* COMMENT 아래에 있는 zoomcontrols 코드는 애뮬레이터상에서 확대 축소 과정이 매끄럽지 않아 임의로 넣었습니다. 디자인을 수정하셔서 쓰셔도 좋고, 아예 삭제하셔도 무관합니다. */}
       <ZoomControls>
@@ -142,6 +109,7 @@ const Container = styled(View)`
   height: 289px;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 const MapContainer = styled(View)`
@@ -163,10 +131,10 @@ const ClusterBubble = styled(LinearGradient)<{size: number}>`
   align-items: center;
 `;
 
-const MarkerImage = styled(Image)<{size: number}>`
-  width: ${props => props.size * 0.6}px;
-  height: ${props => props.size * 0.6}px;
-  border-radius: ${props => (props.size * 0.6) / 6}px;
+const ClusterText = styled(Text)<{size: number}>`
+  color: ${styles.colors.gray[600]};
+  font-size: ${props => props.size / 3}px;
+  font-weight: bold;
 `;
 
 const ZoomControls = styled(View)`
@@ -191,4 +159,15 @@ const ZoomText = styled(Text)`
   font-weight: bold;
 `;
 
-export default MapReport;
+const IconImage = styled(Image)`
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  z-index: 99;
+  top: 27;
+  left: 26;
+  background-color: white;
+  border-radius: 10px;
+`;
+
+export default MapReportDetail;

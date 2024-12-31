@@ -1,25 +1,28 @@
 import styled from 'styled-components/native';
 import {Animated, Dimensions, View, Text} from 'react-native';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {styles} from '../../styles/styleGuide';
 import React from 'react';
 
 interface StyleTabProps {
   menus: string[];
   setIndex: (i: number) => void;
+  index: number;
 }
 
-const StyleTab = ({menus, setIndex}: StyleTabProps) => {
-  const [activeTab, setActiveTab] = useState(0);
-  const translateX = useRef(new Animated.Value(0)).current;
+const StyleTab = ({menus, setIndex, index}: StyleTabProps) => {
   const [containerWidth, setContainerWidth] = useState(0);
   const PADDING = 2;
   const tabWidth = containerWidth
     ? (containerWidth - PADDING * 2) / menus.length
     : 0;
+  const translateX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    translateX.setValue(index * tabWidth);
+  }, [tabWidth]);
 
   const handleSelect = (i: number) => {
-    setActiveTab(i);
     setIndex(i);
 
     Animated.timing(translateX, {
@@ -33,8 +36,8 @@ const StyleTab = ({menus, setIndex}: StyleTabProps) => {
     <TabContainer
       onLayout={event => setContainerWidth(event.nativeEvent.layout.width)}>
       <SelectedTab $tabWidth={tabWidth} style={{transform: [{translateX}]}} />
-      {menus.map((value, index) => (
-        <Tab key={`styleTab${index}`} onPress={() => handleSelect(index)}>
+      {menus.map((value, i) => (
+        <Tab key={`styleTab${i}`} onPress={() => handleSelect(i)}>
           {value}
         </Tab>
       ))}
