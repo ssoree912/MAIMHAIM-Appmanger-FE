@@ -4,33 +4,20 @@ import {styled} from 'styled-components';
 import OverviewItem from './OverviewItem';
 
 interface overviewItemProps {
+  appName: string;
   address: string;
-  times: number;
+  count: number;
 }
 
-const OverviewList = ({appName}: {appName: string}) => {
-  const data: overviewItemProps[] = [
-    {
-      address: '230 S. Alvarado, Los Angeles',
-      times: 16,
-    },
-    {
-      address: '639 N Broadway, Los Angeles',
-      times: 16,
-    },
-    {
-      address: '2735 S. Figueroa St., Los Angeles',
-      times: 16,
-    },
-    {
-      address: '534 S. Occidental, Los Angeles',
-      times: 16,
-    },
-    {
-      address: '3026 S Figueroa St, Los Angeles',
-      times: 16,
-    },
-  ];
+
+const OverviewList = ({appName, data}: {appName: string; data: overviewItemProps[]}) => {
+     console.log('OverviewList received appName:', appName);
+      console.log('OverviewList received data:', data);
+
+  if (!data || data.length === 0) {
+    console.warn('No data provided to OverviewList');
+    return <Text>No overview data available</Text>;
+  }
 
   return (
     <Container>
@@ -39,13 +26,14 @@ const OverviewList = ({appName}: {appName: string}) => {
           key={`OverviewListIndex${index}`}
           appName={appName}
           address={value.address}
-          times={value.times}
-          index={index}
+          count={value.count}
+          index={index + 1} // Assigning 1-based index
         />
       ))}
     </Container>
   );
 };
+
 
 export default OverviewList;
 

@@ -112,10 +112,10 @@ const CustomLayout: React.FC<ItemProps> = ({item}) => {
               />
             </IconsContainer>
 
-            <MessageText>해당 기능은 준비 중이에요!</MessageText>
+            <MessageText>This page is currently in the works</MessageText>
 
             <BackButton>
-              <BackButtonText>창닫기</BackButtonText>
+              <BackButtonText>Close</BackButtonText>
               <Pressable onPress={() => setModalVisible(false)}>
                 <BackButtonIcon
                   source={require('../../assets/img/icons/icon_squarex.png')}

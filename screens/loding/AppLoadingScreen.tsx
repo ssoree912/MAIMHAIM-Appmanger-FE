@@ -15,7 +15,7 @@ const AppLoadingScreen: React.FC<AppLoadingScreenProps> = ({
   appName,
   logoSource,
   appIconSource,
-  loadingMessage = '앱을 불러오고 있어요',
+  loadingMessage = 'Just a few more Seconds',
 }) => {
   const [isActive, setIsActive] = useState(true);
   const position = useRef(new Animated.Value(isActive ? 45 : -45)).current;

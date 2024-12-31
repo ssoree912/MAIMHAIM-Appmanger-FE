@@ -4,41 +4,65 @@ import MapView, {Marker, Region} from 'react-native-maps';
 import {View, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from '../../styles/styleGuide';
+import {FIXED_LOCATIONS} from './location';
 import clusterData from '../../utils/clusterData';
 import {debounce} from 'lodash';
 
-const MapReport = () => {
+const MapReport = ({appData}) => {
   const [region, setRegion] = useState<Region>({
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: 36.1296, // Las Vegas Convention Center Latitude
+    longitude: -115.1676, // Las Vegas Convention Center Longitude
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
 
-  const zoomButtonPressed = useRef(false);
-
   const [clusters, setClusters] = useState<
     Array<{latitude: number; longitude: number; count: number}>
   >([]);
+  const initialRender = useRef(true);
 
-  const data = [
-    {latitude: 37.78825, longitude: -122.4324},
-    {latitude: 37.78835, longitude: -122.4328},
-    {latitude: 37.78845, longitude: -122.4326},
-    {latitude: 37.78885, longitude: -122.4332},
-    {latitude: 37.78925, longitude: -122.4344},
-  ];
+  // Combine fixed locations with app data
+  const data = Object.entries(FIXED_LOCATIONS).map(([key, location]) => {
+    const appInfo = appData?.find(app => app.appName.toLowerCase() === key);
+    return {
+      ...location,
+      count: appInfo ? appInfo.count : 0,
+    };
+  });
 
   useEffect(() => {
+    if (initialRender.current) {
+      console.log('Initial render: clustering data without triggering region update');
+      clusterMapData(); // 초기 렌더링에서 클러스터링 수행
+      initialRender.current = false;
+    }
+  }, [data]); // 데이터 변화에만 반응
+
+  const clusterMapData = () => {
+    console.log('Clustering with region:', region);
     const baseThreshold = 100;
     const threshold = baseThreshold * region.latitudeDelta * 100;
 
+    console.log('Clustering threshold:', threshold);
+    console.log('Raw data for clustering:', data);
+
     const clusteredData = clusterData(data, threshold);
-    setClusters(clusteredData);
-  }, [region]);
+    console.log('Clustered data:', clusteredData);
+
+    setClusters(clusteredData); // 클러스터 상태 업데이트
+  };
+
+  const handleRegionChangeComplete = debounce((newRegion: Region) => {
+    if (
+      newRegion.latitudeDelta !== region.latitudeDelta ||
+      newRegion.longitudeDelta !== region.longitudeDelta
+    ) {
+      console.log('Region changed:', newRegion);
+      setRegion(newRegion); // 지역 업데이트
+    }
+  }, 200);
 
   const zoomIn = () => {
-    zoomButtonPressed.current = true;
     setRegion(prevRegion => ({
       ...prevRegion,
       latitudeDelta: prevRegion.latitudeDelta / 2,
@@ -47,21 +71,12 @@ const MapReport = () => {
   };
 
   const zoomOut = () => {
-    zoomButtonPressed.current = true;
     setRegion(prevRegion => ({
       ...prevRegion,
       latitudeDelta: prevRegion.latitudeDelta * 2,
       longitudeDelta: prevRegion.longitudeDelta * 2,
     }));
   };
-
-  const handleRegionChangeComplete = debounce((newRegion: Region) => {
-    if (!zoomButtonPressed.current) {
-      setRegion(newRegion);
-    } else {
-      zoomButtonPressed.current = false;
-    }
-  }, 200);
 
   return (
     <Container>

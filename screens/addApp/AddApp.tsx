@@ -78,10 +78,10 @@ const AddApp = () => {
           await DatabaseService.updateAppIsAdd(selectedApp.packageName, false); // 로컬 DB에서 isAdd를 0으로 업데이트
           console.log(selectedApp.ssid);
           await LeaveHandleModule.leaveApp(selectedApp.ssid, false);
-          showNotification(`${selectedApp.name}이(가) 제거되었습니다.`);
+          showNotification(`${selectedApp.name} has been removed.`);
         } catch (error) {
           console.error('Error removing app:', error);
-         showNotification('앱 제거 중 문제가 발생했습니다. 다시 시도해 주세요.');
+         showNotification('There was an issue removing the app. Please try again.');
         }
       } else {
         // 앱 추가
@@ -89,10 +89,10 @@ const AddApp = () => {
         try {
           await addApp(parseInt(memberId, 10), [{ appId: selectedApp.appId, add: true }]); // 서버에 추가 요청
           await DatabaseService.updateAppIsAdd(selectedApp.packageName, true); // 로컬 DB에서 isAdd를 1로 업데이트
-          showNotification(`${selectedApp.name}이(가) 추가되었습니다.`);
+          showNotification(`${selectedApp.name} has been added.`);
         } catch (error) {
           console.error('Error adding app:', error);
-          showNotification('앱 추가 중 문제가 발생했습니다. 다시 시도해 주세요.');
+          showNotification('There was an issue adding the app. Please try again.');
         }
       }
     }
@@ -122,7 +122,7 @@ const AddApp = () => {
       try {
         // 서버에 모든 앱의 isAdd 상태를 업데이트 요청
         await addApp(parseInt(memberId, 10), appsToAdd);
-        showNotification('모든 앱의 상태가 변경되었습니다.');
+        showNotification('All app statuses have been updated.');
         const packageNames = apps.map(app => app.packageName);
         await ActivateModule.activateAddApp(packageNames, newToggleState);
         // 로컬 데이터베이스에 모든 앱의 isAdd 상태 업데이트
@@ -133,7 +133,7 @@ const AddApp = () => {
         console.log('Local database updated for all apps');
       } catch (error) {
         console.error('Error adding all apps:', error);
-        showNotification('모든 앱 상태 변경 중 문제가 발생했습니다.');
+        showNotification('There was an issue updating app statuses.');
       }
     }
 
@@ -149,8 +149,7 @@ const AddApp = () => {
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          marginTop: 20,
-          marginBottom: -40,
+          marginTop: 64,
           marginLeft: 20,
         }}
         onPress={() => navigate(-1)}>
@@ -158,16 +157,19 @@ const AddApp = () => {
       </Pressable>
       <ManageContentView>
         <TopContentView>
-          <Text style={{ fontWeight: 'bold', fontSize: 22 }}>앱 추가하기</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 20 }}> Edit App List</Text>
         </TopContentView>
         <ContentView>
           <AllSelectView>
+            <Text style={{left: -146,fontSize: 12, color: '#9496A1'}}>
+                    App Name
+            </Text>
             <Select onPress={handleAllToggle}>
-              <Text style={{ fontSize: 10 }}>모두 선택</Text>
+              <Text style={{ fontSize: 12, color: '#9496A1' }}>Select All</Text>
               <Icon
                 name={isAllTrue ? 'checkbox' : 'checkbox-outline'}
                 size={20}
-                color="#000"
+                color={isAllTrue ? '#48CBC0' : '#9496A1'}
               />
             </Select>
           </AllSelectView>
@@ -175,7 +177,7 @@ const AddApp = () => {
             <SelectView key={item.appId}>
               <ItemFirstView>
                 <Img source={{ uri: item.image }} />
-                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>
+                <Text style={{ fontSize: 16 }}>
                   {item.name}
                 </Text>
               </ItemFirstView>
@@ -185,7 +187,7 @@ const AddApp = () => {
                 <Icon
                   name={toggleStates[index] ? 'checkbox' : 'checkbox-outline'}
                   size={20}
-                  color="#000"
+                  color={toggleStates[index] ? '#48CBC0' : '#9496A1'}
                 />
               </SelectIcon>
             </SelectView>
@@ -208,7 +210,7 @@ export default AddApp;
 // Styled components...
 
 const AppManageView = styled(ScrollView)`
-  background: #eee;
+  background: #fff;
   height: 100%;
 `;
 const ManageContentView = styled(View)`
@@ -216,19 +218,19 @@ const ManageContentView = styled(View)`
   margin-bottom: 200px;
 `;
 const TopContentView = styled(View)`
-  gap: 27px;
-  padding: 80px 30px;
-`;
+   left: 134px;
+   top: -25px;
+  `;
 const ContentView = styled(View)``;
 const AllSelectView = styled(View)`
   justify-content: flex-end;
   flex-direction: row;
   align-items: center;
   padding: 15px 30px;
-  margin-top: -80px;
+  margin-top: 0px;
   border-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: #939393;
+  border-bottom-color: #F3F4F8;
 `;
 const Select = styled(Pressable)`
   flex-direction: row;
@@ -240,14 +242,17 @@ const SelectView = styled(View)`
   padding: 15px 30px;
   border-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: #939393;
+  border-bottom-color: #F3F4F8;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 `;
 const Img = styled(Image)`
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #D2D4DA;
+  border-radius: 8px;
+
 `;
 const ItemFirstView = styled(View)`
   flex-direction: row;
@@ -255,5 +260,4 @@ const ItemFirstView = styled(View)`
   align-items: center;
 `;
 const SelectIcon = styled(Pressable)<{ isActive?: boolean }>`
-  padding: 3px;
 `;
