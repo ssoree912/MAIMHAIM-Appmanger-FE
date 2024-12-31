@@ -13,30 +13,30 @@ interface TimelineItemProps {
 const TimelineList = () => {
   const mockData: TimelineItemProps[] = [
     {
-      placeName: '"Place Name" ("street 1"&"Street 2)',
-      address: '"Address"',
-      time: '0hr 00min',
-      subTime: '00:00 am - 00:00 pm',
+      placeName: 'Seoul City Hall (City Hall Plaza)',
+      address: '110 Sejong-daero, Jung-gu, Seoul, South Korea',
+      time: '0hr 05min',
+      subTime: '08:00 am - 08:05 am',
     },
     {
-      placeName: '"Place Name" ("street 1"&"Street 2)',
-      address: '"Address"',
-      time: '0hr 00min',
-      subTime: '00:00 am - 00:00 pm',
+      placeName: 'Deoksugung Palace (Palace Entrance)',
+      address: '99 Sejong-daero, Jung-gu, Seoul, South Korea',
+      time: '0hr 10min',
+      subTime: '08:10 am - 08:20 am',
     },
     {
-      placeName: '"Place Name" ("street 1"&"Street 2)',
-      address: '"Address"',
-      time: '0hr 00min',
-      subTime: '00:00 am - 00:00 pm',
+      placeName: 'Cheonggyecheon Stream (Entrance)',
+      address: '14 Sejong-daero 3-gil, Jung-gu, Seoul, South Korea',
+      time: '0hr 15min',
+      subTime: '08:25 am - 08:40 am',
     },
     {
-      placeName: '"Place Name" ("street 1"&"Street 2)',
-      address: '"Address"',
-      time: '0hr 00min',
-      subTime: '00:00 am - 00:00 pm',
+      placeName: 'Jonggak Station (Exit 1)',
+      address: 'Jong-ro, Jongno-gu, Seoul, South Korea',
+      time: '0hr 10min',
+      subTime: '08:50 am - 09:00 am',
     },
-  ];
+       ];
 
   return (
     <Container>

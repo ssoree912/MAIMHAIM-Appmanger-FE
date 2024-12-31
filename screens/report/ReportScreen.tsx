@@ -129,7 +129,7 @@ const ReportScreen = () => {
           <SubTitle>Top Visited Apps</SubTitle>
           <DateView date={getWeekString(selectedDate)} onPrevious={handlePrevWeek} onNext={handleNextWeek} />
           <StyleTab menus={templist} setIndex={setIndex} />
-          {index === 1 && <MapReport />}
+          {index === 1 && <MapReport appData={chartData} />}
           {index === 0 && <Chart data={chartData} type="report" />}
           {(index === 0 || index === 1) && <AppList apps={chartData} />}
           {index === 2 && <MapTimeline />}

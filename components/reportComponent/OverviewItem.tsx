@@ -19,8 +19,8 @@ const OverviewItem = ({appName, address, count, index}: overviewItemProps) => {
       <LeftSection>
         <Numbering>{index}</Numbering>
         <ContentSection>
-          <AppName>{appName}</AppName>
-          <Address>{address}</Address>
+          <AppName numberOfLines={1} ellipsizeMode="tail">{appName}</AppName>
+          <Address numberOfLines={1} ellipsizeMode="tail">{address}</Address>
         </ContentSection>
       </LeftSection>
       <RightSection>
@@ -56,24 +56,28 @@ const Numbering = styled(Text)`
   line-height: 24px;
   font-size: 10px;
   text-align: center;
-  color: ${styles.colors.gray[600]};
+  color: ${styles.colors.gray[900]};
 `;
 
 const ContentSection = styled(View)`
   display: flex;
+  flex: 1;
   gap: 4px;
+  overflow: hidden; /* Ensures no overflow from content */
 `;
 
 const AppName = styled(Text)`
   font-size: 16px;
   line-height: 24px;
   color: ${styles.colors.gray[800]};
+  flex-shrink: 1; /* Prevents AppName from expanding uncontrollably */
 `;
 
 const Address = styled(Text)`
   font-size: 12px;
   line-height: 24px;
   color: ${styles.colors.gray[900]};
+  flex-shrink: 1;
 `;
 
 const RightSection = styled(View)`

@@ -70,6 +70,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".loading.StarbucksLoadingActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize" />
+
+
         <!-- Geofence 이벤트 처리하는 BroadcastReceiver -->
         <receiver
             android:name=".GeofenceBroadcastReceiver"
@@ -88,6 +95,13 @@
             android:exported="false"
             android:foregroundServiceType="location" />
 
+        <service
+            android:name=".LightSensorService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/GOOGLE_MAPS_API_KEY"/>
 
     </application>
 </manifest>
