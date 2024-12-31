@@ -35,6 +35,7 @@ import com.mynewproject.db.App;
 import com.mynewproject.db.AppDB;
 import com.mynewproject.db.AppDatabaseHelper;
 import com.mynewproject.db.TriggerType;
+import com.mynewproject.loading.AppLoadingActivity;
 import com.mynewproject.loading.StarbucksLoadingActivity;
 import com.mynewproject.manager.NotificationHelper;
 
@@ -404,26 +405,13 @@ public class LocationForegroundService extends Service {
     // 앱 오픈 메서드
     public void openApp(String packageName) {
         Log.e("openApp", packageName);
-        Context context = getApplicationContext();
 
-        // 스타벅스 앱 처리
-        if ("com.starbucks.co".equals(packageName)) {
-            Intent loadingIntent = new Intent(context, StarbucksLoadingActivity.class);
-            loadingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(loadingIntent);
-        } else {
-            // 일반 앱 실행
-            Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
-            if (intent != null) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            } else {
-                Log.e("openApp", "앱을 열 수 없습니다: " + packageName);
-                Intent playStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-                playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(playStoreIntent);
-            }
-        }
+        // 모든 패키지 → 공통 로딩 액티비티로 이동
+        Intent loadingIntent = new Intent(getApplicationContext(), AppLoadingActivity.class);
+        // 패키지 이름을 인텐트에 담아서 전달
+        loadingIntent.putExtra("EXTRA_PACKAGE_NAME", packageName);
+        loadingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(loadingIntent);
     }
 
 

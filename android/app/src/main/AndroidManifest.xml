@@ -71,7 +71,7 @@
         </activity>
 
         <activity
-            android:name=".loading.StarbucksLoadingActivity"
+            android:name=".loading.AppLoadingActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:configChanges="orientation|screenSize" />
