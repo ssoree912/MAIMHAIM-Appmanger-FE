@@ -91,6 +91,7 @@ const MapReportDetail = ({appId}: {appId: number}) => {
         </StyledMap>
         <IconImage source={{uri: iconUrl}} />
       </MapContainer>
+      {/* COMMENT 아래에 있는 zoomcontrols 코드는 애뮬레이터상에서 확대 축소 과정이 매끄럽지 않아 임의로 넣었습니다. 디자인을 수정하셔서 쓰셔도 좋고, 아예 삭제하셔도 무관합니다. */}
       <ZoomControls>
         <ZoomButton onPress={zoomIn}>
           <ZoomText>+</ZoomText>
