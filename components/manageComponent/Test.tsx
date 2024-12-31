@@ -18,10 +18,10 @@ const Test = () => {
           <Icon name="map-outline" size={32} color="#3ed2cc" />
         </IconsContainer>
 
-        <MessageText>해당 페이지는 준비 중이에요!</MessageText>
+        <MessageText>This page is currently in the works</MessageText>
 
         <CloseButton onPress={handleClose}>
-          <CloseButtonText>창닫기</CloseButtonText>
+          <CloseButtonText>Close</CloseButtonText>
           <CloseIcon name="close-outline" size={16} color="#333" />
         </CloseButton>
       </Card>

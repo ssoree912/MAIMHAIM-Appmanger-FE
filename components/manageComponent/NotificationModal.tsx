@@ -25,7 +25,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
           <ModalContainer>
             <MessageText>{message}</MessageText>
             <CloseButton onPress={onClose}>
-              <CloseButtonText>확인</CloseButtonText>
+              <CloseButtonText>OK</CloseButtonText>
             </CloseButton>
           </ModalContainer>
         </Animatable.View>

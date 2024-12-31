@@ -3,6 +3,7 @@ import {Text, TouchableOpacity, Image, View} from 'react-native';
 import {useNavigate} from 'react-router-native';
 import styled from 'styled-components/native';
 import {styles} from '../../styles/styleGuide';
+import Sry from '../../assets/defaultIcon/graphic_sorry'
 
 const ComingSoonPage = () => {
   const navigate = useNavigate();
@@ -11,15 +12,14 @@ const ComingSoonPage = () => {
     <Container>
       {/* Images Row */}
       <IconsContainer>
-        <StyledImage
-          source={require('../../assets/img/icons/graphic_sorry.png')}
+        <Sry
         />
       </IconsContainer>
 
-      <MessageText>해당 페이지는 준비 중이에요!</MessageText>
+      <MessageText>Hang tight! {'\n'}This page is coming soon</MessageText>
 
       <BackButton onPress={() => navigate(-1)}>
-        <BackButtonText>이전 화면으로 돌아가기</BackButtonText>
+        <BackButtonText>Return to the last page</BackButtonText>
         <BackButtonIcon
           source={require('../../assets/img/icons/icon_back.png')}
         />
@@ -40,8 +40,8 @@ const Container = styled(View)`
 `;
 
 const IconsContainer = styled(View)`
-  width: 200px;
-  height: 60px;
+  width: 164Hug;
+  height: 60 Hug;
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
@@ -50,6 +50,8 @@ const IconsContainer = styled(View)`
 const MessageText = styled(Text)`
   font-size: 16px;
   color: ${styles.colors.gray[600]};
+  textAlign: center;
+  align-items: center;
   font-weight: 500;
   margin-bottom: 20px;
 `;
@@ -69,6 +71,7 @@ const BackButton = styled(TouchableOpacity)`
 const BackButtonText = styled(Text)`
   font-size: 18px;
   font-weight: 500;
+  textAlign: center;
   color: ${styles.colors.gray[600]};
 `;
 

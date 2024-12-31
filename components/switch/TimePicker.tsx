@@ -12,7 +12,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ onTimeChange, initialTime }) =>
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
   const [selectedMinute, setSelectedMinute] = useState<number | null>(null);
 
-  const periods = ['오전', '오후'];
+  const periods = ['AM', 'PM'];
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
   const minutes = Array.from({ length: 60 }, (_, i) => i);
 
@@ -26,7 +26,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ onTimeChange, initialTime }) =>
       const [hour, minute] = initialTime.split(':').map((val) => parseInt(val, 10));
       const isPM = hour >= 12;
 
-      const newPeriod = isPM ? '오후' : '오전';
+      const newPeriod = isPM ? 'PM' : 'AM';
       const newHour = isPM ? hour - 12 || 12 : hour || 12;
       const newMinute = minute;
 
@@ -140,8 +140,8 @@ const Picker = styled(ScrollView)`
 const Item = styled.Text<{ isSelected: boolean }>`
   height: 40px;
   text-align: center;
-  color: ${({ isSelected }) => (isSelected ? '#333' : '#aaa')};
-  font-size: ${({ isSelected }) => (isSelected ? '20px' : '18px')};
+  color: ${({ isSelected }) => (isSelected ? '#282A3A' : '#B3B5BD')};
+  font-size: ${({ isSelected }) => (isSelected ? '16px' : '14px')};
   font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
 `;
 
@@ -149,7 +149,7 @@ const Line = styled(View)`
   height: 40px;
   width: 100%;
   position: absolute;
-  top: 43%;
+  top: 41%;
   pointer-events: none;
   border-radius: 10px;
   background-color: #fff;
