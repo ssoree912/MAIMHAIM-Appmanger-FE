@@ -84,6 +84,7 @@
 		4B8FD2552D12FE48009A5BAB /* KalmanFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KalmanFilter.swift; sourceTree = "<group>"; };
 		4B9360A02D16E4C600373122 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		4B9360A22D16E5FB00373122 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		4BC00EE72D24299D00975D06 /* MyNewProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MyNewProject.entitlements; path = MyNewProject/MyNewProject.entitlements; sourceTree = "<group>"; };
 		4F674A8836E39736ACD516D3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = MyNewProject/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MyNewProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97295B002E90603111F7C6F5 /* Pods-MyNewProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyNewProject.release.xcconfig"; path = "Target Support Files/Pods-MyNewProject/Pods-MyNewProject.release.xcconfig"; sourceTree = "<group>"; };
@@ -181,6 +182,7 @@
 		13B07FAE1A68108700A75B9A /* MyNewProject */ = {
 			isa = PBXGroup;
 			children = (
+				4BC00EE72D24299D00975D06 /* MyNewProject.entitlements */,
 				4B9360A22D16E5FB00373122 /* Constants.swift */,
 				4B8FD2572D134770009A5BAB /* modules */,
 				4B7232002D0F385A00ACD48E /* db */,
@@ -647,6 +649,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MyNewProject/MyNewProject.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 26D79W688B;
 				ENABLE_BITCODE = NO;
@@ -676,6 +679,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MyNewProject/MyNewProject.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 26D79W688B;
 				INFOPLIST_FILE = MyNewProject/Info.plist;

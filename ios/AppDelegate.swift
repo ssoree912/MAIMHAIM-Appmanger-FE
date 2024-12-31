@@ -65,25 +65,15 @@
           setupBeaconConstraint()
           return true
       }
-    func userNotificationCenter(
-            _ center: UNUserNotificationCenter,
-            willPresent notification: UNNotification,
-            withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-        ) {
-            // 포그라운드에서도 알림을 표시
-            completionHandler([.banner, .list, .sound])
-        }
-
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let tokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-        print(tokenString)
-    }
+    
     @objc func sourceURL(for bridge: RCTBridge) -> URL? {
         #if DEBUG
   //      연결되어있는 ip로 바꿔야함
-        return URL(string: "http://172.20.10.7:8081/index.bundle?platform=ios&dev=true")
+        return URL(string: "http://192.168.219.102:8081/index.bundle?platform=ios&dev=true")
         #else
+
         return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    
         #endif
     }
 
