@@ -24,7 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadServiceStatus, saveServiceStatus } from '../../utils/foregroundServiceUtils';
 import {useRecoilState} from 'recoil';
 import axios from 'axios';
-import { getTriggerCounts,addUser } from '../../services/apiServices'; // 앱 매니저 횟수 API 가져오기
+import { getTriggerCounts,addUser } from '../../services/apiServices';
 import DatabaseService from '../../utils/DatabaseService';
 import {getCount} from '../../services/apiServices'; // 고급모드 API 호출
 
@@ -155,17 +155,17 @@ const HomeScreen: React.FC = () => {
                                     ? require('../../assets/img/homeLogo_active.png')
                                     : require('../../assets/img/homeLogo.png')
                             }
-                            style={{ width: 64, height: 86 }}
+                            style={{ width: 144, height: 79.2 }}
                         />
                         <Text
                             style={{
                                 fontWeight: 600,
-                                fontSize: 14,
+                                fontSize: 12,
                                 margin: 20,
-                                color: isActive ? '#fff' : styles.colors.gray[600],
+                                color: isActive ? '#000' : '#fff',
                             }}
                         >
-                            마임하임이 {isActive ? '일하고 있어요!' : '쉬고 있어요'}
+                            MaimHaim is {isActive ? 'up and working!' : 'taking a break.'}
                         </Text>
                         <BtnView isActive={isActive} onPress={handleButtonPress}>
                             <CircleBtn
@@ -185,11 +185,11 @@ const HomeScreen: React.FC = () => {
                                     fontWeight: 400,
                                     textAlign: 'center',
                                     color: isActive
-                                        ? styles.colors.gray[100]
-                                        : styles.colors.gray[600],
+                                        ? '#000'
+                                        : '#fff',
                                 }}
                             >
-                                지금까지 터치를
+                                So far, you've cut down
                             </Text>
                             <TouchCountContainer>
                                 <TouchCount isActive={isActive}>
@@ -197,7 +197,7 @@ const HomeScreen: React.FC = () => {
                                         {totalCount.toLocaleString()}{' '}
                                     </CountText>
                                 </TouchCount>
-                                <StatusText isActive={isActive}>회 줄였어요!</StatusText>
+                                <StatusText isActive={isActive}>touches!</StatusText>
                             </TouchCountContainer>
                         </TextView>
                     </ContentView>
@@ -219,15 +219,15 @@ const LogoContainer = styled(View)`
 `;
 
 const LogoImage = styled.Image`
-  width: 130px;
-  height: 58px;
+  width: 144px;
+  height: 79.2px;
 `;
 
 
 const MainView = styled(View)<{ isActive?: boolean }>`
   flex: 1;
   background-color: ${({ isActive }) =>
-    isActive ? styles.colors.brand.primary : '#fff'};
+    isActive ? styles.colors.brand.primary : '#2A2A2A'};
   justify-content: center;
   align-items: center;
   padding-bottom: 80px;
@@ -251,7 +251,7 @@ const BtnView = styled(Pressable)<isActiveBTN>`
   border-radius: 100px;
   width: 230px;
   background-color: ${({ isActive }) =>
-    isActive ? styles.colors.brand.primary : '#eee'};
+    isActive ? '#48CBC0' : '#D2D4DA'};
   height: 50px;
   position: relative;
   justify-content: center;
@@ -298,16 +298,16 @@ const TouchCount = styled(View)<{isActive?: boolean}>`
   border-radius: 12px;
   margin-right: 5px;
   background-color: ${({isActive}) =>
-    isActive ? '#fff' : styles.colors.brand.primary};
+    isActive ? '#000' : '#48CBC0'};
 `;
 
 const CountText = styled(Text)<{isActive?: boolean}>`
   font-size: 24px;
   font-weight: bold;
-  color: ${({isActive}) => (isActive ? styles.colors.brand.primary : '#fff')};
+  color: #fff;
 `;
 
 const StatusText = styled(Text)<{isActive?: boolean}>`
   font-size: 16px;
-  color: ${({isActive}) => (isActive ? '#fff' : styles.colors.gray[600])};
+  color: ${({isActive}) => (isActive ? '#000' : '#fff')};
 `;

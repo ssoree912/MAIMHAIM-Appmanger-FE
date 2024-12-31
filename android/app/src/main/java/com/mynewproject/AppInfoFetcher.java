@@ -23,41 +23,38 @@ public class AppInfoFetcher {
     private final Context context;
     private AppDB appDB;
     private String[] targetPackages = {
-            "kr.co.symtra.kmuid",
-            "kr.co.tmoney.tiay",
-            "com.starbucks.co",
-            "com.kiwoom.heromts",
-            "com.gsr.gs25",
-            "com.oliveyoung",
-            "com.kr.hollyscoffee",
-            "com.cj.twosome",
-            "com.lgt.tmoney",
-            "com.kbstar.kbbank",
-            "nh.smart.banking",
-            "com.kebhana.hanapush",
-            "com.truefriend.neosmartarenewal",
-            "viva.republica.toss",
-            "com.golfzon.android",
-            "kr.co.emart24.everse"
+            "com.amazon.mShop.android.shopping",
+            "bbc.mobile.news.ww",
+            "com.cta.cestech",
+            "com.cnn.mobile.android.phone",
+            "com.costco.app.android",
+            "com.fidelity.wi.activity",
+            "com.google.android.apps.magazines",
+            "com.ingka.ikea.app",
+            "com.google.android.apps.tachyon",
+            "com.starbucks.mobilecard",
+            "com.robinhood.gateway",
+            "com.walmart.android",
+            "us.zoom.videomeetings",
+            "com.costco.dmc.store",
+            "com.starbucks.co"
     };
     private String[] names = {
-            "kcard",          // kr.co.symtra.kmuid
-            "tiay",           // kr.co.tmoney.tiay
-            "starbucks",      // com.starbucks.co
-            "heromts",        // com.kiwoom.heromts
-            "gs25",           // com.gsr.gs25
-            "oliveyoung",     // com.oliveyoung
-            "hollys",   // com.kr.hollyscoffee
-            "twosome",        // com.cj.twosome
-            "tmoney",         // com.lgt.tmoney
-            "kbbank",         // com.kbstar.kbbank
-            "smartbanking",   // nh.smart.banking
-            "hanapush",       // com.kebhana.hanapush
-            "neosmartarenewal", // com.truefriend.neosmartarenewal
-            "toss"         ,   // viva.republica.toss,
-            "golfzon",
-            "emart24"
-
+            "amazon",
+            "BBC",
+            "ces",
+            "CNN",
+            "COSTCO",
+            "fidelity",
+            "googlenews",
+            "IKEA",
+            "googlemeet",
+            "STARBUCKS",
+            "wallet",
+            "walmart",
+            "zoom",
+            "costco",
+            "starbucks"
     };
 
     public AppInfoFetcher(Context context, AppDB appDB) {
@@ -76,9 +73,8 @@ public class AppInfoFetcher {
             for (PackageInfo packageInfo : packages) {
                 ApplicationInfo applicationInfo = packageInfo.applicationInfo;
 
-                // 시스템 앱이 아닌 사용자 앱만 필터링
-                if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                     String packageName = packageInfo.packageName;
+                    Log.d("getAllInstalledUserAppInfo", "getAllInstalledUserAppInfo: " + packageName);
                     String appName = pm.getApplicationLabel(applicationInfo).toString();
                     int uid = applicationInfo.uid;
 
@@ -114,7 +110,7 @@ public class AppInfoFetcher {
                     appInfoJson.put("packageName", packageName);
                     appInfoJson.put("uid", uid);
                     appInfoArray.put(appInfoJson);
-                }
+
             }
 
             // 모든 앱 정보를 서버로 전송
@@ -167,7 +163,7 @@ public class AppInfoFetcher {
         Log.d("AppInfoFetcher", "서버 요청");
         Thread thread = new Thread(() -> {
             try {
-//                URL url = new URL("http://192.168.219.103:8080/api/v2/managed-apps");
+//                URL url = new URL("http://192.168.219.102:8080/api/v2/managed-apps");
 //                URL url = new URL("http://10.223.123.80:8080/api/v2/managed-apps");
                 URL url = new URL("http://54.180.201.68:8080/api/v2/managed-apps");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -1,5 +1,7 @@
 package com.mynewproject;
 
+import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
+
 import android.Manifest;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -23,6 +25,7 @@ import androidx.core.app.ActivityCompat;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -32,6 +35,8 @@ import com.mynewproject.db.App;
 import com.mynewproject.db.AppDB;
 import com.mynewproject.db.AppDatabaseHelper;
 import com.mynewproject.db.TriggerType;
+import com.mynewproject.loading.AppLoadingActivity;
+import com.mynewproject.loading.StarbucksLoadingActivity;
 import com.mynewproject.manager.NotificationHelper;
 
 import java.util.ArrayList;
@@ -40,12 +45,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.mynewproject.geofence.GeofenceHelper;
+import com.mynewproject.geofence.ServerCommunicator;
+import com.mynewproject.geofence.LocationData;
+import com.mynewproject.geofence.LocationDataStore;
+
+
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.LocationServices;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import com.mynewproject.location.AppLocationStore;
+import com.mynewproject.location.AppServerClient;
+import android.content.SharedPreferences;
+import org.json.JSONObject;
+
+
 public class LocationForegroundService extends Service {
 
     public static boolean shake_determine = false;
     private long entryStartTime = 0; // Wi-Fi 진입 시 타이머 시작 시간
     private long exitStartTime = 0; // Wi-Fi 이탈 시 타이머 시작 시간
-    private static final long DWELL_TIME_THRESHOLD = 1000; // 2초 (진입 또는 이탈을 판단하기 위한 시간 임계값)
+    private static final long DWELL_TIME_THRESHOLD = 500; // 2초 (진입 또는 이탈을 판단하기 위한 시간 임계값)
     private static final int NOTIFICATION_ID = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -74,19 +99,29 @@ public class LocationForegroundService extends Service {
     private Map<String, ParticleFilter> particleFilters = new HashMap<>();
 
     private AppDB appDB;  // AppDB 인스턴스 추가
-    private String[] packageNames = {"kcard" , "starbucks" , "gs25","golfzon","hollys"};
+    private String[] packageNames = { "starbucks" , "walmart","costco","ces"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 1.0;
+    private double OUTER_BOUNDARY = 0.4;
 
-    private double INNER_BOUNDARY = 2.0;
+    private double INNER_BOUNDARY = 0.4;
     private static LocationForegroundService instance;
     ShakeDetector shakeDetector ;
     public static LocationForegroundService getInstance() {
         return instance;
     }
-//    리팩토링
+    //    리팩토링
     private NotificationHelper notificationHelper;
     private AppDatabaseHelper appDatabaseHelper;
+
+
+
+    private Set<String> detectedSSIDs = new HashSet<>();
+    private GeofenceHelper geofenceHelper;
+    private GeofencingClient geofencingClient;
+
+    private boolean isLoadingPageShown = false;
+
+
 
     @Override
     public void onCreate() {
@@ -98,6 +133,9 @@ public class LocationForegroundService extends Service {
 
 //        createNotificationChannel(); // 알림 채널 생성
 //        Notification notification = createNotification();
+
+
+
         startForeground(NOTIFICATION_ID, notificationHelper.createNotification());
         // 서비스 시작을 위해 startService() 또는 startForegroundService() 사용
         Intent serviceIntent = new Intent(this, LightSensorService.class);
@@ -108,6 +146,12 @@ public class LocationForegroundService extends Service {
         // 위치 업데이트 초기화
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE); // Wi-Fi 매니저 초기화
+
+        // GeofenceHelper 초기화
+
+        geofenceHelper = new GeofenceHelper(this); // 추가된 코드
+        geofenceHelper.setupGeofences(); // 지오펜스 설정
+        //geofenceHelper.checkCurrentLocation(this); // 현재 위치 확인 추가
 
         // Wi-Fi 상태 변경 감지를 위한 리시버 등록
         wifiStateReceiver = new WifiStateReceiver();
@@ -122,11 +166,32 @@ public class LocationForegroundService extends Service {
         startLocationUpdates();
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(wifiStateReceiver); // 리시버 해제
     }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    // 스타벅스 로딩 페이지 실행 메서드
+    private void showStarbucksLoadingPage(Context context) {
+        if (!isLoadingPageShown) {
+            isLoadingPageShown = true; // 중복 실행 방지
+            runOnUiThread(() -> {
+                Intent loadingIntent = new Intent(context, StarbucksLoadingActivity.class);
+                loadingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(loadingIntent);
+            });
+        }
+    }
+
+
     // 와이파이 스캔 시작 메서드
     private void startWifiScan() {
         // 스캔이 이미 진행 중이면 메서드 종료
@@ -137,7 +202,7 @@ public class LocationForegroundService extends Service {
             while (isScanning) {
                 scanWifiNetworks();
                 try {
-                    Thread.sleep(230 )           ; // 5초 간격으로 스캔
+                    Thread.sleep(350 )           ; // 5초 간격으로 스캔
                 } catch (InterruptedException e) {
                     Log.e("WifiScan", "Wi-Fi 스캔 스레드 중단됨", e);
                     isScanning = false; // 스캔 중단
@@ -299,8 +364,9 @@ public class LocationForegroundService extends Service {
         if (max_distance < INNER_BOUNDARY) {
 
             if (currentTime - entryStartTime >= DWELL_TIME_THRESHOLD && !isHomeWifiDetected) {
-                if (SSID_name.contains(packageNames[0])) {
-                    handleWifiEntry(packageNames[0], SSID_name, BSSID_name,currentTime);
+                if(SSID_name.contains(packageNames[0])) { // 스타벅스 처리
+                        handleWifiEntry(packageNames[0], SSID_name, BSSID_name, currentTime);
+
                 } else if (SSID_name.contains(packageNames[1])) {
                     handleWifiEntry(packageNames[1], SSID_name, BSSID_name,currentTime);
                 } else if (SSID_name.contains(packageNames[2])) {
@@ -338,19 +404,17 @@ public class LocationForegroundService extends Service {
 
     // 앱 오픈 메서드
     public void openApp(String packageName) {
-        Context context = getApplicationContext();
-        Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
-        if (intent != null) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else {
-            Log.e("openApp", "앱을 열 수 없습니다: " + packageName);
-            // 앱이 없을 경우 Google Play 스토어로 이동
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+        Log.e("openApp", packageName);
+
+        // 모든 패키지 → 공통 로딩 액티비티로 이동
+        Intent loadingIntent = new Intent(getApplicationContext(), AppLoadingActivity.class);
+        // 패키지 이름을 인텐트에 담아서 전달
+        loadingIntent.putExtra("EXTRA_PACKAGE_NAME", packageName);
+        loadingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(loadingIntent);
     }
+
+
 
     private void startLocationUpdates() {
         LocationRequest locationRequest = LocationRequest.create();
@@ -386,6 +450,16 @@ public class LocationForegroundService extends Service {
             }
         };
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
@@ -418,6 +492,34 @@ public class LocationForegroundService extends Service {
                     notificationHelper.sendNotification(SSID_name, appName + "로 진입함", getApp.getPackageName());
                     entryStartTime = 0; // 진입 후 타이머 초기화
                     isHomeWifiDetected = true;
+
+                    // **SharedPreferences에서 memberId 가져오기**
+                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+                    String memberId = sharedPreferences.getString("memberId", "0"); // 기본값 0
+
+                    // **서버로 위치 데이터 전송 추가**
+                    JSONObject locationData = AppLocationStore.getLocationData(appName); // 패키지 이름으로 위치 데이터 가져오기
+                    if (locationData != null) {
+                        try {
+                            JSONObject payload = new JSONObject();
+                            payload.put("memberId", memberId); // 필요 시 동적으로 설정
+                            payload.put("type", "LOCATION");
+                            payload.put("raw", locationData);
+
+                            // 서버로 데이터 전송
+                            AppServerClient.sendDataToServer(lastPackageName, payload);
+
+                            Log.d("wifi_information2", "Location data sent to server for: " + appName);
+                        } catch (Exception e) {
+                            Log.e("wifi_information2", "Error sending location data: " + e.getMessage());
+                        }
+                    } else {
+                        Log.e("wifi_information2", "No location data found for app: " + appName);
+                    }
+
+
+
+
                     if( getApp.isMotionTriggerActive() && (getApp.getTriggerType().equals(TriggerType.MOTION))&&getApp.isAdvancedMode() ){
                         isShakeAble = true;
                         shakePackageName = getApp.getPackageName();
@@ -432,10 +534,10 @@ public class LocationForegroundService extends Service {
     }
     public void checkAndHandleWifiExit(String SSID_name, boolean active) {
         Log.d("checkAndHandleWifiExit", "checkAndHandleWifiExit: " +(names != null) +(SSID_name!=null) + isHomeWifiDetected );
-            if ((names != null && names.contains(SSID_name) && isHomeWifiDetected) ) {
-                exitStartTime = 0; // 이탈 후 타이머 초기화
-                leaveHandle(SSID_name, active);
-            }
+        if ((names != null && names.contains(SSID_name) && isHomeWifiDetected) ) {
+            exitStartTime = 0; // 이탈 후 타이머 초기화
+            leaveHandle(SSID_name, active);
+        }
     }
 
     public void leaveHandle(String SSID_name, boolean active) {
@@ -459,22 +561,107 @@ public class LocationForegroundService extends Service {
         }
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public void handleGeofenceEvent(String geofenceId) {
+        Log.d("GeofenceEvent", "Received Geofence ID: " + geofenceId);
+
+        // 위치 권한 확인
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("GeofenceEvent", "Location permissions are not granted.");
+            return;
+        }
+
+        // LocationRequest를 생성하여 위치 요청
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(1000); // 1초 간격
+
+        // 위치 업데이트 요청
+        fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                    Location location = locationResult.getLastLocation();
+                    if (location != null) {
+                        handleLocationUpdate(location, geofenceId);
+                    } else {
+                        Log.e("GeofenceEvent", "Location is null.");
+                    }
+                } else {
+                    Log.e("GeofenceEvent", "Failed to retrieve location updates.");
+                }
+
+                // 위치 요청 중단
+                fusedLocationClient.removeLocationUpdates(this);
+            }
+        }, Looper.getMainLooper());
     }
+
+    // 위치 업데이트를 처리하는 메서드
+    private void handleLocationUpdate(Location location, String geofenceId) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        Log.d("GeofenceEvent", "Current Location: " + latitude + ", " + longitude);
+
+        switch (geofenceId) {
+            case "starbucks":
+                openApp("com.starbucks.co");
+                ServerCommunicator.sendDataToServer(
+                        this,
+                        geofenceId,
+                        "App opened",
+                        latitude,
+                        longitude
+                );
+                break;
+
+            case "another_geofence_id": // 다른 Geofence ID 처리
+                Log.d("GeofenceEvent", "Another geofence triggered.");
+                // 추가 동작 정의
+                break;
+
+            default:
+                Log.d("GeofenceEvent", "Unhandled Geofence ID: " + geofenceId);
+                break;
+        }
+    }
+
+    // onStartCommand에서 이벤트 분리
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getBooleanExtra("shake_detected", false) && isShakeAble) {
-            shake_determine = true;
-            openApp(shakePackageName);
-            AppDatabaseHelper.handleShakeEvent(currentShakeAppId,shakePackageName);
-            isShakeAble = false;
-            shakePackageName = ""; // 흔들기 패키지 초기화
-            shakeDetector.stop();
+        if (intent != null) {
+            boolean shakeDetected = intent.getBooleanExtra("shake_detected", false);
+            String geofenceId = intent.getStringExtra("geofence_request_id");
+
+            // Geofence 이벤트와 흔들기 이벤트가 동시에 발생하지 않도록 제어
+            if (shakeDetected && geofenceId != null) {
+                Log.e("onStartCommand", "Shake and Geofence events occurred simultaneously. Ignoring Geofence.");
+                return START_STICKY;
+            }
+
+            // 흔들기 이벤트 처리
+            if (shakeDetected && isShakeAble) {
+                handleShakeEvent();
+            }
+
+            // 지오펜스 이벤트 처리
+            if (geofenceId != null) {
+                handleGeofenceEvent(geofenceId);
+            }
         }
         return START_STICKY;
+    }
+
+    // 흔들기 이벤트 처리
+    private void handleShakeEvent() {
+        shake_determine = true;
+        openApp(shakePackageName);
+        AppDatabaseHelper.handleShakeEvent(currentShakeAppId, shakePackageName);
+        isShakeAble = false;
+        shakePackageName = ""; // 흔들기 패키지 초기화
+        if (shakeDetector != null) {
+            shakeDetector.stop();
+        }
     }
 
 }

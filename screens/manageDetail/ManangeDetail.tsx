@@ -23,6 +23,14 @@ import { getAppDetails } from '../../services/apiServices'; // 고급모드 API 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AlertModal from '../../components/manageComponent/AlterModal';
 import NotificationModal from '../../components/manageComponent/NotificationModal'; // NotificationModal 임포트
+import Gps from '../../assets/defaultIcon/GPS.svg';
+import Loc from '../../assets/defaultIcon/Location.svg';
+import Mot from '../../assets/defaultIcon/Motion.svg';
+import Tm from '../../assets/defaultIcon/Time.svg';
+import Sched from '../../assets/defaultIcon/Schedule.svg';
+import Sort from '../../assets/defaultIcon/Sorting.svg';
+import Opt from '../../assets/defaultIcon/Option.svg';
+import Pencil from '../../assets/defaultIcon/pencil.svg';
 
 const ManangeDetail = () => {
   const [toggleStates, setToggleStates] = useState(true);
@@ -67,6 +75,7 @@ const [memberId, setMemberId] = useState<number | null>(null); // AsyncStorage�
    try {
      const key = `advancedActivate_${memberId}_${appId}`;
      await AsyncStorage.setItem(key, JSON.stringify(state));
+     await ActivateModule.activateAdvanced(selectedItem.packageName, state);
      console.log(`Saved advancedActivate state: ${state} for appId: ${appId}`);
    } catch (error) {
      console.error('Error saving advanced activate state:', error);
@@ -107,16 +116,16 @@ const toggleAdvancedMode = async () => {
       console.log(`Activating mode for appType: ${appType}`);
       switch (appType) {
         case 'LOCATION':
-          setSelectedOption('위치 기반');
+          setSelectedOption('Location');
           break;
         case 'TIME':
-          setSelectedOption('시간 기반');
+          setSelectedOption('Time');
           break;
         case 'SCHEDULE':
-          setSelectedOption('일정 기반');
+          setSelectedOption('Schedule');
           break;
         case 'MOTION':
-          setSelectedOption('모션 기반');
+          setSelectedOption('Motion');
           break;
         default:
           setSelectedOption('run');
@@ -142,7 +151,7 @@ const fetchAppDetails = async (appId, memberId) => {
     setToggleStates(!storedState); // 고급모드일 때 toggleStates 설정
   } catch (error) {
     console.error('Error fetching app details:', error);
-    Alert.alert('오류', '앱 정보를 불러오는 중 문제가 발생했습니다.');
+    Alert.alert('Error', 'An issue occurred while retrieving the app information.');
     throw error;
   }
 };
@@ -181,13 +190,13 @@ const fetchTriggers = async () => {
         setAllowed(true);
         setSelectedOption(
           activeTrigger.type === 'LOCATION'
-            ? '위치 기반'
+            ? 'Location'
             : activeTrigger.type === 'TIME'
-            ? '시간 기반'
+            ? 'Time'
             : activeTrigger.type === 'SCHEDULE'
-            ? '일정 기반'
+            ? 'Schedule'
             : activeTrigger.type === 'MOTION'
-            ? '모션 기반'
+            ? 'Motion'
             : 'run'
         );
 
@@ -211,7 +220,7 @@ const fetchTriggers = async () => {
     }
   } catch (error) {
     console.error('Error fetching triggers:', error);
-    Alert.alert('오류', '트리거 데이터를 불러오는 중 문제가 발생했습니다.');
+    Alert.alert('Error', 'An issue occurred while retrieving trigger data.');
   }
 };
 
@@ -225,7 +234,7 @@ useEffect(() => {
 
 
  const parseDaysFromWeekString = (weekString: string) => {
-    const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return weekString.split('').map((day, index) => day === 'T' ? daysOfWeek[index] : '').filter(Boolean);
   };
 
@@ -245,16 +254,16 @@ useEffect(() => {
 
   const addresses = [
     {
-      roadName: `${selectedItem.name} 서대문 지점`,
-      lotName: "서울특별시 서대문구 연세로 50",
+      roadName: `${selectedItem.name} (Alvarado & 3rd)`,
+      lotName: "230 S Alvarado St, Los Angeles, CA 90057",
     },
     {
-      roadName: `${selectedItem.name} 광한리 지점`,
-      lotName: "강원도 강릉시 경포로 365",
+      roadName: `${selectedItem.name} (2nd & Central)`,
+      lotName: "138 S.Central Avenue, Los Angeles, CA 90012",
     },
     {
-      roadName: `${selectedItem.name} 사당역 지점`,
-      lotName: "서울특별시 동작구 사당로 300",
+      roadName: `${selectedItem.name} (6th & Spring)`,
+      lotName: "603 S.Spring Street, Los Angeles, CA 90014",
     },
   ];
 
@@ -266,14 +275,14 @@ useEffect(() => {
         // 현재 선택된 옵션에 해당하는 트리거를 가져옴
         const selectedTrigger = triggers.find(
           trigger =>
-            (selectedOption === '위치 기반' && trigger.type === 'LOCATION') ||
-            (selectedOption === '시간 기반' && trigger.type === 'TIME') ||
-            (selectedOption === '일정 기반' && trigger.type === 'SCHEDULE') ||
-            (selectedOption === '모션 기반' && trigger.type === 'MOTION') // '모션 기반' 처리
+            (selectedOption === 'Location' && trigger.type === 'LOCATION') ||
+            (selectedOption === 'Time' && trigger.type === 'TIME') ||
+            (selectedOption === 'Schedule' && trigger.type === 'SCHEDULE') ||
+            (selectedOption === 'Motion' && trigger.type === 'MOTION') // '모션 기반' 처리
         );
 
         if (!selectedTrigger) {
-          throw new Error('해당 트리거를 찾을 수 없습니다.');
+          throw new Error('The specified trigger could not be found.');
         }
 
         console.log(
@@ -335,7 +344,7 @@ const handleOptionPress = async (optionName) => {
   setSelectedOption(optionName);
 
     // "모션 기반" 조건일 때 알림 창 표시
-    if (optionName === '일정 기반') {
+    if (optionName === 'Schedule') {
       setModalVisible(true); // 모션 기반 선택 시 알림 창 표시
       return;
     }
@@ -343,10 +352,10 @@ const handleOptionPress = async (optionName) => {
   // 선택한 옵션에 따라 트리거를 찾음
   const selectedTrigger = triggers.find(
     (trigger) =>
-      (optionName === '위치 기반' && trigger.type === 'LOCATION') ||
-      (optionName === '시간 기반' && trigger.type === 'TIME') ||
-      (optionName === '일정 기반' && trigger.type === 'SCHEDULE') ||
-      (optionName === '모션 기반' && trigger.type === 'MOTION') // '모션 기반' 처리
+      (optionName === 'Location' && trigger.type === 'LOCATION') ||
+      (optionName === 'Time' && trigger.type === 'TIME') ||
+      (optionName === 'Schedule' && trigger.type === 'SCHEDULE') ||
+      (optionName === 'Motion' && trigger.type === 'MOTION') // '모션 기반' 처리
   );
 
   if (selectedTrigger) {
@@ -380,13 +389,13 @@ const handleOptionPress = async (optionName) => {
 
       setAllowed(updatedAllowed);
       console.log(
-        `${optionName} 트리거 활성 상태가 ${
-          updatedAllowed ? '활성화' : '비활성화'
-        }되었습니다.`,
+        `${optionName} trigger is ${
+          updatedAllowed ? 'Activated' : 'Deactivated'
+        }`,
       );
     } catch (error) {
       console.error('Failed to update trigger activation:', error);
-      Alert.alert('오류', '트리거 활성화 상태 변경 중 문제가 발생했습니다.');
+      Alert.alert('Error', 'An issue occurred while changing the trigger activation status.');
     }
   } else {
     // 트리거가 없으면 기본 옵션 'run'으로 처리
@@ -401,8 +410,8 @@ const handleOptionPress = async (optionName) => {
 
 
   const [settingsOptions, setSettingsOptions] = useState([
-    {name: '백그라운드 실행', isSelected: true},
-    {name: '화면 띄우기', isSelected: false},
+    {name: 'In Background', isSelected: true},
+    {name: 'In Foreground', isSelected: false},
   ]);
 
   const onOptionSelect = (optionName: string) => {
@@ -439,7 +448,7 @@ const handleOptionPress = async (optionName) => {
  {/* 고급 모드 전환 버튼 */}
     <ToggleBtn onPress={toggleAdvancedMode} toggleStates={advancedActivate}>
       <SwitchText toggleStates={advancedActivate}>
-        {advancedActivate ? '고급모드' : '기본모드'}
+        {advancedActivate ? 'Pro' : 'Std'}
       </SwitchText>
       <CircleBtn toggleStates={advancedActivate} />
     </ToggleBtn>
@@ -447,12 +456,12 @@ const handleOptionPress = async (optionName) => {
   </HeaderView>
             {toggleStates && (
               <>
-                <Title>위치 설정</Title>
+                <Title>Location Settings</Title>
                 <LocationBox>
-                  <Icon name="location-outline" size={20} color="#6e6e6e" />
-                  <LocationText>{selectedItem.name} 전 지점</LocationText>
+                  <Gps size={24} color="#494A56" />
+                  <LocationText>{selectedItem.name} 'Location Info'</LocationText>
                   <EditButton>
-                    <Icon name="pencil-outline" size={20} color="#6e6e6e" />
+                    <Pencil size={24} color="#494A56" />
                   </EditButton>
                 </LocationBox>
               </>
@@ -460,16 +469,16 @@ const handleOptionPress = async (optionName) => {
 
             {!toggleStates && (
               <>
-                <TitleText>세부 설정하기</TitleText>
+                <TitleText>Adjustments</TitleText>
 
                 <FeatureHeder>
                   <HeaderText
                     style={{flex: 2, textAlign: 'left', paddingLeft: 16}}>
-                    기능
+                    Feature
                   </HeaderText>
-                  <HeaderText style={{flex: 1}}>허용 여부</HeaderText>
-                  <HeaderText style={{flex: 1}}>더보기</HeaderText>
-                  <HeaderText style={{flex: 1, maxWidth: 32}}>조건</HeaderText>
+                  <HeaderText style={{flex: 1}}>Enable</HeaderText>
+                  <HeaderText style={{flex: 1}}>More</HeaderText>
+                  <HeaderText style={{flex: 1, maxWidth: 43}}>Trigger</HeaderText>
                 </FeatureHeder>
 
                 <FeatureContainer>
@@ -477,7 +486,7 @@ const handleOptionPress = async (optionName) => {
                     <FeatureTop>
                       <ItemText allowed={allowed}>
                         {selectedOption === 'run'
-                          ? '앱 실행하기'
+                          ? 'Launch the App'
                           : selectedOption}
                       </ItemText>
 
@@ -521,36 +530,43 @@ const handleOptionPress = async (optionName) => {
                             initialTime={initialTime || '00:00:00'} // Default value
                           />
                         </FeatureBottom>
-                        {selectedOption === '모션 기반' && (
+                        {selectedOption === 'Motion' && (
                           <LocationMotionText>
                             <Text
                               style={{
                                 color: styles.colors.gray[600],
                                 fontSize: 12,
                               }}>
-                              * 설정한 위치에서 모션을 하면 앱이 실행되요
+                              * Simply gesture at your chosen location
                             </Text>
                           </LocationMotionText>
                         )}
 
-                        {selectedOption !== '시간 기반' && (
+                        {selectedOption !== 'Time' && (
                           <LocationBox2 onPress={onAddressScreen}>
-                            <Icon
-                              name="location-outline"
-                              size={20}
-                              color="#6e6e6e"
+                            <Gps
+                              size={24}
+                              color="#494A56"
                             />
                             <LocationText>
-                              {selectedItem.name} 전 지점
+                              "Location Info"
                             </LocationText>
                             <EditButton>
-                              <Icon
-                                name="pencil-outline"
-                                size={20}
-                                color="#6e6e6e"
+                              <Pencil
+                                size={24}
+                                color="#494A56"
                               />
                             </EditButton>
                           </LocationBox2>
+                        )}
+                        {selectedOption === 'Motion' && (
+                          <MotionBox>
+                           <MotionText>Motion</MotionText>
+                           <OptionText style = {{left: 125,color: '#777986', fontSize: 16}}>Shake</OptionText>
+                           <EditButton>
+                             <Opt size={24} color="#494A56" />
+                           </EditButton>
+                          </MotionBox>
                         )}
                       </>
                     )}
@@ -559,37 +575,31 @@ const handleOptionPress = async (optionName) => {
                     color={
                       selectedOption === 'run'
                         ? '#FFA4A4'
-                        : selectedOption === '위치 기반'
-                        ? '#FFA4A4'
-                        : selectedOption === '모션 기반'
-                        ? '#91E4C5'
-                        : selectedOption === '시간 기반'
-                        ? '#A1AAFF'
-                        : selectedOption === '일정 기반'
-                        ? '#6EC2EA'
+                        : selectedOption === 'Location'
+                        ? '#FF5D5D'
+                        : selectedOption === 'Motion'
+                        ? '#39C892'
+                        : selectedOption === 'Time'
+                        ? '#8159DE'
+                        : selectedOption === 'Schedule'
+                        ? '#299AD0'
                         : '#CCCCCC'
                     }
                     onPress={() => {
                       IconTest();
                     }}>
                     <Tag>
-                      <Icon
-                        name={
-                          selectedOption === 'run'
-                            ? 'map-outline'
-                            : selectedOption === '위치 기반'
-                            ? 'map-outline'
-                            : selectedOption === '모션 기반'
-                            ? 'walk-outline'
-                            : selectedOption === '시간 기반'
-                            ? 'time-outline'
-                            : selectedOption === '일정 기반'
-                            ? 'calendar-outline'
-                            : '#CCCCCC'
-                        }
-                        size={24}
-                        color="#fff"
-                      />
+                    {/* 조건부로 SVG 렌더링 */}
+                          {selectedOption === 'run' || selectedOption === 'Location' ? (
+                            <Loc width={24} height={24} />
+                          ) : selectedOption === 'Motion' ? (
+                            <Mot width={24} height={24} />
+                          ) : selectedOption === 'Time' ? (
+                            <Tm width={24} height={24}  />
+                          ) : selectedOption === 'Schedule' ? (
+                            <Sched width={24} height={24} />
+                          ) : ('#CCCCCC')
+                          }
                     </Tag>
                   </FeatureRight>
                 </FeatureContainer>
@@ -608,55 +618,55 @@ const handleOptionPress = async (optionName) => {
                           padding: 10,
                           color: styles.colors.gray[400],
                         }}>
-                        조건 선택
+                        Trigger
                       </Text>
                       <OptionWrap>
                         <Option
-                          onPress={() => handleOptionPress('위치 기반')}
+                          onPress={() => handleOptionPress('Location')}
                           style={{
                             backgroundColor:
-                              selectedOption === '위치 기반'
+                              selectedOption === 'Location'
                                 ? styles.colors.gray[200]
                                 : '#fff',
                           }}>
-                          <OptionText>위치 기반</OptionText>
-                          <OptionIcon color={'FFA4A4'}>
-                            <Icon name="map-outline" size={24} color="#fff" />
+                          <OptionText>Location</OptionText>
+                          <OptionIcon color={'FF5D5D'}>
+                            <Loc size={24} color="#fff" />
                           </OptionIcon>
                         </Option>
                         {/* 모션 기반 */}
                         <Option
-                          onPress={() => handleOptionPress('모션 기반')}
+                          onPress={() => handleOptionPress('Motion')}
                           style={{
                             backgroundColor:
-                              selectedOption === '모션 기반'
+                              selectedOption === 'Motion'
                                 ? styles.colors.gray[200]
                                 : '#fff',
                           }}>
-                          <OptionText>모션 기반</OptionText>
-                          <OptionIcon color={'91E4C5'}>
-                            <Icon name="walk-outline" size={24} color="#fff" />
+                          <OptionText>Motion</OptionText>
+                          <OptionIcon color={'39C892'}>
+                            <Mot size={24} color="#fff" />
                           </OptionIcon>
                         </Option>
                         {/* 모션 기반 */}
                         <Option
-                          onPress={() => handleOptionPress('시간 기반')}
+                          onPress={() => handleOptionPress('Time')}
                           style={{
                             backgroundColor:
-                              selectedOption === '시간 기반'
+                              selectedOption === 'Time'
                                 ? styles.colors.gray[200]
                                 : '#fff',
                           }}>
-                          <OptionText>시간 기반</OptionText>
-                          <OptionIcon color={'A1AAFF'}>
-                            <Icon name="time-outline" size={24} color="#fff" />
+                          <OptionText>Time</OptionText>
+                          <OptionIcon color={'8159DE'}>
+                            <Tm size={24} color="#fff" />
                           </OptionIcon>
                         </Option>
                         <Option
-                          onPress={() => handleOptionPress('일정 기반')}
+                          onPress={() => handleOptionPress('Schedule')}
                           style={{
                             backgroundColor:
-                              selectedOption === '일정 기반'
+                              selectedOption === 'Schedule'
                                 ? styles.colors.gray[200]
                                 : '#fff',
                           }}>
@@ -665,7 +675,7 @@ const handleOptionPress = async (optionName) => {
                               flexDirection: 'row',
                               alignItems: 'center',
                             }}>
-                            <Text>일정 기반</Text>
+                            <Text>Schedule</Text>
                             <Text>{'\u00A0'}</Text>
                             <Text>{'\u00A0'}</Text>
                             <Text
@@ -673,12 +683,11 @@ const handleOptionPress = async (optionName) => {
                                 color: styles.colors.gray[400],
                                 fontSize: 12,
                               }}>
-                              *캘린더와 연동돼요
+                              *Synced with Calendar
                             </Text>
                           </OptionText>
-                          <OptionIcon color={'6EC2EA'}>
-                            <Icon
-                              name="calendar-outline"
+                          <OptionIcon color={'299AD0'}>
+                            <Sched
                               size={24}
                               color="#fff"
                             />
@@ -692,7 +701,7 @@ const handleOptionPress = async (optionName) => {
                             fontSize: 16,
                             fontWeight: 'bold',
                           }}>
-                          설정 완료
+                          Save
                         </Text>
                       </CloseButton>
                     </ModalContent>
@@ -708,13 +717,10 @@ const handleOptionPress = async (optionName) => {
                     <AdressModalContent>
                       {addresses.map((address, index) => (
                         <>
-                          <ModalTitle>위치명</ModalTitle>
+                          <ModalTitle>"Place Name"("Street1"&"Street2")</ModalTitle>
 
                           <AddressContainer key={index}>
-                            <ButtonGroup>
-                              <ButtonText>도로명</ButtonText>
-                              <ButtonText>지번</ButtonText>
-                            </ButtonGroup>
+                              "Address"
                             <TextGroup>
                               <AddressText>{address.roadName}</AddressText>
                               <AddressText>{address.lotName}</AddressText>
@@ -725,7 +731,7 @@ const handleOptionPress = async (optionName) => {
                       ))}
                       <AddressButton
                         onPress={() => setAddressModalVisible(false)}>
-                        <CloseButtonText>창닫기</CloseButtonText>
+                        <CloseButtonText>Close</CloseButtonText>
                         <CloseIcon
                           name="close-outline"
                           size={16}
@@ -738,7 +744,7 @@ const handleOptionPress = async (optionName) => {
                  <AlertModal
                             visible={modalVisible}
                             onClose={() => setModalVisible(false)}
-                            message="일정 기반 설정은 준비 중입니다!"
+                            message="This page is currently in the works"
                           />
               </>
             )}
@@ -746,7 +752,7 @@ const handleOptionPress = async (optionName) => {
 
 
         ) : (
-          <Text>해당 아이템을 찾을 수 없습니다.</Text>
+          <Text>The specified item could not be found.</Text>
         )}
       </Container>
       <View style={{padding: 20}}></View>
@@ -779,9 +785,9 @@ const BackButton = styled(Pressable)`
 const AppName = styled(Text)``;
 
 const ToggleBtn = styled(Pressable)<{ toggleStates: boolean }>`
-  width: 124px;
+  width: 96px;
   background-color: ${({ toggleStates }) =>
-    toggleStates ? styles.colors.brand.primary : styles.colors.gray[300]};
+    toggleStates ? styles.colors.brand.primary : '#9496A1'};
   height: 36px;
   border-radius: 25px;
   position: relative;
@@ -791,9 +797,10 @@ const ToggleBtn = styled(Pressable)<{ toggleStates: boolean }>`
 `;
 
 const SwitchText = styled(Text)<{toggleStates: boolean}>`
-  color: #fff;
+  color: #FBFBFC;
   font-size: 14px;
-  margin-left: ${({toggleStates}) => (toggleStates ? '55px' : '15px')};
+  font-weight: bold;
+  margin-left: ${({toggleStates}) => (toggleStates ? '15px' : '57px')};
 `;
 
 const CircleBtn = styled(View)<{toggleStates: boolean}>`
@@ -803,12 +810,12 @@ const CircleBtn = styled(View)<{toggleStates: boolean}>`
   background: #fff;
   position: absolute;
   right: 3px;
-  ${({toggleStates}) => (toggleStates ? 'left:3px;' : 'right:3px;')}
+  ${({toggleStates}) => (toggleStates ? 'right:3px;' : 'left:3px;')}
 `;
 
 const Title = styled(Text)`
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 8px;
 `;
 
@@ -818,9 +825,9 @@ const LocationBox = styled(View)`
   align-items: center;
   background-color: ${styles.colors.gray[100]};
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 15px;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 const LocationBox2 = styled(Pressable)`
@@ -900,7 +907,7 @@ const ItemText = styled(Text)<{allowed: boolean}>`
   font-weight: ${({allowed}) => (allowed ? 500 : 'normal')};
   padding-left: 16px;
   flex: 2;
-  font-size: 16px;
+  font-size: 18px;
 `;
 
 const FeatureBottom = styled(View)`
@@ -1073,5 +1080,22 @@ const LocationMotionText = styled(View)`
   padding-left: 16px;
   margin-top: -10px;
 `;
+const MotionBox = styled(View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 8px;
+  justify-content: space-between;
+  margin: 0 16px;
+  margin-bottom: 16px;
+`;
 
+const MotionText = styled(Text)`
+  font-size: 16px;
+  color: #282A3A;
+  margin-left: 10px;
+  font-weight: bold;
+`;
 

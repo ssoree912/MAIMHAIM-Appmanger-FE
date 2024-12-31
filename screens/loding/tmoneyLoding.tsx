@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+ import React, {useEffect, useRef, useState} from 'react';
 import {Animated, Image, View, TextStyle} from 'react-native';
 import {Text} from '../../theme/theme';
 import styled from 'styled-components/native';

@@ -36,7 +36,6 @@ public class TimeScheduleModule extends ReactContextBaseJavaModule {
             Log.d(TAG, "Alarm set for package: " + packageName + ", week: " + week + ", time: " + time);
             if(!packageName.isBlank()){
                 updateTime(packageName, week, time);
-
                 promise.resolve("Alarm set successfully");
             }else {
                 promise.reject("ERROR", "null");
@@ -52,6 +51,7 @@ public class TimeScheduleModule extends ReactContextBaseJavaModule {
         TimeService timeService = new TimeService(getReactApplicationContext());
         new Thread(() -> {
             App app = appDB.appDao().getAppByPackage(packageName);
+            Log.d(TAG, "updateTime: " + packageName + ", week: " + week + ", time: " + time);
             if(app.isActivate()&& app.isAdd() && app.isAdvancedMode()){
                 appDB.appDao().updateTimeAndWeek(packageName,week,time);
                 appDB.appDao().updateTriggerType(packageName, TriggerType.TIME);

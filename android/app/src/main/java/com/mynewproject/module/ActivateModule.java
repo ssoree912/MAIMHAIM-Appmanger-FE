@@ -62,10 +62,10 @@ public class ActivateModule extends ReactContextBaseJavaModule {
         }
     }
     @ReactMethod
-    public void activateAdvanced(boolean active , Promise promise) {
+    public void activateAdvanced(String packageName, boolean active , Promise promise) {
         try {
             Log.d(TAG,"Advanced" + active );
-            updateAdvance(active);
+            updateAdvance(packageName,active);
             promise.resolve("trigger active success");
         } catch (Exception e) {
             Log.e(TAG, "Failed to set trigger active", e);
@@ -121,9 +121,9 @@ public class ActivateModule extends ReactContextBaseJavaModule {
         }).start();
     }
 
-    private void updateAdvance( boolean active){
+    private void updateAdvance(String packageName, boolean active){
         new Thread(() -> {
-            appDB.appDao().updateAdvancedAll(active);
+            appDB.appDao().updateAdvanced(active,packageName);
         }).start();
     }
 }

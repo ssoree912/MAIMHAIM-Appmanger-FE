@@ -21,7 +21,7 @@ const AlertModal: React.FC<AlertModalProps> = ({ visible, onClose, message }) =>
           </IconsContainer>
           <MessageText>{message}</MessageText>
           <BackButton onPress={onClose}>
-            <BackButtonText>창닫기</BackButtonText>
+            <BackButtonText>Close</BackButtonText>
             <BackButtonIcon
               source={require('../../assets/img/icons/icon_squarex.png')}
             />

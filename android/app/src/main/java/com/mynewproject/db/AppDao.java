@@ -52,5 +52,8 @@ public interface AppDao {
     void updateTriggerType(String packageName, TriggerType type);
 
     @Query("UPDATE APP SET advancedMode = :activate")
-    void updateAdvancedAll(boolean activate);
+    void updateAdvancedAll(boolean activate);@
+
+    Query("UPDATE APP SET advancedMode = :activate WHERE packageName = :packageName")
+    void updateAdvanced(boolean activate, String packageName);
 }
