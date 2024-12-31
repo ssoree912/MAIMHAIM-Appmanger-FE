@@ -1,5 +1,7 @@
 package com.mynewproject;
 
+import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
+
 import android.Manifest;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -33,6 +35,8 @@ import com.mynewproject.db.App;
 import com.mynewproject.db.AppDB;
 import com.mynewproject.db.AppDatabaseHelper;
 import com.mynewproject.db.TriggerType;
+import com.mynewproject.loading.AppLoadingActivity;
+import com.mynewproject.loading.StarbucksLoadingActivity;
 import com.mynewproject.manager.NotificationHelper;
 
 import java.util.ArrayList;
@@ -97,9 +101,9 @@ public class LocationForegroundService extends Service {
     private AppDB appDB;  // AppDB 인스턴스 추가
     private String[] packageNames = { "starbucks" , "walmart","costco","ces"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 0.2;
+    private double OUTER_BOUNDARY = 0.4;
 
-    private double INNER_BOUNDARY = 0.2;
+    private double INNER_BOUNDARY = 0.4;
     private static LocationForegroundService instance;
     ShakeDetector shakeDetector ;
     public static LocationForegroundService getInstance() {
@@ -115,6 +119,7 @@ public class LocationForegroundService extends Service {
     private GeofenceHelper geofenceHelper;
     private GeofencingClient geofencingClient;
 
+    private boolean isLoadingPageShown = false;
 
 
 
@@ -173,6 +178,19 @@ public class LocationForegroundService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    // 스타벅스 로딩 페이지 실행 메서드
+    private void showStarbucksLoadingPage(Context context) {
+        if (!isLoadingPageShown) {
+            isLoadingPageShown = true; // 중복 실행 방지
+            runOnUiThread(() -> {
+                Intent loadingIntent = new Intent(context, StarbucksLoadingActivity.class);
+                loadingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(loadingIntent);
+            });
+        }
+    }
+
 
     // 와이파이 스캔 시작 메서드
     private void startWifiScan() {
@@ -346,8 +364,9 @@ public class LocationForegroundService extends Service {
         if (max_distance < INNER_BOUNDARY) {
 
             if (currentTime - entryStartTime >= DWELL_TIME_THRESHOLD && !isHomeWifiDetected) {
-                if (SSID_name.contains(packageNames[0])) {
-                    handleWifiEntry(packageNames[0], SSID_name, BSSID_name,currentTime);
+                if(SSID_name.contains(packageNames[0])) { // 스타벅스 처리
+                        handleWifiEntry(packageNames[0], SSID_name, BSSID_name, currentTime);
+
                 } else if (SSID_name.contains(packageNames[1])) {
                     handleWifiEntry(packageNames[1], SSID_name, BSSID_name,currentTime);
                 } else if (SSID_name.contains(packageNames[2])) {
@@ -385,19 +404,17 @@ public class LocationForegroundService extends Service {
 
     // 앱 오픈 메서드
     public void openApp(String packageName) {
-        Context context = getApplicationContext();
-        Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
-        if (intent != null) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else {
-            Log.e("openApp", "앱을 열 수 없습니다: " + packageName);
-            // 앱이 없을 경우 Google Play 스토어로 이동
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+        Log.e("openApp", packageName);
+
+        // 모든 패키지 → 공통 로딩 액티비티로 이동
+        Intent loadingIntent = new Intent(getApplicationContext(), AppLoadingActivity.class);
+        // 패키지 이름을 인텐트에 담아서 전달
+        loadingIntent.putExtra("EXTRA_PACKAGE_NAME", packageName);
+        loadingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(loadingIntent);
     }
+
+
 
     private void startLocationUpdates() {
         LocationRequest locationRequest = LocationRequest.create();

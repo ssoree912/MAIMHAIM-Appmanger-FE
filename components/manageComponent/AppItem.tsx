@@ -43,7 +43,7 @@ export const AppItem = ({ apps, searchTerm }: any) => {
             
               try {
                   await activateApp(parseInt(memberId, 10), appId, activate);
-                  setModalMessage(`앱이 ${activate ? '활성화' : '비활성화'} 되었습니다.`);
+                  setModalMessage(`${activate ? 'Activated.' : 'Deactivated.'}`);
                 setModalVisible(true);
                 let isActivate = activate ? 1 : 0;
                   await DatabaseService.updateAppDetails(packageName, { activate });
@@ -51,7 +51,7 @@ export const AppItem = ({ apps, searchTerm }: any) => {
                   console.log(`Local database updated for package: ${packageName}`);
               } catch (error) {
                   console.error('Error toggling app activation:', error);
-                  setModalMessage('앱 활성화 상태 변경 중 문제가 발생했습니다.');
+                  setModalMessage("There was an issue changing the app's activation status.");
                   setModalVisible(true);
               }
           }
@@ -76,7 +76,7 @@ export const AppItem = ({ apps, searchTerm }: any) => {
                   <ItemInner>
                     <ImgNameView>
                       <LogoImage source={{ uri: item.image }} />
-                      <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{item.name}</Text>
+                      <Text style={{ fontWeight: 'medium', fontSize: 16 }}>{item.name}</Text>
                     </ImgNameView>
                     <IconView>
                       <ToggleBtn onPress={() => handleToggle(item.appId, item.packageName, item.ssid)} isActive={toggleStates[item.appId]}>
@@ -102,18 +102,20 @@ export const AppItem = ({ apps, searchTerm }: any) => {
 
 const ItemList = styled(View)`
   gap: 6px;
-  margin-bottom: 21px;
+  margin-bottom: 8px;
 `;
 
 const LogoImage = styled(Image)`
-  width: 49px;
-  height: 49px;
+  width: 64px;
+  height: 64px;
+  border: 1px solid #D2D4DA;
+  border-radius: 12px;
 `;
 
 const ItemInner = styled(View)`
   flex-direction: row;
   border-radius: 13px;
-  background: #d9d9d9;
+  background: #F3F4F8;
   padding: 15px 20px;
   justify-content: space-between;
   align-items: center;
@@ -133,17 +135,17 @@ const IconView = styled(View)`
 `;
 
 const ToggleBtn = styled(Pressable)<{ isActive?: boolean }>`
-  width: 40px;
-  background-color: ${({ isActive }) => (isActive ? '#3751c1' : '#888')};
-  height: 22px;
-  border-radius: 10px;
+  width: 55px;
+  background-color: ${({ isActive }) => (isActive ? '#48CBC0' : '#D2D4DA')};
+  height: 32px;
+  border-radius: 50px;
   position: relative;
   justify-content: center;
 `;
 
 const CircleBtn = styled(View)<{ isActive?: boolean }>`
-  width: 16px;
-  height: 16px;
+  width: 28px;
+  height: 28px;
   border-radius: 100px;
   background: #fff;
   position: absolute;
@@ -152,6 +154,7 @@ const CircleBtn = styled(View)<{ isActive?: boolean }>`
 
 const CategoryTitle = styled(Text)`
   font-weight: bold;
-  font-size: 18px;
+  font-size: 14px;
   margin: 10px 0;
+  color : #9496A1;
 `;

@@ -14,7 +14,7 @@ const BottomNavigationBar = () => {
 
   const checkColor = (path: string) =>
     location.pathname === path
-      ? styles.colors.gray[400]
+      ? '#48CBC0'
       : styles.colors.gray[200];
 
   return (
@@ -27,8 +27,6 @@ const BottomNavigationBar = () => {
         <ManageAppsIcon color={checkColor('/appmanage')} />
         <ItemText $selected={location.pathname === '/appmanage'}>
           Manage
-          {'\n'}
-          Apps
         </ItemText>
       </Item>
       <Item onPress={() => navigate('/report')}>
@@ -75,5 +73,5 @@ const ItemText = styled(Text)<{$selected: boolean}>`
   line-height: 16px;
   text-align: center;
   color: ${props =>
-    props.$selected ? styles.colors.gray[500] : styles.colors.gray[200]};
+    props.$selected ? '#48CBC0' : '#B3B5BD'};
 `;

@@ -39,9 +39,9 @@ const AppRoutes = () => {
     const handleBackPress = () => {
       if (location.pathname !== 'report') {
         if (location.pathname === '/') {
-          Alert.alert('앱 종료', '앱을 종료하시겠습니까?', [
-            {text: '취소', style: 'cancel'},
-            {text: '종료', onPress: () => BackHandler.exitApp()},
+          Alert.alert('Exit App', 'Are you sure you want to exit the app?', [
+            {text: 'Cancel', style: 'cancel'},
+            {text: 'Exit', onPress: () => BackHandler.exitApp()},
           ]);
         } else {
           navigate(-1);

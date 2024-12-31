@@ -4,7 +4,7 @@ import {Text} from '../../theme/theme';
 
 export const MainView = styled(View)`
   flex: 1;
-  background-color: #5be2c3;
+  background-color: #48CBC0;
   justify-content: center;
   align-items: center;
 `;

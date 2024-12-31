@@ -47,21 +47,21 @@ const AppManage = () => {
   return (
     <AppManageView>
       <ManageContentView>
-        <Text style={{ fontWeight: 'bold', fontSize: 22 }}>앱 관리</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 32 }}>Manage Apps</Text>
         <TopContentView>
           <TextView>
-            <SearchIcon name="search" size={20} color="#000" />
+            <SearchIcon name="search" size={20} color="#B3B5BD" />
             <SearchInput
-              placeholder="앱 검색하기"
-              placeholderTextColor="#000"
+              placeholder="Find an app"
+              placeholderTextColor="#B3B5BD"
               value={searchTerm}
               onChangeText={text => setSearchTerm(text)}
             />
           </TextView>
           <AddView>
             <AddViewContent onPress={() => navigate('/appmanage/addapp')}>
-              <Icon name="add-circle" size={24} color="#979c9e" />
-              <Text style={{ color: '#888' }}>앱 추가하기</Text>
+              <Icon name="add-circle" size={24} color="#9496a1" />
+              <Text style={{ color: '#9496A1' }}>Edit app list</Text>
             </AddViewContent>
           </AddView>
         </TopContentView>
@@ -70,6 +70,7 @@ const AppManage = () => {
         <AppItem apps={apps} activationStates={activationStates} searchTerm={searchTerm} addApp={addApp} />
       </ManageContentView>
     </AppManageView>
+
   );
 };
 
@@ -77,7 +78,7 @@ export default AppManage;
 
 const AppManageView = styled(ScrollView)`
   background: #fff;
-  padding: 80px 30px;
+  padding: 59px 20px;
   height: 100%;
 `;
 
@@ -95,21 +96,21 @@ const TextView = styled(View)`
 const SearchInput = styled(TextInput)`
   width: 100%;
   padding: 5px;
-  background: #d9d9d9;
-  border-radius: 13px;
-  padding-left: 38px;
+  background: #F3F4F8;
+  border-radius: 100px;
+  padding-left: 44px;
   color: #000;
 `;
 
 const SearchIcon = styled(Icon)`
   position: absolute;
   z-index: 2;
-  left: 10px;
+  left: 16px;
 `;
 
 const AddView = styled(Pressable)`
   width: 100%;
-  border: 1px solid #cdcfd0;
+  border: 2px dashed #cdcfd0;
   border-radius: 13px;
   padding: 18px;
 `;

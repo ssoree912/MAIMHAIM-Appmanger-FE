@@ -1,0 +1,1121 @@
+Index: android/app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml
+--- a/android/app/src/main/AndroidManifest.xml	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/android/app/src/main/AndroidManifest.xml	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -88,12 +88,6 @@
+             android:exported="false"
+             android:foregroundServiceType="location" />
+ 
+-        <service
+-            android:name=".LightSensorService"
+-            android:foregroundServiceType="specialUse"
+-            android:exported="false" />
+-        <meta-data
+-            android:name="com.google.android.geo.API_KEY"
+-            android:value="@string/GOOGLE_MAPS_API_KEY"/>
++
+     </application>
+ </manifest>
+Index: android/gradle.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/android/gradle.properties b/android/gradle.properties
+--- a/android/gradle.properties	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/android/gradle.properties	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -37,3 +37,5 @@
+ # Use this property to enable or disable the Hermes JS engine.
+ # If set to false, you will be using JSC instead.
+ hermesEnabled=true
++android.useAndroidX=true
++android.enableJetifier=true
+\ No newline at end of file
+Index: package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package-lock.json b/package-lock.json
+--- a/package-lock.json	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/package-lock.json	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -19,7 +19,8 @@
+         "axios": "^1.7.7",
+         "fbjs": "^3.0.5",
+         "postcss": "^8.4.47",
+-        "react": "^18.3.1",
++        "react": "^18.2.0",
++        "react-dom": "^18.2.0",
+         "react-native": "0.75.4",
+         "react-native-animatable": "^1.4.0",
+         "react-native-calendars": "^1.1307.0",
+@@ -36,7 +37,7 @@
+         "react-native-safe-area-context": "^4.11.0",
+         "react-native-screens": "^3.34.0",
+         "react-native-shadow-2": "^7.1.1",
+-        "react-native-snap-carousel": "^3.9.1",
++        "react-native-snap-carousel": "^1.3.1",
+         "react-native-sqlite-storage": "^6.0.1",
+         "react-native-svg": "^15.10.1",
+         "react-native-svg-transformer": "^1.5.0",
+@@ -444,7 +445,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-bugfix-firefox-class-in-computed-class-key/-/plugin-bugfix-firefox-class-in-computed-class-key-7.25.9.tgz",
+       "integrity": "sha512-ZkRyVkThtxQ/J6nv3JFYv1RYY+JT5BvU0y3k5bWrmuG4woXypRa4PXmm9RhOwodRkYFWqC0C0cqcJ4OqR7kW+g==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9",
+@@ -461,7 +461,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-bugfix-safari-class-field-initializer-scope/-/plugin-bugfix-safari-class-field-initializer-scope-7.25.9.tgz",
+       "integrity": "sha512-MrGRLZxLD/Zjj0gdU15dfs+HH/OXvnw/U4jJD8vpcP2CJQapPEv1IWwjc/qMg7ItBlPwSv1hRBbb7LeuANdcnw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -477,7 +476,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression/-/plugin-bugfix-safari-id-destructuring-collision-in-function-expression-7.25.9.tgz",
+       "integrity": "sha512-2qUwwfAFpJLZqxd02YW9btUCZHl+RFvdDkNfZwaIJrvB8Tesjsk8pEQkTvGwZXLqXUx/2oyY3ySRhm6HOXuCug==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -493,7 +491,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining/-/plugin-bugfix-v8-spread-parameters-in-optional-chaining-7.25.9.tgz",
+       "integrity": "sha512-6xWgLZTJXwilVjlnV7ospI3xi+sl8lN8rXXbBD6vYn3UYDlGsag8wrZkKcSI8G6KgqKP7vNFaDgeDnfAABq61g==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9",
+@@ -511,7 +508,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly/-/plugin-bugfix-v8-static-class-fields-redefine-readonly-7.25.9.tgz",
+       "integrity": "sha512-aLnMXYPnzwwqhYSCyXfKkIkYgJ8zv9RK+roo9DkTXz38ynIhd9XCbN08s3MGvqL2MYGVUGdRQLL/JqBIeJhJBg==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9",
+@@ -595,7 +591,6 @@
+       "version": "7.21.0-placeholder-for-preset-env.2",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-private-property-in-object/-/plugin-proposal-private-property-in-object-7.21.0-placeholder-for-preset-env.2.tgz",
+       "integrity": "sha512-SOSkfJDddaM7mak6cPEpswyTRnuRltl429hMraQEglW+OkovnCzsiszTmsrlY//qLFjCpQDFRvjdm2wA5pPm9w==",
+-      "dev": true,
+       "license": "MIT",
+       "engines": {
+         "node": ">=6.9.0"
+@@ -705,7 +700,6 @@
+       "version": "7.26.0",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-syntax-import-assertions/-/plugin-syntax-import-assertions-7.26.0.tgz",
+       "integrity": "sha512-QCWT5Hh830hK5EQa7XzuqIkQU9tT/whqbDz7kuaZMHFl1inRRg7JnuAEOQ0Ur0QUl0NufCk1msK2BeY79Aj/eg==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -721,7 +715,6 @@
+       "version": "7.26.0",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-syntax-import-attributes/-/plugin-syntax-import-attributes-7.26.0.tgz",
+       "integrity": "sha512-e2dttdsJ1ZTpi3B9UYGLw41hifAubg19AtCu/2I/F1QNVclOBr1dYpTdmdyZ84Xiz43BS/tCUkMAZNLv12Pi+A==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -901,7 +894,6 @@
+       "version": "7.18.6",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-syntax-unicode-sets-regex/-/plugin-syntax-unicode-sets-regex-7.18.6.tgz",
+       "integrity": "sha512-727YkEAPwSIQTv5im8QHz3upqp92JTWhidIC81Tdx4VJYIte/VndKf1qKrfnnhPLiPghStWfvC/iFaMCQu7Nqg==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-create-regexp-features-plugin": "^7.18.6",
+@@ -967,7 +959,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-block-scoped-functions/-/plugin-transform-block-scoped-functions-7.25.9.tgz",
+       "integrity": "sha512-toHc9fzab0ZfenFpsyYinOX0J/5dgJVA2fm64xPewu7CoYHWEivIWKxkK2rMi4r3yQqLnVmheMXRdG+k239CgA==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1014,7 +1005,6 @@
+       "version": "7.26.0",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-class-static-block/-/plugin-transform-class-static-block-7.26.0.tgz",
+       "integrity": "sha512-6J2APTs7BDDm+UMqP1useWqhcRAXo0WIoVj26N7kPFB6S73Lgvyka4KTZYIxtgYXiN5HTyRObA72N2iu628iTQ==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-create-class-features-plugin": "^7.25.9",
+@@ -1082,7 +1072,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-dotall-regex/-/plugin-transform-dotall-regex-7.25.9.tgz",
+       "integrity": "sha512-t7ZQ7g5trIgSRYhI9pIJtRl64KHotutUJsh4Eze5l7olJv+mRSg4/MmbZ0tv1eeqRbdvo/+trvJD/Oc5DmW2cA==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-create-regexp-features-plugin": "^7.25.9",
+@@ -1099,7 +1088,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-duplicate-keys/-/plugin-transform-duplicate-keys-7.25.9.tgz",
+       "integrity": "sha512-LZxhJ6dvBb/f3x8xwWIuyiAHy56nrRG3PeYTpBkkzkYRRQ6tJLu68lEF5VIqMUZiAV7a8+Tb78nEoMCMcqjXBw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1115,7 +1103,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-duplicate-named-capturing-groups-regex/-/plugin-transform-duplicate-named-capturing-groups-regex-7.25.9.tgz",
+       "integrity": "sha512-0UfuJS0EsXbRvKnwcLjFtJy/Sxc5J5jhLHnFhy7u4zih97Hz6tJkLU+O+FMMrNZrosUPxDi6sYxJ/EA8jDiAog==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-create-regexp-features-plugin": "^7.25.9",
+@@ -1132,7 +1119,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-dynamic-import/-/plugin-transform-dynamic-import-7.25.9.tgz",
+       "integrity": "sha512-GCggjexbmSLaFhqsojeugBpeaRIgWNTcgKVq/0qIteFEqY2A+b9QidYadrWlnbWQUrW5fn+mCvf3tr7OeBFTyg==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1148,7 +1134,6 @@
+       "version": "7.26.3",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-exponentiation-operator/-/plugin-transform-exponentiation-operator-7.26.3.tgz",
+       "integrity": "sha512-7CAHcQ58z2chuXPWblnn1K6rLDnDWieghSOEmqQsrBenH0P9InCUtOJYD89pvngljmZlJcz3fcmgYsXFNGa1ZQ==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1164,7 +1149,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-export-namespace-from/-/plugin-transform-export-namespace-from-7.25.9.tgz",
+       "integrity": "sha512-2NsEz+CxzJIVOPx2o9UsW1rXLqtChtLoVnwYHHiB04wS5sgn7mrV45fWMBX0Kk+ub9uXytVYfNP2HjbVbCB3Ww==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1229,7 +1213,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-json-strings/-/plugin-transform-json-strings-7.25.9.tgz",
+       "integrity": "sha512-xoTMk0WXceiiIvsaquQQUaLLXSW1KJ159KP87VilruQm0LNNGxWzahxSS6T6i4Zg3ezp4vA4zuwiNUR53qmQAw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1275,7 +1258,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-member-expression-literals/-/plugin-transform-member-expression-literals-7.25.9.tgz",
+       "integrity": "sha512-PYazBVfofCQkkMzh2P6IdIUaCEWni3iYEerAsRWuVd8+jlM1S9S9cz1dF9hIzyoZ8IA3+OwVYIp9v9e+GbgZhA==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1291,7 +1273,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-modules-amd/-/plugin-transform-modules-amd-7.25.9.tgz",
+       "integrity": "sha512-g5T11tnI36jVClQlMlt4qKDLlWnG5pP9CSM4GhdRciTNMRgkfpo5cR6b4rGIOYPgRRuFAvwjPQ/Yk+ql4dyhbw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-module-transforms": "^7.25.9",
+@@ -1324,7 +1305,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.25.9.tgz",
+       "integrity": "sha512-hyss7iIlH/zLHaehT+xwiymtPOpsiwIIRlCAOwBB04ta5Tt+lNItADdlXw3jAWZ96VJ2jlhl/c+PNIQPKNfvcA==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-module-transforms": "^7.25.9",
+@@ -1343,7 +1323,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-modules-umd/-/plugin-transform-modules-umd-7.25.9.tgz",
+       "integrity": "sha512-bS9MVObUgE7ww36HEfwe6g9WakQ0KF07mQF74uuXdkoziUPfKyu/nIm663kz//e5O1nPInPFx36z7WJmJ4yNEw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-module-transforms": "^7.25.9",
+@@ -1376,7 +1355,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-new-target/-/plugin-transform-new-target-7.25.9.tgz",
+       "integrity": "sha512-U/3p8X1yCSoKyUj2eOBIx3FOn6pElFOKvAAGf8HTtItuPyB+ZeOqfn+mvTtg9ZlOAjsPdK3ayQEjqHjU/yLeVQ==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1439,7 +1417,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-object-super/-/plugin-transform-object-super-7.25.9.tgz",
+       "integrity": "sha512-Kj/Gh+Rw2RNLbCK1VAWj2U48yxxqL2x0k10nPtSdRa0O2xnHXalD0s+o1A6a0W43gJ00ANo38jxkQreckOzv5A==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9",
+@@ -1535,7 +1512,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-property-literals/-/plugin-transform-property-literals-7.25.9.tgz",
+       "integrity": "sha512-IvIUeV5KrS/VPavfSM/Iu+RE6llrHrYIKY1yfCzyO/lMXHQ+p7uGhonmGVisv6tSBSVgWzMBohTcvkC9vQcQFA==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1631,7 +1607,6 @@
+       "version": "7.26.0",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-regexp-modifiers/-/plugin-transform-regexp-modifiers-7.26.0.tgz",
+       "integrity": "sha512-vN6saax7lrA2yA/Pak3sCxuD6F5InBjn9IcrIKQPjpsLvuHYLVroTxjdlVRHjjBWxKOqIwpTXDkOssYT4BFdRw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-create-regexp-features-plugin": "^7.25.9",
+@@ -1648,7 +1623,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-reserved-words/-/plugin-transform-reserved-words-7.25.9.tgz",
+       "integrity": "sha512-7DL7DKYjn5Su++4RXu8puKZm2XBPHyjWLUidaPEkCUBbE7IPcsrkRHggAOOKydH1dASWdcUBxrkOGNxUv5P3Jg==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1730,7 +1704,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-template-literals/-/plugin-transform-template-literals-7.25.9.tgz",
+       "integrity": "sha512-o97AE4syN71M/lxrCtQByzphAdlYluKPDBzDVzMmfCobUjjhAryZV0AIpRPrxN0eAkxXO6ZLEScmt+PNhj2OTw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1746,7 +1719,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-typeof-symbol/-/plugin-transform-typeof-symbol-7.25.9.tgz",
+       "integrity": "sha512-v61XqUMiueJROUv66BVIOi0Fv/CUuZuZMl5NkRoCVxLAnMexZ0A3kMe7vvZ0nulxMuMp0Mk6S5hNh48yki08ZA==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1781,7 +1753,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-unicode-escapes/-/plugin-transform-unicode-escapes-7.25.9.tgz",
+       "integrity": "sha512-s5EDrE6bW97LtxOcGj1Khcx5AaXwiMmi4toFWRDP9/y0Woo6pXC+iyPu/KuhKtfSrNFd7jJB+/fkOtZy6aIC6Q==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.25.9"
+@@ -1797,7 +1768,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-unicode-property-regex/-/plugin-transform-unicode-property-regex-7.25.9.tgz",
+       "integrity": "sha512-Jt2d8Ga+QwRluxRQ307Vlxa6dMrYEMZCgGxoPR8V52rxPyldHu3hdlHspxaqYmE7oID5+kB+UKUB/eWS+DkkWg==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-create-regexp-features-plugin": "^7.25.9",
+@@ -1830,7 +1800,6 @@
+       "version": "7.25.9",
+       "resolved": "https://registry.npmjs.org/@babel/plugin-transform-unicode-sets-regex/-/plugin-transform-unicode-sets-regex-7.25.9.tgz",
+       "integrity": "sha512-8BYqO3GeVNHtx69fdPshN3fnzUNLrWdHhk/icSwigksJGczKSizZ+Z6SBCxTs723Fr5VSNorTIK7a+R2tISvwQ==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-create-regexp-features-plugin": "^7.25.9",
+@@ -1847,7 +1816,6 @@
+       "version": "7.26.0",
+       "resolved": "https://registry.npmjs.org/@babel/preset-env/-/preset-env-7.26.0.tgz",
+       "integrity": "sha512-H84Fxq0CQJNdPFT2DrfnylZ3cf5K43rGfWK4LJGPpjKHiZlk0/RzwEus3PDDZZg+/Er7lCA03MVacueUuXdzfw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/compat-data": "^7.26.0",
+@@ -1948,7 +1916,6 @@
+       "version": "0.1.6-no-external-plugins",
+       "resolved": "https://registry.npmjs.org/@babel/preset-modules/-/preset-modules-0.1.6-no-external-plugins.tgz",
+       "integrity": "sha512-HrcgcIESLm9aIR842yhJ5RWan/gebQUJ6E/E5+rf0y9o6oj7w0Br+sWuL6kEQ/o/AdfvR1Je9jG18/gnpwjEyA==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "@babel/helper-plugin-utils": "^7.0.0",
+@@ -3231,6 +3198,20 @@
+         "react-native": ">=0.58.4"
+       }
+     },
++    "node_modules/@react-native-picker/picker": {
++      "version": "2.10.2",
++      "resolved": "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.10.2.tgz",
++      "integrity": "sha512-kr3OvCRwTYjR/OKlb52k4xmQVU7dPRIALqpyiihexdJxEgvc1smnepgqCeM9oXmNSG4YaV5/RSxFlLC5Z/T/Eg==",
++      "license": "MIT",
++      "peer": true,
++      "workspaces": [
++        "example"
++      ],
++      "peerDependencies": {
++        "react": "*",
++        "react-native": "*"
++      }
++    },
+     "node_modules/@react-native/assets-registry": {
+       "version": "0.75.4",
+       "resolved": "https://registry.npmjs.org/@react-native/assets-registry/-/assets-registry-0.75.4.tgz",
+@@ -5757,13 +5738,6 @@
+       "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz",
+       "integrity": "sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==",
+       "license": "MIT"
+-    },
+-    "node_modules/core-js": {
+-      "version": "1.2.7",
+-      "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz",
+-      "integrity": "sha512-ZiPp9pZlgxpWRu0M+YWbm6+aQ84XEfH1JRXvfOc/fILWI0VKhLC2LX13X1NYq4fULzLMq7Hfh43CSo2/aIaUPA==",
+-      "deprecated": "core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.",
+-      "license": "MIT"
+     },
+     "node_modules/core-js-compat": {
+       "version": "3.39.0",
+@@ -6347,15 +6321,6 @@
+         "node": ">= 0.8"
+       }
+     },
+-    "node_modules/encoding": {
+-      "version": "0.1.13",
+-      "resolved": "https://registry.npmjs.org/encoding/-/encoding-0.1.13.tgz",
+-      "integrity": "sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "iconv-lite": "^0.6.2"
+-      }
+-    },
+     "node_modules/entities": {
+       "version": "4.5.0",
+       "resolved": "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz",
+@@ -7243,7 +7208,6 @@
+       "version": "2.0.3",
+       "resolved": "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz",
+       "integrity": "sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==",
+-      "dev": true,
+       "license": "BSD-2-Clause",
+       "engines": {
+         "node": ">=0.10.0"
+@@ -8168,18 +8132,6 @@
+         "node": ">=10.17.0"
+       }
+     },
+-    "node_modules/iconv-lite": {
+-      "version": "0.6.3",
+-      "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.6.3.tgz",
+-      "integrity": "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "safer-buffer": ">= 2.1.2 < 3.0.0"
+-      },
+-      "engines": {
+-        "node": ">=0.10.0"
+-      }
+-    },
+     "node_modules/ieee754": {
+       "version": "1.2.1",
+       "resolved": "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz",
+@@ -8831,35 +8783,6 @@
+         "node": ">=0.10.0"
+       }
+     },
+-    "node_modules/isomorphic-fetch": {
+-      "version": "2.2.1",
+-      "resolved": "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz",
+-      "integrity": "sha512-9c4TNAKYXM5PRyVcwUZrF3W09nQ+sO7+jydgs4ZGW9dhsLG2VOlISJABombdQqQRXCwuYG3sYV/puGf5rp0qmA==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "node-fetch": "^1.0.1",
+-        "whatwg-fetch": ">=0.10.0"
+-      }
+-    },
+-    "node_modules/isomorphic-fetch/node_modules/is-stream": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/is-stream/-/is-stream-1.1.0.tgz",
+-      "integrity": "sha512-uQPm8kcs47jx38atAcWTVxyltQYoPT68y9aWYdV6yWXSyW8mzSat0TL6CiWdZeCdF3KrAvpVtnHbTv4RN+rqdQ==",
+-      "license": "MIT",
+-      "engines": {
+-        "node": ">=0.10.0"
+-      }
+-    },
+-    "node_modules/isomorphic-fetch/node_modules/node-fetch": {
+-      "version": "1.7.3",
+-      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-1.7.3.tgz",
+-      "integrity": "sha512-NhZ4CsKx7cYm2vSrBAr2PvFOe6sWDf0UYLRqA6svUYg7+/TSfVAu49jYC4BvQ4Sms9SZgdqGBgroqfDhJdTyKQ==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "encoding": "^0.1.11",
+-        "is-stream": "^1.0.1"
+-      }
+-    },
+     "node_modules/istanbul-lib-coverage": {
+       "version": "3.2.2",
+       "resolved": "https://registry.npmjs.org/istanbul-lib-coverage/-/istanbul-lib-coverage-3.2.2.tgz",
+@@ -11907,57 +11830,6 @@
+         "node": ">=0.10.0"
+       }
+     },
+-    "node_modules/react-addons-shallow-compare": {
+-      "version": "15.6.2",
+-      "resolved": "https://registry.npmjs.org/react-addons-shallow-compare/-/react-addons-shallow-compare-15.6.2.tgz",
+-      "integrity": "sha512-yAV9tOObmKPiohqne1jiMcx6kDjfz7GeL8K9KHgI+HvDsbrRv148uyUzrPc6GwepZnQcJ59Q3lp1ghrkyPwtjg==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "fbjs": "^0.8.4",
+-        "object-assign": "^4.1.0"
+-      }
+-    },
+-    "node_modules/react-addons-shallow-compare/node_modules/fbjs": {
+-      "version": "0.8.18",
+-      "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.18.tgz",
+-      "integrity": "sha512-EQaWFK+fEPSoibjNy8IxUtaFOMXcWsY0JaVrQoZR9zC8N2Ygf9iDITPWjUTVIax95b6I742JFLqASHfsag/vKA==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "core-js": "^1.0.0",
+-        "isomorphic-fetch": "^2.1.1",
+-        "loose-envify": "^1.0.0",
+-        "object-assign": "^4.1.0",
+-        "promise": "^7.1.1",
+-        "setimmediate": "^1.0.5",
+-        "ua-parser-js": "^0.7.30"
+-      }
+-    },
+-    "node_modules/react-addons-shallow-compare/node_modules/ua-parser-js": {
+-      "version": "0.7.40",
+-      "resolved": "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.40.tgz",
+-      "integrity": "sha512-us1E3K+3jJppDBa3Tl0L3MOJiGhe1C6P0+nIvQAFYbxlMAx0h81eOwLmU57xgqToduDDPx3y5QsdjPfDu+FgOQ==",
+-      "funding": [
+-        {
+-          "type": "opencollective",
+-          "url": "https://opencollective.com/ua-parser-js"
+-        },
+-        {
+-          "type": "paypal",
+-          "url": "https://paypal.me/faisalman"
+-        },
+-        {
+-          "type": "github",
+-          "url": "https://github.com/sponsors/faisalman"
+-        }
+-      ],
+-      "license": "MIT",
+-      "bin": {
+-        "ua-parser-js": "script/cli.js"
+-      },
+-      "engines": {
+-        "node": "*"
+-      }
+-    },
+     "node_modules/react-devtools-core": {
+       "version": "5.3.2",
+       "resolved": "https://registry.npmjs.org/react-devtools-core/-/react-devtools-core-5.3.2.tgz",
+@@ -11989,6 +11861,19 @@
+         }
+       }
+     },
++    "node_modules/react-dom": {
++      "version": "18.2.0",
++      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz",
++      "integrity": "sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==",
++      "license": "MIT",
++      "dependencies": {
++        "loose-envify": "^1.1.0",
++        "scheduler": "^0.23.0"
++      },
++      "peerDependencies": {
++        "react": "^18.2.0"
++      }
++    },
+     "node_modules/react-freeze": {
+       "version": "1.0.4",
+       "resolved": "https://registry.npmjs.org/react-freeze/-/react-freeze-1.0.4.tgz",
+@@ -12197,6 +12082,17 @@
+         "react-native": ">=0.65.0"
+       }
+     },
++    "node_modules/react-native-pager-view": {
++      "version": "6.6.1",
++      "resolved": "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-6.6.1.tgz",
++      "integrity": "sha512-2dFulYs8JxEUecemv1PGWCUv+ZQuwSaQfFiSr2++KH8km5HzpuS8vJ3MVb0M6UhpqacFDj9OGe7z97ks/mr7gA==",
++      "license": "MIT",
++      "peer": true,
++      "peerDependencies": {
++        "react": "*",
++        "react-native": "*"
++      }
++    },
+     "node_modules/react-native-picker-select": {
+       "version": "9.3.1",
+       "resolved": "https://registry.npmjs.org/react-native-picker-select/-/react-native-picker-select-9.3.1.tgz",
+@@ -12258,18 +12154,10 @@
+       }
+     },
+     "node_modules/react-native-snap-carousel": {
+-      "version": "3.9.1",
+-      "resolved": "https://registry.npmjs.org/react-native-snap-carousel/-/react-native-snap-carousel-3.9.1.tgz",
+-      "integrity": "sha512-xWEGusacIgK1YaDXLi7Gao2+ISLoGPVEBR8fcMf4tOOJQufutlNwkoLu0l6B8Qgsrre0nTxoVZikRgGRDWlLaQ==",
+-      "license": "BSD-3-Clause",
+-      "dependencies": {
+-        "prop-types": "^15.6.1",
+-        "react-addons-shallow-compare": "15.6.2"
+-      },
+-      "peerDependencies": {
+-        "react": ">=15.0.0",
+-        "react-native": "*"
+-      }
++      "version": "1.3.1",
++      "resolved": "https://registry.npmjs.org/react-native-snap-carousel/-/react-native-snap-carousel-1.3.1.tgz",
++      "integrity": "sha512-3i5oR6Z1nH7mejw1LIki9NR8/T2tO+ZK9RkrDCcAGBxwflnoRrCi0B23qhp30XLS819w9l0KaLRsf6sqnQKKcA==",
++      "license": "ISC"
+     },
+     "node_modules/react-native-sqlite-storage": {
+       "version": "6.0.1",
+@@ -12719,16 +12607,6 @@
+       "dev": true,
+       "license": "MIT"
+     },
+-    "node_modules/react-test-renderer/node_modules/scheduler": {
+-      "version": "0.23.2",
+-      "resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.23.2.tgz",
+-      "integrity": "sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==",
+-      "dev": true,
+-      "license": "MIT",
+-      "dependencies": {
+-        "loose-envify": "^1.1.0"
+-      }
+-    },
+     "node_modules/readable-stream": {
+       "version": "3.6.2",
+       "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz",
+@@ -13118,11 +12996,14 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
+-    "node_modules/safer-buffer": {
+-      "version": "2.1.2",
+-      "resolved": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz",
+-      "integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==",
+-      "license": "MIT"
++    "node_modules/scheduler": {
++      "version": "0.23.2",
++      "resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.23.2.tgz",
++      "integrity": "sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==",
++      "license": "MIT",
++      "dependencies": {
++        "loose-envify": "^1.1.0"
++      }
+     },
+     "node_modules/selfsigned": {
+       "version": "2.4.1",
+@@ -14381,7 +14262,7 @@
+       "version": "5.0.4",
+       "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.0.4.tgz",
+       "integrity": "sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==",
+-      "dev": true,
++      "devOptional": true,
+       "license": "Apache-2.0",
+       "bin": {
+         "tsc": "bin/tsc",
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/package.json	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -21,7 +21,8 @@
+     "axios": "^1.7.7",
+     "fbjs": "^3.0.5",
+     "postcss": "^8.4.47",
+-    "react": "^18.3.1",
++    "react": "^18.2.0",
++    "react-dom": "^18.2.0",
+     "react-native": "0.75.4",
+     "react-native-animatable": "^1.4.0",
+     "react-native-calendars": "^1.1307.0",
+@@ -38,7 +39,7 @@
+     "react-native-safe-area-context": "^4.11.0",
+     "react-native-screens": "^3.34.0",
+     "react-native-shadow-2": "^7.1.1",
+-    "react-native-snap-carousel": "^3.9.1",
++    "react-native-snap-carousel": "^1.3.1",
+     "react-native-sqlite-storage": "^6.0.1",
+     "react-native-svg": "^15.10.1",
+     "react-native-svg-transformer": "^1.5.0",
+Index: screens/addApp/AddApp.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/screens/addApp/AddApp.tsx b/screens/addApp/AddApp.tsx
+--- a/screens/addApp/AddApp.tsx	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/screens/addApp/AddApp.tsx	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -158,7 +158,7 @@
+       </Pressable>
+       <ManageContentView>
+         <TopContentView>
+-          <Text style={{ fontWeight: 'bold', fontSize: 22 }}>앱 추가하기</Text>
++          <Text style={{ fontWeight: 'bold', fontSize: 22 }}> Edit App List</Text>
+         </TopContentView>
+         <ContentView>
+           <AllSelectView>
+@@ -185,7 +185,7 @@
+                 <Icon
+                   name={toggleStates[index] ? 'checkbox' : 'checkbox-outline'}
+                   size={20}
+-                  color="#000"
++                  color="#48CBC0"
+                 />
+               </SelectIcon>
+             </SelectView>
+Index: screens/appmanage/AppManage.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/screens/appmanage/AppManage.tsx b/screens/appmanage/AppManage.tsx
+--- a/screens/appmanage/AppManage.tsx	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/screens/appmanage/AppManage.tsx	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -47,12 +47,12 @@
+   return (
+     <AppManageView>
+       <ManageContentView>
+-        <Text style={{ fontWeight: 'bold', fontSize: 22 }}>앱 관리</Text>
++        <Text style={{ fontWeight: 'bold', fontSize: 32 }}>Manage Apps</Text>
+         <TopContentView>
+           <TextView>
+             <SearchIcon name="search" size={20} color="#000" />
+             <SearchInput
+-              placeholder="앱 검색하기"
++              placeholder="Find an app"
+               placeholderTextColor="#000"
+               value={searchTerm}
+               onChangeText={text => setSearchTerm(text)}
+@@ -60,8 +60,8 @@
+           </TextView>
+           <AddView>
+             <AddViewContent onPress={() => navigate('/appmanage/addapp')}>
+-              <Icon name="add-circle" size={24} color="#979c9e" />
+-              <Text style={{ color: '#888' }}>앱 추가하기</Text>
++              <Icon name="add-circle" size={24} color="#9496a1" />
++              <Text style={{ color: '#888' }}>Edit app list</Text>
+             </AddViewContent>
+           </AddView>
+         </TopContentView>
+Index: screens/comingSoonPage/ComingSoonPage.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/screens/comingSoonPage/ComingSoonPage.tsx b/screens/comingSoonPage/ComingSoonPage.tsx
+--- a/screens/comingSoonPage/ComingSoonPage.tsx	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/screens/comingSoonPage/ComingSoonPage.tsx	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -16,10 +16,10 @@
+         />
+       </IconsContainer>
+ 
+-      <MessageText>해당 페이지는 준비 중이에요!</MessageText>
++      <MessageText>Hang tight! {'\n'}This page is coming soon</MessageText>
+ 
+       <BackButton onPress={() => navigate(-1)}>
+-        <BackButtonText>이전 화면으로 돌아가기</BackButtonText>
++        <BackButtonText>Return to the last page</BackButtonText>
+         <BackButtonIcon
+           source={require('../../assets/img/icons/icon_back.png')}
+         />
+@@ -50,6 +50,8 @@
+ const MessageText = styled(Text)`
+   font-size: 16px;
+   color: ${styles.colors.gray[600]};
++  justify-content: ;
++  align-items: center;
+   font-weight: 500;
+   margin-bottom: 20px;
+ `;
+Index: screens/home/HomeScreen.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/screens/home/HomeScreen.tsx b/screens/home/HomeScreen.tsx
+--- a/screens/home/HomeScreen.tsx	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/screens/home/HomeScreen.tsx	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -162,7 +162,7 @@
+                                 color: isActive ? '#fff' : styles.colors.gray[600],
+                             }}
+                         >
+-                            마임하임이 {isActive ? '일하고 있어요!' : '쉬고 있어요'}
++                            MaimHaim is {isActive ? 'up and working!' : 'taking a break.'}
+                         </Text>
+                         <BtnView isActive={isActive} onPress={handleButtonPress}>
+                             <CircleBtn
+@@ -186,7 +186,7 @@
+                                         : styles.colors.gray[600],
+                                 }}
+                             >
+-                                지금까지 터치를
++                                So far, you've cut down
+                             </Text>
+                             <TouchCountContainer>
+                                 <TouchCount isActive={isActive}>
+@@ -194,7 +194,7 @@
+                                         {totalCount.toLocaleString()}{' '}
+                                     </CountText>
+                                 </TouchCount>
+-                                <StatusText isActive={isActive}>회 줄였어요!</StatusText>
++                                <StatusText isActive={isActive}>touches!</StatusText>
+                             </TouchCountContainer>
+                         </TextView>
+                     </ContentView>
+Index: screens/loding/AppLoadingScreen.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/screens/loding/AppLoadingScreen.tsx b/screens/loding/AppLoadingScreen.tsx
+--- a/screens/loding/AppLoadingScreen.tsx	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/screens/loding/AppLoadingScreen.tsx	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -15,7 +15,7 @@
+   appName,
+   logoSource,
+   appIconSource,
+-  loadingMessage = '앱을 불러오고 있어요',
++  loadingMessage = 'Just a few more Seconds',
+ }) => {
+   const [isActive, setIsActive] = useState(true);
+   const position = useRef(new Animated.Value(isActive ? 45 : -45)).current;
+Index: screens/manageDetail/ManangeDetail.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/screens/manageDetail/ManangeDetail.tsx b/screens/manageDetail/ManangeDetail.tsx
+--- a/screens/manageDetail/ManangeDetail.tsx	(revision 4852a719fcb25fa3b8075a6e5929cb379e1c62eb)
++++ b/screens/manageDetail/ManangeDetail.tsx	(revision 2676594ac36e9c9bd90a384d1814e6612bf86270)
+@@ -107,16 +107,16 @@
+       console.log(`Activating mode for appType: ${appType}`);
+       switch (appType) {
+         case 'LOCATION':
+-          setSelectedOption('위치 기반');
++          setSelectedOption('Location');
+           break;
+         case 'TIME':
+-          setSelectedOption('시간 기반');
++          setSelectedOption('Time');
+           break;
+         case 'SCHEDULE':
+-          setSelectedOption('일정 기반');
++          setSelectedOption('Schedule');
+           break;
+         case 'MOTION':
+-          setSelectedOption('모션 기반');
++          setSelectedOption('Motion');
+           break;
+         default:
+           setSelectedOption('run');
+@@ -181,13 +181,13 @@
+         setAllowed(true);
+         setSelectedOption(
+           activeTrigger.type === 'LOCATION'
+-            ? '위치 기반'
++            ? 'Location'
+             : activeTrigger.type === 'TIME'
+-            ? '시간 기반'
++            ? 'Time'
+             : activeTrigger.type === 'SCHEDULE'
+-            ? '일정 기반'
++            ? 'Schedule'
+             : activeTrigger.type === 'MOTION'
+-            ? '모션 기반'
++            ? 'Motion'
+             : 'run'
+         );
+ 
+@@ -225,7 +225,7 @@
+ 
+ 
+  const parseDaysFromWeekString = (weekString: string) => {
+-    const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
++    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+     return weekString.split('').map((day, index) => day === 'T' ? daysOfWeek[index] : '').filter(Boolean);
+   };
+ 
+@@ -266,10 +266,10 @@
+         // 현재 선택된 옵션에 해당하는 트리거를 가져옴
+         const selectedTrigger = triggers.find(
+           trigger =>
+-            (selectedOption === '위치 기반' && trigger.type === 'LOCATION') ||
+-            (selectedOption === '시간 기반' && trigger.type === 'TIME') ||
+-            (selectedOption === '일정 기반' && trigger.type === 'SCHEDULE') ||
+-            (selectedOption === '모션 기반' && trigger.type === 'MOTION') // '모션 기반' 처리
++            (selectedOption === 'Location' && trigger.type === 'LOCATION') ||
++            (selectedOption === 'Time' && trigger.type === 'TIME') ||
++            (selectedOption === 'Schedule' && trigger.type === 'SCHEDULE') ||
++            (selectedOption === 'Motion' && trigger.type === 'MOTION') // '모션 기반' 처리
+         );
+ 
+         if (!selectedTrigger) {
+@@ -335,7 +335,7 @@
+   setSelectedOption(optionName);
+ 
+     // "모션 기반" 조건일 때 알림 창 표시
+-    if (optionName === '일정 기반') {
++    if (optionName === 'Schedule') {
+       setModalVisible(true); // 모션 기반 선택 시 알림 창 표시
+       return;
+     }
+@@ -343,10 +343,10 @@
+   // 선택한 옵션에 따라 트리거를 찾음
+   const selectedTrigger = triggers.find(
+     (trigger) =>
+-      (optionName === '위치 기반' && trigger.type === 'LOCATION') ||
+-      (optionName === '시간 기반' && trigger.type === 'TIME') ||
+-      (optionName === '일정 기반' && trigger.type === 'SCHEDULE') ||
+-      (optionName === '모션 기반' && trigger.type === 'MOTION') // '모션 기반' 처리
++      (optionName === 'Location' && trigger.type === 'LOCATION') ||
++      (optionName === 'Time' && trigger.type === 'TIME') ||
++      (optionName === 'Schedule' && trigger.type === 'SCHEDULE') ||
++      (optionName === 'Motion' && trigger.type === 'MOTION') // '모션 기반' 처리
+   );
+ 
+   if (selectedTrigger) {
+@@ -401,8 +401,8 @@
+ 
+ 
+   const [settingsOptions, setSettingsOptions] = useState([
+-    {name: '백그라운드 실행', isSelected: true},
+-    {name: '화면 띄우기', isSelected: false},
++    {name: 'In Background', isSelected: true},
++    {name: 'In Foreground', isSelected: false},
+   ]);
+ 
+   const onOptionSelect = (optionName: string) => {
+@@ -439,7 +439,7 @@
+  {/* 고급 모드 전환 버튼 */}
+     <ToggleBtn onPress={toggleAdvancedMode} toggleStates={advancedActivate}>
+       <SwitchText toggleStates={advancedActivate}>
+-        {advancedActivate ? '고급모드' : '기본모드'}
++        {advancedActivate ? 'Pro' : 'Std'}
+       </SwitchText>
+       <CircleBtn toggleStates={advancedActivate} />
+     </ToggleBtn>
+@@ -460,16 +460,16 @@
+ 
+             {!toggleStates && (
+               <>
+-                <TitleText>세부 설정하기</TitleText>
++                <TitleText>Adjustments</TitleText>
+ 
+                 <FeatureHeder>
+                   <HeaderText
+                     style={{flex: 2, textAlign: 'left', paddingLeft: 16}}>
+-                    기능
++                    Feature
+                   </HeaderText>
+-                  <HeaderText style={{flex: 1}}>허용 여부</HeaderText>
+-                  <HeaderText style={{flex: 1}}>더보기</HeaderText>
+-                  <HeaderText style={{flex: 1, maxWidth: 32}}>조건</HeaderText>
++                  <HeaderText style={{flex: 1}}>Enable</HeaderText>
++                  <HeaderText style={{flex: 1}}>More</HeaderText>
++                  <HeaderText style={{flex: 1, maxWidth: 43}}>Trigger</HeaderText>
+                 </FeatureHeder>
+ 
+                 <FeatureContainer>
+@@ -477,7 +477,7 @@
+                     <FeatureTop>
+                       <ItemText allowed={allowed}>
+                         {selectedOption === 'run'
+-                          ? '앱 실행하기'
++                          ? 'Launch the App'
+                           : selectedOption}
+                       </ItemText>
+ 
+@@ -521,19 +521,19 @@
+                             initialTime={initialTime || '00:00:00'} // Default value
+                           />
+                         </FeatureBottom>
+-                        {selectedOption === '모션 기반' && (
++                        {selectedOption === 'Motion' && (
+                           <LocationMotionText>
+                             <Text
+                               style={{
+                                 color: styles.colors.gray[600],
+                                 fontSize: 12,
+                               }}>
+-                              * 설정한 위치에서 모션을 하면 앱이 실행되요
++                              * Simply gesture at your chosen location
+                             </Text>
+                           </LocationMotionText>
+                         )}
+ 
+-                        {selectedOption !== '시간 기반' && (
++                        {selectedOption !== 'Time' && (
+                           <LocationBox2 onPress={onAddressScreen}>
+                             <Icon
+                               name="location-outline"
+@@ -541,7 +541,7 @@
+                               color="#6e6e6e"
+                             />
+                             <LocationText>
+-                              {selectedItem.name} 전 지점
++                              "Location Info"
+                             </LocationText>
+                             <EditButton>
+                               <Icon
+@@ -559,14 +559,14 @@
+                     color={
+                       selectedOption === 'run'
+                         ? '#FFA4A4'
+-                        : selectedOption === '위치 기반'
+-                        ? '#FFA4A4'
+-                        : selectedOption === '모션 기반'
+-                        ? '#91E4C5'
+-                        : selectedOption === '시간 기반'
+-                        ? '#A1AAFF'
+-                        : selectedOption === '일정 기반'
+-                        ? '#6EC2EA'
++                        : selectedOption === 'Location'
++                        ? '#FF5D5D'
++                        : selectedOption === 'Motion'
++                        ? '#39C892'
++                        : selectedOption === 'Time'
++                        ? '#8159DE'
++                        : selectedOption === 'Schedule'
++                        ? '#299AD0'
+                         : '#CCCCCC'
+                     }
+                     onPress={() => {
+@@ -577,13 +577,13 @@
+                         name={
+                           selectedOption === 'run'
+                             ? 'map-outline'
+-                            : selectedOption === '위치 기반'
++                            : selectedOption === 'Location'
+                             ? 'map-outline'
+-                            : selectedOption === '모션 기반'
++                            : selectedOption === 'Motion'
+                             ? 'walk-outline'
+-                            : selectedOption === '시간 기반'
++                            : selectedOption === 'Time'
+                             ? 'time-outline'
+-                            : selectedOption === '일정 기반'
++                            : selectedOption === 'Schedule'
+                             ? 'calendar-outline'
+                             : '#CCCCCC'
+                         }
+@@ -608,55 +608,55 @@
+                           padding: 10,
+                           color: styles.colors.gray[400],
+                         }}>
+-                        조건 선택
++                        Trigger
+                       </Text>
+                       <OptionWrap>
+                         <Option
+-                          onPress={() => handleOptionPress('위치 기반')}
++                          onPress={() => handleOptionPress('Location')}
+                           style={{
+                             backgroundColor:
+-                              selectedOption === '위치 기반'
++                              selectedOption === 'Location'
+                                 ? styles.colors.gray[200]
+                                 : '#fff',
+                           }}>
+-                          <OptionText>위치 기반</OptionText>
+-                          <OptionIcon color={'FFA4A4'}>
++                          <OptionText>Location</OptionText>
++                          <OptionIcon color={'FF5D5D'}>
+                             <Icon name="map-outline" size={24} color="#fff" />
+                           </OptionIcon>
+                         </Option>
+                         {/* 모션 기반 */}
+                         <Option
+-                          onPress={() => handleOptionPress('모션 기반')}
++                          onPress={() => handleOptionPress('Motion')}
+                           style={{
+                             backgroundColor:
+-                              selectedOption === '모션 기반'
++                              selectedOption === 'Motion'
+                                 ? styles.colors.gray[200]
+                                 : '#fff',
+                           }}>
+-                          <OptionText>모션 기반</OptionText>
+-                          <OptionIcon color={'91E4C5'}>
++                          <OptionText>Motion</OptionText>
++                          <OptionIcon color={'39C892'}>
+                             <Icon name="walk-outline" size={24} color="#fff" />
+                           </OptionIcon>
+                         </Option>
+                         {/* 모션 기반 */}
+                         <Option
+-                          onPress={() => handleOptionPress('시간 기반')}
++                          onPress={() => handleOptionPress('Time')}
+                           style={{
+                             backgroundColor:
+-                              selectedOption === '시간 기반'
++                              selectedOption === 'Time'
+                                 ? styles.colors.gray[200]
+                                 : '#fff',
+                           }}>
+-                          <OptionText>시간 기반</OptionText>
+-                          <OptionIcon color={'A1AAFF'}>
++                          <OptionText>Time</OptionText>
++                          <OptionIcon color={'8159DE'}>
+                             <Icon name="time-outline" size={24} color="#fff" />
+                           </OptionIcon>
+                         </Option>
+                         <Option
+-                          onPress={() => handleOptionPress('일정 기반')}
++                          onPress={() => handleOptionPress('Schedule')}
+                           style={{
+                             backgroundColor:
+-                              selectedOption === '일정 기반'
++                              selectedOption === 'Schedule'
+                                 ? styles.colors.gray[200]
+                                 : '#fff',
+                           }}>
+@@ -665,7 +665,7 @@
+                               flexDirection: 'row',
+                               alignItems: 'center',
+                             }}>
+-                            <Text>일정 기반</Text>
++                            <Text>Schedule</Text>
+                             <Text>{'\u00A0'}</Text>
+                             <Text>{'\u00A0'}</Text>
+                             <Text
+@@ -673,10 +673,10 @@
+                                 color: styles.colors.gray[400],
+                                 fontSize: 12,
+                               }}>
+-                              *캘린더와 연동돼요
++                              *Synced with Calendar
+                             </Text>
+                           </OptionText>
+-                          <OptionIcon color={'6EC2EA'}>
++                          <OptionIcon color={'299AD0'}>
+                             <Icon
+                               name="calendar-outline"
+                               size={24}
+@@ -692,7 +692,7 @@
+                             fontSize: 16,
+                             fontWeight: 'bold',
+                           }}>
+-                          설정 완료
++                          Save
+                         </Text>
+                       </CloseButton>
+                     </ModalContent>
+@@ -708,13 +708,10 @@
+                     <AdressModalContent>
+                       {addresses.map((address, index) => (
+                         <>
+-                          <ModalTitle>위치명</ModalTitle>
++                          <ModalTitle>"Place Name"("Street1"&"Street2")</ModalTitle>
+ 
+                           <AddressContainer key={index}>
+-                            <ButtonGroup>
+-                              <ButtonText>도로명</ButtonText>
+-                              <ButtonText>지번</ButtonText>
+-                            </ButtonGroup>
++                              "Address"
+                             <TextGroup>
+                               <AddressText>{address.roadName}</AddressText>
+                               <AddressText>{address.lotName}</AddressText>

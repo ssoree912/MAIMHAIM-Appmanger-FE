@@ -12,24 +12,47 @@ import {styles} from '../../styles/styleGuide';
 import AppItem from './AppItem';
 import {useNavigate} from 'react-router-native';
 
-interface AppItemProps {
-  appName: string;
-  times: number;
-  isSelected: boolean;
-}
-
-const AppList = () => {
+const AppList = ({
+  apps,
+}: {
+      apps: {appId: number; appName: string; weeklyReport: number[]; count: number; image: string}[];
+// 데이터 타입 유연성 제공
+}) => {
   const [isLongPress, setIsLongPress] = useState(false);
   const navigate = useNavigate();
 
-  const data: AppItemProps[] = [
-    {appName: 'Amazon Fresh', times: 18, isSelected: false},
-    {appName: 'Starbucks', times: 16, isSelected: false},
-    {appName: 'Target', times: 9, isSelected: false},
-    {appName: 'Wallmart', times: 5, isSelected: false},
-  ];
 
-  const [mockData, setMockData] = useState(data);
+       const [mockData, setMockData] = useState(() =>
+         apps.map((app) => ({
+           appId: app.appId,
+           appName: app.appName,
+           times: app.count,
+           weekList: app.weeklyReport,
+           image: app.image,
+           isSelected: false,
+         })),
+       );
+
+
+       useEffect(() => {
+         if (!Array.isArray(apps)) {
+           console.error('Invalid apps data:', apps); // apps가 배열이 아닌 경우 경고 출력
+           return;
+         }
+
+         const processedData = apps.map((app) => ({
+              appId: app.appId,
+           appName: app.label || app.appName || 'Unknown',
+           times: app.value || app.count || 0,
+           image: app.image || '',
+           isSelected: false,
+           weekList: app.weeklyReport,
+         }));
+         console.log('Updated mockData on apps change:', processedData);
+         setMockData(processedData);
+       }, [apps]);
+
+
 
   const changeSelectedState = (index: number) => {
     setMockData(prevState =>
@@ -55,33 +78,40 @@ const AppList = () => {
   };
 
   useEffect(() => {
-    const handleBackButton = () => {
-      if (isLongPress) {
-        data.forEach(value => (value.isSelected = false));
-        setIsLongPress(false);
-      } else {
-        navigate(-1);
-      }
-      return true;
-    };
-    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+      const handleBackButton = () => {
+        if (isLongPress) {
+          setMockData((prevState) =>
+            prevState.map((item) => ({...item, isSelected: false}))
+          );
+          setIsLongPress(false);
+        } else {
+          navigate(-1);
+        }
+        return true;
+      };
 
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
-    };
-  }, []);
+      BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      };
+    }, [isLongPress]);
 
   return (
     <Container>
       {mockData.map((value, index) => (
         <AppItem
           key={`AppListIndex${index}`}
-          appName={value.appName}
-          times={value.times}
-          isSelected={value.isSelected}
+         appName={value.appName || 'Unknown'} // 기본값 설정
+          times={value.times || 0} // 숫자 보장
+           isSelected={value.isSelected || false} // 기본값 추가
           isLongPress={isLongPress}
           handleLongPress={() => handleLongPress(index)}
           handlePress={() => handlePress(index)}
+          icon={value.image || ''} // 빈 문자열로 기본값 설정
+          navigate={navigate}
+          appId={value.appId}
+          weekList={value.weekList}
         />
       ))}
       <MoreButton>

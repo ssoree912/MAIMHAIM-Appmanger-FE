@@ -18,34 +18,30 @@ public class AppLocationStore {
     static {
         try {
             FIXED_LOCATIONS.put("walmart", new JSONObject()
-                    .put("location", "Walmart San Leandro")
-                    .put("address", "1919 Davis St, San Leandro, CA 94577")
-                    .put("latitude", 37.611035490773)
-                    .put("longitude", 126.99457310622));
+                    .put("location", "Walmart Supercenter")
+                    .put("address", "4505 W Charleston Blvd, Las Vegas, NV 89102, USA")
+                    .put("latitude", 36.158704)
+                    .put("longitude", -115.199187));
 
             FIXED_LOCATIONS.put("starbucks", new JSONObject()
-                    .put("location", "Starbucks HQ")
-                    .put("address", "2401 Utah Ave S, Seattle, WA, USA")
-                    .put("latitude", 47.580974)
-                    .put("longitude", -122.316275));
+                    .put("location", "Starbucks (Convention Center)")
+                    .put("address", "3150 Paradise Rd, Las Vegas, NV 89109, USA")
+                    .put("latitude", 36.131630)
+                    .put("longitude", -115.153798));
 
             FIXED_LOCATIONS.put("costco", new JSONObject()
-                    .put("location", "Costco San Leandro")
-                    .put("address", "Some Address, Seoul, Korea")
-                    .put("latitude", 37.5650172)
-                    .put("longitude", 126.849465));
+                    .put("location", "Costco Wholesale")
+                    .put("address", "222 S Martin L King Blvd, Las Vegas, NV 89106, USA")
+                    .put("latitude", 36.167825)
+                    .put("longitude", -115.157683));
 
             FIXED_LOCATIONS.put("amazon", new JSONObject()
-                    .put("location", "amazon San Leandro")
-                    .put("address", "Some Address, Daejeon, Korea")
-                    .put("latitude", 36.35111)
-                    .put("longitude", 127.38500));
+                    .put("location", "Amazon Hub Locker - Moxie")
+                    .put("address", "3035 E Tropicana Ave, Las Vegas, NV 89121, USA")
+                    .put("latitude", 36.099827)
+                    .put("longitude", -115.104259));
 
-            FIXED_LOCATIONS.put("hollys", new JSONObject()
-                    .put("location", "Hollys Coffee")
-                    .put("address", "Some Address, Seoul, Korea")
-                    .put("latitude", 37.55639)
-                    .put("longitude", 126.93983));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

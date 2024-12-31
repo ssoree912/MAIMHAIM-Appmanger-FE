@@ -16,6 +16,7 @@ import TimePicker from './TimePicker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { updateTrigger } from '../../services/apiServices';
 import NotificationModal from '../../components/manageComponent/NotificationModal'; // 알림 모달 컴포넌트
+import Opt from '../../assets/defaultIcon/Option.svg';
 
 type Option = {
   name: string;
@@ -33,9 +34,9 @@ type OptionsSwitchProps = {
   initialTime?: string;
 };
 
-const daysOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-const weekdays = ['월요일', '화요일', '수요일', '목요일', '금요일'];
-const weekendDays = ['토요일', '일요일'];
+const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+const weekendDays = ['Saturday', 'Sunday'];
 
 const { TimeScheduleModule} = NativeModules;
 
@@ -57,8 +58,8 @@ const formatToServerTime = (timeString: string) => {
   let hour = parseInt(hourPart.replace('시', ''), 10);
   const minute = minutePart.replace('분', '').padStart(2, '0');
 
-  if (period === '오후' && hour !== 12) hour += 12;
-  else if (period === '오전' && hour === 12) hour = 0;
+  if (period === 'PM' && hour !== 12) hour += 12;
+  else if (period === 'AM' && hour === 12) hour = 0;
 
   return `${hour.toString().padStart(2, '0')}:${minute}:00`;
 };
@@ -154,18 +155,18 @@ const [notificationVisible, setNotificationVisible] = useState(false);
           console.log(packageName);
           
           console.log('Changes saved successfully.');
-          setNotificationMessage('저장되었습니다!');
+          setNotificationMessage('Saved!');
                   setNotificationVisible(true);
         } catch (error) {
           console.error('Failed to save changes:', error);
-           setNotificationMessage('저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+           setNotificationMessage('An error occurred while saving. Please try again.');
                   setNotificationVisible(true)
         }
       } else {
         console.log('No changes to save.');
 
         // 변경 사항 없음 알림
-         setNotificationMessage('이미 저장되었습니다.');
+         setNotificationMessage('Already Saved');
               setNotificationVisible(true);
       }
     };
@@ -176,9 +177,9 @@ const [notificationVisible, setNotificationVisible] = useState(false);
     const isWeekdays = weekdays.every(day => days.includes(day));
     const isWeekend = weekendDays.every(day => days.includes(day));
 
-    if (isEveryday) return '매일';
-    if (isWeekdays && days.length === weekdays.length) return '주중';
-    if (isWeekend && days.length === weekendDays.length) return '주말';
+    if (isEveryday) return 'Everyday';
+    if (isWeekdays && days.length === weekdays.length) return 'Weekdays';
+    if (isWeekend && days.length === weekendDays.length) return 'Weekend';
 
     return days
       .sort((a, b) => daysOfWeek.indexOf(a) - daysOfWeek.indexOf(b))
@@ -206,26 +207,26 @@ const [notificationVisible, setNotificationVisible] = useState(false);
            </Container>
 
 
-      {selectedName === '시간 기반' && (
+      {selectedName === 'Time' && (
         <>
         <TimePicker initialTime={formattedTime} onTimeChange={handleTimeChange} />
 
           <RepeatDaysToggle>
-             <Text>요일 반복</Text>
+             <Text style={{fontSize: 16, color: '#282A3A'}}>Repeat </Text>
                         <Wrap>
                           <Text>
                             {selectedDays.length
                               ? determineDayDisplay(selectedDays)
-                              : '안 함'}
+                              : 'Disable'}
                           </Text>
                           <TouchableOpacity onPress={() => setModalVisible(true)}>
-                            <Icon name="menu" size={20} color="#666" style={{ padding: 10 }} />
+                            <Opt size={20} color="#666" style={{ padding: 10 }} />
                           </TouchableOpacity>
                         </Wrap>
           </RepeatDaysToggle>
 
           <SaveButton onPress={saveChanges}>
-            <SaveButtonText>저장</SaveButtonText>
+            <SaveButtonText>Save</SaveButtonText>
           </SaveButton>
 
           <StyledModal
@@ -235,13 +236,13 @@ const [notificationVisible, setNotificationVisible] = useState(false);
             onRequestClose={() => setModalVisible(false)}>
             <ModalBackground>
               <ModalContent>
-                <ModalTitle>요일 반복</ModalTitle>
+                <ModalTitle>Repeat</ModalTitle>
                 <InnerContainer>
                   <RepeatOptions onPress={() => setSelectedDays(weekdays)}>
-                    <RepeatOptionsText>주중 반복</RepeatOptionsText>
+                    <RepeatOptionsText>Weekdays</RepeatOptionsText>
                   </RepeatOptions>
                   <RepeatOptions onPress={() => setSelectedDays(weekendDays)}>
-                    <RepeatOptionsText>주말 반복</RepeatOptionsText>
+                    <RepeatOptionsText>Weekend</RepeatOptionsText>
                   </RepeatOptions>
                 </InnerContainer>
                 <FlatList
@@ -256,7 +257,7 @@ const [notificationVisible, setNotificationVisible] = useState(false);
                   )}
                 />
                 <ConfirmButton onPress={() => setModalVisible(false)}>
-                  <ConfirmButtonText>확인</ConfirmButtonText>
+                  <ConfirmButtonText>Save</ConfirmButtonText>
                 </ConfirmButton>
               </ModalContent>
             </ModalBackground>
@@ -277,16 +278,20 @@ const [notificationVisible, setNotificationVisible] = useState(false);
 export default OptionsSwitch;
 
 const SaveButton = styled.TouchableOpacity`
-  background-color: #007bff;
+  background-color: #48CBC0;
   padding: 10px;
   border-radius: 5px;
   margin: 10px 0;
   align-items: center;
+  background-color: #48cbc0;
+  border-radius: 15px;
+  width: 90%;
 `;
 
 const SaveButtonText = styled.Text`
   color: #fff;
   font-weight: bold;
+  font-size: 16px;
 `;
 
 
@@ -400,9 +405,11 @@ const ConfirmButton = styled.TouchableOpacity`
   margin-top: 20px;
   padding: 10px 40px;
   background-color: #48cbc0;
-  border-radius: 10px;
-  width: 100%;
+  border-radius: 15px;
+  width: 353px;
+  height: 56px;
   align-items: center;
+  justify-content: center;
 `;
 
 const ConfirmButtonText = styled.Text`
