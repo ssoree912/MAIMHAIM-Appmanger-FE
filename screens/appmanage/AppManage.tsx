@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // AsyncSt
 import { useNavigate } from 'react-router-native'; // useNavigate 임포트
 import { AddApplication } from '../../atom/atom'; // AddApplication import
 import { useRecoilState } from 'recoil'; // Recoil state import
-
+import Sort from '../../assets/defaultIcon/Sorting.svg';
 const AppManage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [apps, setApps] = useState([]); // 앱 리스트 상태
@@ -58,6 +58,7 @@ const AppManage = () => {
               onChangeText={text => setSearchTerm(text)}
             />
           </TextView>
+
           <AddView>
             <AddViewContent onPress={() => navigate('/appmanage/addapp')}>
               <Icon name="add-circle" size={24} color="#9496a1" />
@@ -65,6 +66,11 @@ const AppManage = () => {
             </AddViewContent>
           </AddView>
         </TopContentView>
+
+        <SortView>
+                   <Sort size={24} color="#5B5D6B" />
+                   <Text style={{ color: '#5B5D6B', fontSize: 14}}> Sort by A-Z</Text>
+        </SortView>
 
         {/* AppItem 컴포넌트에 검색어와 앱 리스트를 전달 */}
         <AppItem apps={apps} activationStates={activationStates} searchTerm={searchTerm} addApp={addApp} />
@@ -108,6 +114,14 @@ const SearchIcon = styled(Icon)`
   left: 16px;
 `;
 
+const SortView = styled(View)`
+  flex-direction: row;
+  position: relative;
+  align-content: center;
+  align-items: center;
+  margin-bottom: -10px;
+`;
+
 const AddView = styled(Pressable)`
   width: 100%;
   border: 2px dashed #cdcfd0;
@@ -119,7 +133,8 @@ const AddViewContent = styled(Pressable)`
   flex-direction: row;
   justify-content: center;
   align-content: center;
-  gap: 13px;
+  align-items: center;
+  gap: 4px;
 `;
 
 const TopContentView = styled(View)`
