@@ -101,9 +101,9 @@ public class LocationForegroundService extends Service {
     private AppDB appDB;  // AppDB 인스턴스 추가
     private String[] packageNames = { "starbucks" , "walmart","costco","ces"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 0.3;
+    private double OUTER_BOUNDARY = 0.18;
 
-    private double INNER_BOUNDARY = 0.3;
+    private double INNER_BOUNDARY = 0.45;
     private static LocationForegroundService instance;
     ShakeDetector shakeDetector ;
     public static LocationForegroundService getInstance() {
@@ -202,7 +202,7 @@ public class LocationForegroundService extends Service {
             while (isScanning) {
                 scanWifiNetworks();
                 try {
-                    Thread.sleep(350 )           ; // 5초 간격으로 스캔
+                    Thread.sleep(250 )           ; // 5초 간격으로 스캔
                 } catch (InterruptedException e) {
                     Log.e("WifiScan", "Wi-Fi 스캔 스레드 중단됨", e);
                     isScanning = false; // 스캔 중단
