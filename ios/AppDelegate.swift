@@ -24,8 +24,8 @@
       var rssiValues: [Double] = [] // Moving Average를 위한 배열
       let movingAverageWindow = 5
       
-    let entryThreshold: Double = 0.7 // 진입 거리 임계값 (미터)
-      let exitThreshold: Double = 2.0  // 이탈 거리 임계값 (미터)
+    let entryThreshold: Double = 2.3 // 진입 거리 임계값 (미터)
+    let exitThreshold: Double = 1.0 // 이탈 거리 임계값 (미터)
 
       // 앱 전환을 위한 데이터 배열
       let appData: [(urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)] = [
