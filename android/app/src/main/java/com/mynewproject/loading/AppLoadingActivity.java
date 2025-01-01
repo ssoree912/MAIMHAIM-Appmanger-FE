@@ -212,7 +212,7 @@ public class AppLoadingActivity extends Activity {
         if (pkg == null) return;
 
         switch (pkg) {
-            case "com.starbucks.co":
+            case "com.starbucks.mobilecard":
                 displayAppName = "Starbucks";
                 displayAppIconRes = R.drawable.starbucks_logo;
                 break;
