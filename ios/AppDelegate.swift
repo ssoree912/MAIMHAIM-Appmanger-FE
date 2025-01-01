@@ -29,7 +29,7 @@
 
       // 앱 전환을 위한 데이터 배열
       let appData: [(urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)] = [
-          ("starbucks://", "com.starbucks.co", 40011, 44551, "Starbucks"),
+          ("starbucks://", "com.starbucks.co", 40011, 45011, "Starbucks"),
   //        ("costco://", "com.ingka.ikea.app", 40011, 44543, "costco")
           ("cesconf://", "com.cta.cestech", 40011, 44543, "CES2025")
       ]
@@ -69,7 +69,7 @@
     @objc func sourceURL(for bridge: RCTBridge) -> URL? {
         #if DEBUG
   //      연결되어있는 ip로 바꿔야함
-        return URL(string: "http://192.168.219.102:8081/index.bundle?platform=ios&dev=true")
+        return URL(string: "http://172.20.10.7:8081/index.bundle?platform=ios&dev=true")
         #else
 
         return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
