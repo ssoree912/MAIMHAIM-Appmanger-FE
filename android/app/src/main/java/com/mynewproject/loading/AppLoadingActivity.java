@@ -94,7 +94,7 @@ public class AppLoadingActivity extends Activity {
         loadingText.setId(View.generateViewId());
 
         // 앱 이름이 있으면 "Loading Starbucks...", 아니면 "Loading..."
-        loadingText.setText("Just a few more seconds!")
+        loadingText.setText("Just a few more seconds!");
 
 
         loadingText.setTextSize(20);
@@ -111,7 +111,7 @@ public class AppLoadingActivity extends Activity {
         if (!displayAppName.isEmpty()) {
             additionalText.setText("Getting your" + displayAppName + "app ready...");
         } else {
-            additionalText.setText("Getting your {empty} app ready...");
+            additionalText.setText("...");
         }
         additionalText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         additionalText.setTextColor(Color.BLACK);
@@ -142,7 +142,7 @@ public class AppLoadingActivity extends Activity {
         ImageView maimhaimText = new ImageView(this);
         maimhaimText.setId(View.generateViewId());
         // 프로젝트 내 "MaimHaim" 로고 Drawable 리소스 (예: R.drawable.maimhaim_logo)
-        maimhaimText.setImageResource(R.drawable.MaimHaimtext);
+        maimhaimText.setImageResource(R.drawable.maimhaimtext);
         ConstraintLayout.LayoutParams maimhaimTextParams = new ConstraintLayout.LayoutParams(
                 200,200 // 원하는 크기로 조절
         );
