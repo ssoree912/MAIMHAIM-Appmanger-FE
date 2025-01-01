@@ -101,9 +101,9 @@ public class LocationForegroundService extends Service {
     private AppDB appDB;  // AppDB 인스턴스 추가
     private String[] packageNames = { "starbucks" , "walmart","costco","ces"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 0.23;
+    private double OUTER_BOUNDARY = 0.4;
 
-    private double INNER_BOUNDARY = 0.43;
+    private double INNER_BOUNDARY = 0.6;
     private static LocationForegroundService instance;
     ShakeDetector shakeDetector ;
     public static LocationForegroundService getInstance() {
@@ -308,7 +308,7 @@ public class LocationForegroundService extends Service {
             SSID_List.add(ssid);
 
             // 거리 계산
-            distance = Math.pow(10, (-45 - particle_rssi) / (10 * 2));
+            distance = Math.pow(10, (-25 - particle_rssi) / (10 * 2));
             if(distance < 10){
 
                 Log.d("WiFiInfo", "SSID: " + ssid +
@@ -330,7 +330,7 @@ public class LocationForegroundService extends Service {
 
         // 거리 계산 및 알림
         double n = 2.0;
-        double txpower = -42;
+        double txpower = -25;
         double max_rssi;
         int cnt = 0;
         try {
