@@ -101,9 +101,9 @@ public class LocationForegroundService extends Service {
     private AppDB appDB;  // AppDB 인스턴스 추가
     private String[] packageNames = { "starbucks" , "walmart","costco","ces"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 3.0;
+    private double OUTER_BOUNDARY = 0.03;
 
-    private double INNER_BOUNDARY = 3.0;
+    private double INNER_BOUNDARY = 0.03;
     private static LocationForegroundService instance;
     ShakeDetector shakeDetector ;
     public static LocationForegroundService getInstance() {
