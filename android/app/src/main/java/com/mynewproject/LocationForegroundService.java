@@ -605,7 +605,7 @@ public class LocationForegroundService extends Service {
 
         switch (geofenceId) {
             case "starbucks":
-                openApp("com.starbucks.co");
+                openApp("com.starbucks.mobilecard");
                 ServerCommunicator.sendDataToServer(
                         this,
                         geofenceId,
