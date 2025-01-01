@@ -94,11 +94,8 @@ public class AppLoadingActivity extends Activity {
         loadingText.setId(View.generateViewId());
 
         // 앱 이름이 있으면 "Loading Starbucks...", 아니면 "Loading..."
-        if (!displayAppName.isEmpty()) {
-            loadingText.setText("Loading " + displayAppName + " ...");
-        } else {
-            loadingText.setText("Loading ...");
-        }
+        loadingText.setText("Just a few more seconds!");
+
 
         loadingText.setTextSize(20);
         loadingText.setTextColor(Color.parseColor("#9496A1"));
@@ -111,6 +108,11 @@ public class AppLoadingActivity extends Activity {
         TextView additionalText = new TextView(this);
         additionalText.setId(View.generateViewId());
         additionalText.setText("Please wait a moment.");
+        if (!displayAppName.isEmpty()) {
+            additionalText.setText("Getting your " + displayAppName + " app ready...");
+        } else {
+            additionalText.setText("...");
+        }
         additionalText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         additionalText.setTextColor(Color.BLACK);
         additionalText.setGravity(View.TEXT_ALIGNMENT_CENTER);
@@ -135,16 +137,18 @@ public class AppLoadingActivity extends Activity {
         mainLayout.addView(appIcon);
 
         // -----------------------------
-        // (F) 하단 제작자 텍스트 (MaimHaim)
+        // (F) 하단 제작자 텍스트 이미지(MaimHaim)
         // -----------------------------
-        TextView creatorText = new TextView(this);
-        creatorText.setId(View.generateViewId());
-        creatorText.setText("MaimHaim");
-        creatorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        creatorText.setTypeface(Typeface.DEFAULT_BOLD);
-        creatorText.setTextColor(Color.BLACK);
-        creatorText.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        mainLayout.addView(creatorText);
+        ImageView maimhaimText = new ImageView(this);
+        maimhaimText.setId(View.generateViewId());
+        // 프로젝트 내 "MaimHaim" 로고 Drawable 리소스 (예: R.drawable.maimhaim_logo)
+        maimhaimText.setImageResource(R.drawable.maimhaimtext);
+        ConstraintLayout.LayoutParams maimhaimTextParams = new ConstraintLayout.LayoutParams(
+                200,200 // 원하는 크기로 조절
+        );
+        maimhaimText.setLayoutParams(maimhaimTextParams);
+        mainLayout.addView(maimhaimText);
+
 
         // -----------------------------
         // (G) ConstraintSet 배치
@@ -158,7 +162,7 @@ public class AppLoadingActivity extends Activity {
         int loadingTextId = loadingText.getId();
         int additionalTextId = additionalText.getId();
         int appIconId = appIcon.getId();
-        int creatorTextId = creatorText.getId();
+        int maimhaimTextId = maimhaimText.getId();
 
         // 1) 원(circle) 중앙보다 약간 위
         constraintSet.connect(circleId, ConstraintSet.START, parentId, ConstraintSet.START, 0);
@@ -190,9 +194,9 @@ public class AppLoadingActivity extends Activity {
         constraintSet.connect(appIconId, ConstraintSet.END, parentId, ConstraintSet.END, 0);
 
         // 6) 제작자 텍스트 - 화면 하단
-        constraintSet.connect(creatorTextId, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM, 50);
-        constraintSet.connect(creatorTextId, ConstraintSet.START, parentId, ConstraintSet.START, 0);
-        constraintSet.connect(creatorTextId, ConstraintSet.END, parentId, ConstraintSet.END, 0);
+        constraintSet.connect(maimhaimTextId, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM, 50);
+        constraintSet.connect(maimhaimTextId, ConstraintSet.START, parentId, ConstraintSet.START, 0);
+        constraintSet.connect(maimhaimTextId, ConstraintSet.END, parentId, ConstraintSet.END, 0);
 
         constraintSet.applyTo(mainLayout);
 
