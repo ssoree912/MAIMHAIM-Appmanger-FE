@@ -28,7 +28,7 @@ public class AppInfoFetcher {
             "com.cta.cestech",
             "com.cnn.mobile.android.phone",
             "com.costco.app.android",
-            "com.fidelity.wi.activity",
+            "com.fidelity.android",
             "com.google.android.apps.magazines",
             "com.ingka.ikea.app",
             "com.google.android.apps.tachyon",
@@ -36,25 +36,25 @@ public class AppInfoFetcher {
             "com.robinhood.gateway",
             "com.walmart.android",
             "us.zoom.videomeetings",
-            "com.costco.dmc.store",
-            "com.starbucks.co"
+//            "com.costco.dmc.store",
+//            "com.starbucks.co"
     };
     private String[] names = {
             "amazon",
             "BBC",
             "ces",
             "CNN",
-            "COSTCO",
+            "costco",
             "fidelity",
             "googlenews",
             "IKEA",
             "googlemeet",
-            "STARBUCKS",
+            "starbucks",
             "wallet",
             "walmart",
             "zoom",
-            "costco",
-            "starbucks"
+//            "costco",
+//            "starbucks"
     };
 
     public AppInfoFetcher(Context context, AppDB appDB) {
