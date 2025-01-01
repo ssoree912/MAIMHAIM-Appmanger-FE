@@ -405,27 +405,15 @@ const handleOptionPress = async (optionName) => {
   }
 };
 
-
-
-
-
   const [settingsOptions, setSettingsOptions] = useState([
-    {name: 'In Background', isSelected: true},
-    {name: 'In Foreground', isSelected: false},
+    {name: 'In Background', isSelected: false},
+    {name: 'In Foreground', isSelected: true},
   ]);
 
   const onOptionSelect = (optionName: string) => {
-    setSettingsOptions(prevOptions =>
-      prevOptions.map(option =>
-        option.name === optionName
-          ? {...option, isSelected: true}
-          : {...option, isSelected: false},
-      ),
-    );
+    // Disable the ability to toggle or change the isSelected state
+    console.log(`Option selected: ${optionName}, but state remains unchanged.`);
   };
-
-
-
 
   const [addressModalVisible, setAddressModalVisible] = useState(false);
 
@@ -714,13 +702,17 @@ const handleOptionPress = async (optionName) => {
                   visible={addressModalVisible}
                   onRequestClose={() => setAddressModalVisible(false)}>
                   <CenteredView>
-                    <AdressModalContent>
+                    <AddressModalContent>
                       {addresses.map((address, index) => (
                         <>
-                          <ModalTitle>"Place Name"("Street1"&"Street2")</ModalTitle>
+                          <ModalTitle>Place Name</ModalTitle>
 
                           <AddressContainer key={index}>
-                              "Address"
+                        <ButtonGroup>
+                                                    <ButtonText>Street1</ButtonText>
+                                                     <ButtonText>Street2</ButtonText>
+                                                   </ButtonGroup>
+
                             <TextGroup>
                               <AddressText>{address.roadName}</AddressText>
                               <AddressText>{address.lotName}</AddressText>
@@ -738,7 +730,7 @@ const handleOptionPress = async (optionName) => {
                           color="#333"
                         />
                       </AddressButton>
-                    </AdressModalContent>
+                    </AddressModalContent>
                   </CenteredView>
                 </Modal>
                  <AlertModal
@@ -1016,7 +1008,7 @@ const TextGroup = styled(View)`
   margin-left: 5px;
 `;
 
-const AdressModalContent = styled(View)`
+const AddressModalContent = styled(View)`
   width: 90%;
   padding: 20px;
   background-color: white;
