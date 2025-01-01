@@ -109,7 +109,7 @@ public class AppLoadingActivity extends Activity {
         additionalText.setId(View.generateViewId());
         additionalText.setText("Please wait a moment.");
         if (!displayAppName.isEmpty()) {
-            additionalText.setText("Getting your" + displayAppName + "app ready...");
+            additionalText.setText("Getting your " + displayAppName + " app ready...");
         } else {
             additionalText.setText("...");
         }
@@ -216,7 +216,7 @@ public class AppLoadingActivity extends Activity {
         if (pkg == null) return;
 
         switch (pkg) {
-            case "com.starbucks.co":
+            case "com.starbucks.mobilecard":
                 displayAppName = "Starbucks";
                 displayAppIconRes = R.drawable.starbucks_logo;
                 break;
