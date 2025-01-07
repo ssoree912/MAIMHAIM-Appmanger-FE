@@ -101,9 +101,9 @@ public class LocationForegroundService extends Service {
     private AppDB appDB;  // AppDB 인스턴스 추가
     private String[] packageNames = { "starbucks" , "walmart","costco","ces"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 3.0;
+    private double OUTER_BOUNDARY = 3.2;
 
-    private double INNER_BOUNDARY = 3.0;
+    private double INNER_BOUNDARY = 3.2;
     private static LocationForegroundService instance;
     ShakeDetector shakeDetector ;
     public static LocationForegroundService getInstance() {
@@ -489,7 +489,7 @@ public class LocationForegroundService extends Service {
                     names = SSID_name;
                     lastPackageName = getApp.getPackageName(); // 마지막으로 진입한 패키지 이름 저장
                     Log.d("wifi_information2", appName + "로 진입함");
-                    notificationHelper.sendNotification(SSID_name, appName + "로 진입함", getApp.getPackageName());
+                    notificationHelper.sendNotification(SSID_name, "Entered " + appName , getApp.getPackageName());
                     entryStartTime = 0; // 진입 후 타이머 초기화
                     isHomeWifiDetected = true;
 
@@ -542,7 +542,7 @@ public class LocationForegroundService extends Service {
 
     public void leaveHandle(String SSID_name, boolean active) {
         if (!active) {
-            notificationHelper.sendNotification(SSID_name, "이탈", lastPackageName);
+            notificationHelper.sendNotification(SSID_name, "Leave ", lastPackageName);
             isShakeAble = false;
 
             // SSID_name을 포함하는 패키지를 찾아서 처리
