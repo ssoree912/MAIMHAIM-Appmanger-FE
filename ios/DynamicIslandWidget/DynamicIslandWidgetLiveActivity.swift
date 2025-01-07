@@ -40,7 +40,7 @@ struct DynamicIslandWidgetLiveActivity: Widget {
                     Text("Dynamic Count: \(context.state.count)")
                 }
             } compactLeading: {
-                Text("🔢")
+                Text("🌳")
             } compactTrailing: {
 //                Text("\(context.state.count)")
             } minimal: {

@@ -25,13 +25,13 @@
       let movingAverageWindow = 5
       
     let entryThreshold: Double = 2.3 // 진입 거리 임계값 (미터)
-    let exitThreshold: Double = 1.0 // 이탈 거리 임계값 (미터)
+    let exitThreshold: Double = 1.7 // 이탈 거리 임계값 (미터)
 
       // 앱 전환을 위한 데이터 배열
       let appData: [(urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)] = [
-          ("starbucks://", "com.starbucks.co", 40011, 45011, "Starbucks"),
+          ("starbucks://", "com.starbucks.mobilecard", 40011, 45011, "Starbucks"),
   //        ("costco://", "com.ingka.ikea.app", 40011, 44543, "costco")
-          ("cesconf://", "com.cta.cestech", 40011, 44543, "CES2025")
+          ("walmart://", "com.walmart.android", 40011, 44543, "Walmart")
       ]
 
       override init() {
@@ -41,7 +41,46 @@
           locationManager?.allowsBackgroundLocationUpdates = true
           locationManager?.pausesLocationUpdatesAutomatically = false
           locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+          requestLocationAuthorization()
       }
+    func requestLocationAuthorization() {
+        guard let locationManager = locationManager else { return }
+
+        switch locationManager.authorizationStatus {
+        case .notDetermined:
+            locationManager.requestAlwaysAuthorization() // 항상 허용 요청
+        case .restricted, .denied:
+            print("[LOG] 위치 권한이 제한되었거나 거부되었습니다.")
+            // 사용자에게 권한 설정을 요청하는 UI 추가 가능
+        case .authorizedWhenInUse:
+            print("[LOG] 위치 권한이 '앱 사용 중 허용' 상태입니다. '항상 허용' 요청.")
+            locationManager.requestAlwaysAuthorization() // '항상 허용' 요청
+        case .authorizedAlways:
+            print("[LOG] 위치 권한이 이미 '항상 허용' 상태입니다.")
+            locationManager.startUpdatingLocation() // 위치 업데이트 시작
+        @unknown default:
+            print("[LOG] 알 수 없는 권한 상태입니다.")
+        }
+    }
+
+    // CLLocationManagerDelegate에서 권한 상태 변경 처리
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .authorizedAlways:
+            print("[LOG] 위치 권한이 '항상 허용'으로 설정되었습니다.")
+            locationManager?.startUpdatingLocation() // 위치 업데이트 시작
+        case .authorizedWhenInUse:
+            print("[LOG] 위치 권한이 '앱 사용 중 허용' 상태입니다.")
+        case .denied:
+            print("[LOG] 위치 권한이 거부되었습니다.")
+        case .notDetermined:
+            print("[LOG] 위치 권한이 아직 요청되지 않았습니다.")
+        case .restricted:
+            print("[LOG] 위치 권한이 제한되었습니다.")
+        @unknown default:
+            print("[LOG] 알 수 없는 권한 상태입니다.")
+        }
+    }
     
 
       func application(
@@ -69,7 +108,7 @@
     @objc func sourceURL(for bridge: RCTBridge) -> URL? {
         #if DEBUG
   //      연결되어있는 ip로 바꿔야함
-        return URL(string: "http://172.20.10.7:8081/index.bundle?platform=ios&dev=true")
+        return URL(string: "http://192.168.0.101:8081/index.bundle?platform=ios&dev=true")
         #else
 
         return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
@@ -179,6 +218,8 @@
         - Minor: \(appInfo.minor)
         - Distance: \(combinedDistance) meters
         """)
+//      sendNotification(appName: appInfo.appName, minor: appInfo.minor, distance: combinedDistance)
+
 
         if notificationState[key] == nil {
             notificationState[key] = (hasAppOpened: false, hasNotificationBeenSent: false)
@@ -254,6 +295,31 @@
 
         previousDistance[key] = combinedDistance
       
+    }
+    func sendNotification(appName: String, minor: Int, distance: Double) {
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = "Beacon Detected"
+        notificationContent.body = """
+        [MATCHING APP INFO]
+        - App Name: \(appName)
+        - Minor: \(minor)
+        - Distance: \(String(format: "%.2f", distance)) meters
+        """
+        notificationContent.sound = .default
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: notificationContent,
+            trigger: nil // 즉시 알림
+        )
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("[LOG] Failed to send notification: \(error.localizedDescription)")
+            } else {
+                print("[LOG] Notification sent for \(appName)")
+            }
+        }
     }
 
     func resetAppState(forKey key: String, appInfo: (urlScheme: String, packageName: String, major: Int, minor: Int, appName: String)) {
