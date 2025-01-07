@@ -83,7 +83,7 @@ public class LocationForegroundService extends Service {
     private boolean isKcardCheck = false; // K-card on off
     private boolean isShakeAble = false;
     private String shakePackageName = "";
-    private int currentShakeAppId =0;// To store the app ID for shake detection
+    private int currentShakeAppId = 0;// To store the app ID for shake detection
 
     public static List<Double> Kalman_List = new ArrayList<>();
     public static List<Double> Particle_List = new ArrayList<>();
@@ -99,20 +99,21 @@ public class LocationForegroundService extends Service {
     private Map<String, ParticleFilter> particleFilters = new HashMap<>();
 
     private AppDB appDB;  // AppDB 인스턴스 추가
-    private String[] packageNames = { "starbucks" , "walmart","costco","ces"};
+    private String[] packageNames = {"starbucks", "walmart", "costco", "ces"};
     private String lastPackageName; // 마지막에 진입한 패키지 이름을 저장
-    private double OUTER_BOUNDARY = 0.4;
+    private double OUTER_BOUNDARY = 3.0;
 
-    private double INNER_BOUNDARY = 0.6;
+    private double INNER_BOUNDARY = 3.0;
     private static LocationForegroundService instance;
-    ShakeDetector shakeDetector ;
+    ShakeDetector shakeDetector;
+
     public static LocationForegroundService getInstance() {
         return instance;
     }
+
     //    리팩토링
     private NotificationHelper notificationHelper;
     private AppDatabaseHelper appDatabaseHelper;
-
 
 
     private Set<String> detectedSSIDs = new HashSet<>();
@@ -120,7 +121,6 @@ public class LocationForegroundService extends Service {
     private GeofencingClient geofencingClient;
 
     private boolean isLoadingPageShown = false;
-
 
 
     @Override
@@ -133,7 +133,6 @@ public class LocationForegroundService extends Service {
 
 //        createNotificationChannel(); // 알림 채널 생성
 //        Notification notification = createNotification();
-
 
 
         startForeground(NOTIFICATION_ID, notificationHelper.createNotification());
@@ -202,7 +201,7 @@ public class LocationForegroundService extends Service {
             while (isScanning) {
                 scanWifiNetworks();
                 try {
-                    Thread.sleep(250 )           ; // 5초 간격으로 스캔
+                    Thread.sleep(350); // 5초 간격으로 스캔
                 } catch (InterruptedException e) {
                     Log.e("WifiScan", "Wi-Fi 스캔 스레드 중단됨", e);
                     isScanning = false; // 스캔 중단
@@ -276,7 +275,7 @@ public class LocationForegroundService extends Service {
             }
 
 
-            if(BSSID_List.contains(bssid)){
+            if (BSSID_List.contains(bssid)) {
                 continue;
             }
 
@@ -285,7 +284,7 @@ public class LocationForegroundService extends Service {
             particleFilters.computeIfAbsent(bssid, k -> new ParticleFilter(1000));
 
             Log.d("scanWifiNetworks", "scanWifiNetworks: " + targetBSSID);
-            if(isHomeWifiDetected && !bssid.equals(targetBSSID)){ //해당 와이파이이면 유지?
+            if (isHomeWifiDetected && !bssid.equals(targetBSSID)) { //해당 와이파이이면 유지?
                 continue;
             }
 
@@ -308,15 +307,15 @@ public class LocationForegroundService extends Service {
             SSID_List.add(ssid);
 
             // 거리 계산
-            distance = Math.pow(10, (-25 - particle_rssi) / (10 * 2));
-            if(distance < 10){
+            distance = Math.pow(10, (-32 - particle_rssi) / (10 * 2));
+            if (distance < 10) {
 
                 Log.d("WiFiInfo", "SSID: " + ssid +
                         ", BSSID: " + bssid +
                         ", RSSI: " + rssi + "dBm" +
                         ", Distance: " + distance + "m" +
                         ", Kalman_RSSI: " + kalman_rssi + "dBm" +
-                        ", Particle_RSSI: " + particle_rssi + "dBm" );
+                        ", Particle_RSSI: " + particle_rssi + "dBm");
             }
         }
 
@@ -330,7 +329,7 @@ public class LocationForegroundService extends Service {
 
         // 거리 계산 및 알림
         double n = 2.0;
-        double txpower = -25;
+        double txpower = -32;
         double max_rssi;
         int cnt = 0;
         try {
@@ -364,22 +363,22 @@ public class LocationForegroundService extends Service {
         if (max_distance < INNER_BOUNDARY) {
 
             if (currentTime - entryStartTime >= DWELL_TIME_THRESHOLD && !isHomeWifiDetected) {
-                if(SSID_name.contains(packageNames[0])) { // 스타벅스 처리
-                        handleWifiEntry(packageNames[0], SSID_name, BSSID_name, currentTime);
+                if (SSID_name.contains(packageNames[0])) { // 스타벅스 처리
+                    handleWifiEntry(packageNames[0], SSID_name, BSSID_name, currentTime);
 
                 } else if (SSID_name.contains(packageNames[1])) {
-                    handleWifiEntry(packageNames[1], SSID_name, BSSID_name,currentTime);
+                    handleWifiEntry(packageNames[1], SSID_name, BSSID_name, currentTime);
                 } else if (SSID_name.contains(packageNames[2])) {
-                    handleWifiEntry(packageNames[2], SSID_name, BSSID_name,currentTime);
+                    handleWifiEntry(packageNames[2], SSID_name, BSSID_name, currentTime);
                 } else if (SSID_name.contains(packageNames[3])) {
-                    handleWifiEntry(packageNames[3], SSID_name, BSSID_name,currentTime);
+                    handleWifiEntry(packageNames[3], SSID_name, BSSID_name, currentTime);
                 } else if (SSID_name.contains(packageNames[4])) {
-                    handleWifiEntry(packageNames[4], SSID_name, BSSID_name,currentTime);
+                    handleWifiEntry(packageNames[4], SSID_name, BSSID_name, currentTime);
                 }
                 exitStartTime = 0; // 재진입 시 이탈 타이머 초기화
             }
             shakeDetector = new ShakeDetector(this);
-            if(isShakeAble)  shakeDetector.start();
+            if (isShakeAble) shakeDetector.start();
         } else if (max_distance >= OUTER_BOUNDARY) {
             if (exitStartTime == 0) {
                 exitStartTime = currentTime;
@@ -395,7 +394,7 @@ public class LocationForegroundService extends Service {
         BSSID_List.clear();
         RSSI_List.clear();
         SSID_List.clear();
-        if (shake_determine == true){
+        if (shake_determine == true) {
             isHomeWifiDetected = true;
             shakeDetector.stop();
             shake_determine = false;
@@ -413,7 +412,6 @@ public class LocationForegroundService extends Service {
         loadingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(loadingIntent);
     }
-
 
 
     private void startLocationUpdates() {
@@ -464,7 +462,6 @@ public class LocationForegroundService extends Service {
     }
 
 
-
     private void sendLocationToReactNative(String json) {
         ReactApplication context = (ReactApplication) getApplicationContext();
         ReactContext reactContext = context.getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
@@ -476,12 +473,13 @@ public class LocationForegroundService extends Service {
             Log.e("LocationForegroundService", "React Native context가 null입니다. 위치 데이터를 전송할 수 없습니다.");
         }
     }
+
     // Wi-Fi 진입 시 처리 로직을 수행하는 함수
-    private void handleWifiEntry(String appName, String SSID_name, String BSSID_name,Long currentTime) {
+    private void handleWifiEntry(String appName, String SSID_name, String BSSID_name, Long currentTime) {
         new Thread(() -> {
             App getApp = appDB.appDao().getPackageNameByName(appName);
             if (getApp != null) {
-                if(getApp.isActivate() && getApp.isAdd() && getApp.isTriggerActive()) {
+                if (getApp.isActivate() && getApp.isAdd() && getApp.isTriggerActive()) {
                     if (entryStartTime == 0) {
                         entryStartTime = currentTime;
                     }
@@ -489,7 +487,7 @@ public class LocationForegroundService extends Service {
                     names = SSID_name;
                     lastPackageName = getApp.getPackageName(); // 마지막으로 진입한 패키지 이름 저장
                     Log.d("wifi_information2", appName + "로 진입함");
-                    notificationHelper.sendNotification(SSID_name, appName + "로 진입함", getApp.getPackageName());
+                    notificationHelper.sendNotification(SSID_name, "Entered " + appName, getApp.getPackageName());
                     entryStartTime = 0; // 진입 후 타이머 초기화
                     isHomeWifiDetected = true;
 
@@ -518,13 +516,11 @@ public class LocationForegroundService extends Service {
                     }
 
 
-
-
-                    if( getApp.isMotionTriggerActive() && (getApp.getTriggerType().equals(TriggerType.MOTION))&&getApp.isAdvancedMode() ){
+                    if (getApp.isMotionTriggerActive() && (getApp.getTriggerType().equals(TriggerType.MOTION)) && getApp.isAdvancedMode()) {
                         isShakeAble = true;
                         shakePackageName = getApp.getPackageName();
                         currentShakeAppId = getApp.getAppId();  // Store the app ID for future shake events
-                    }else {
+                    } else {
                         appDB.appDao().incrementCount(getApp.getAppId());
                         openApp(getApp.getPackageName());
                     }
@@ -532,9 +528,10 @@ public class LocationForegroundService extends Service {
             }
         }).start();
     }
+
     public void checkAndHandleWifiExit(String SSID_name, boolean active) {
-        Log.d("checkAndHandleWifiExit", "checkAndHandleWifiExit: " +(names != null) +(SSID_name!=null) + isHomeWifiDetected );
-        if ((names != null && names.contains(SSID_name) && isHomeWifiDetected) ) {
+        Log.d("checkAndHandleWifiExit", "checkAndHandleWifiExit: " + (names != null) + (SSID_name != null) + isHomeWifiDetected);
+        if ((names != null && names.contains(SSID_name) && isHomeWifiDetected)) {
             exitStartTime = 0; // 이탈 후 타이머 초기화
             leaveHandle(SSID_name, active);
         }
@@ -542,7 +539,7 @@ public class LocationForegroundService extends Service {
 
     public void leaveHandle(String SSID_name, boolean active) {
         if (!active) {
-            notificationHelper.sendNotification(SSID_name, "이탈", lastPackageName);
+            notificationHelper.sendNotification(SSID_name, "Leave", lastPackageName);
             isShakeAble = false;
 
             // SSID_name을 포함하는 패키지를 찾아서 처리
